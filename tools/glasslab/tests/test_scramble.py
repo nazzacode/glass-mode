@@ -19,8 +19,11 @@ SNAP = """JSON.stringify({
   imgBg: getComputedStyle(document.getElementById('avatar')).backgroundColor,
   bg: getComputedStyle(document.getElementById('bgav')).backgroundImage,
   late: document.getElementById('late')?.textContent,
+  frame: getComputedStyle(document.getElementById('frame')).filter,
+  lateFrame: getComputedStyle(document.getElementById('lframe') || document.body).filter,
 })"""
-LATE = "{const d=document.createElement('div');d.id='late';d.textContent='Margaret Thornbury';document.getElementById('mail').append(d)}"
+LATE = ("{const d=document.createElement('div');d.id='late';d.textContent='Margaret Thornbury';document.getElementById('mail').append(d);"
+        "const f=document.createElement('iframe');f.id='lframe';document.getElementById('mail').append(f)}")
 SECRETS = ["Margaret", "Thornbury", "Kestrel", "Invoice", "Nathan", "Quarterly", "kestrel.io", "4821", "nazzacode", "Sellner", "Regime", "Leaked"]
 
 
@@ -90,6 +93,14 @@ def test_images_covered(runs):
     a = runs[0]["after"]
     assert a["bg"] == "none"
     assert a["img"] != runs[0]["before"]["img"] and a["imgBg"] not in ("rgba(0, 0, 0, 0)", "transparent")
+
+
+@pytest.mark.e2e
+def test_iframes_covered_even_late(runs):
+    """the scrambler can't reach into iframes (cross-origin: Google's app launcher shows the account photo) → grey box"""
+    b, a = runs[0]["before"], runs[0]["after"]
+    assert b["frame"] == "none" and "contrast(0)" in a["frame"]
+    assert "contrast(0)" in a["lateFrame"] and runs[0]["stats"]["frames"] >= 1
 
 
 @pytest.mark.e2e

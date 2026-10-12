@@ -81,31 +81,30 @@ async def measure(pg, key, layers, bounds, modes, alpha, shots):
     return out
 
 
-async def explore(pg, bounds, screen="page", modes=("dark", "light"), alpha=0.45, shots=None, settle=3, max_triggers=MAX_TRIGGERS):
-    """→ [{key, trigger, layers, modes: {mode: metrics}, ok}] for every trigger that revealed a floating layer"""
+async def visit(pg, screen, fn, triggers=None, settle=3, max_triggers=MAX_TRIGGERS):
+    """open each safe trigger's hidden UI → await fn(key, trigger, layers) while it is open → [non-None results].
+    Page restored after every trigger. `triggers` lets a caller enumerate first (on the real page: DANGER needs real labels)."""
     url = await pg.eval("location.href")
-    states = []
-    for t in await pg.probe("triggers", DANGER, max_triggers) or []:
+    out = []
+    for t in triggers if triggers is not None else await pg.probe("triggers", DANGER, max_triggers) or []:
         try:
-            if s := await state(pg, t, screen, bounds, modes, alpha, shots):
-                states.append(s)
-                print(f"  ↳ {s['key']:38s} " + "  ".join(f"{md} surface {m['surface']:4.0%} opacity {m['opacity']:.2f}"
-                      f"{'' if m['over_content'] else ' (clear)'} contrast {min(m['contrast']):4.0%}" for md, m in s["modes"].items())
-                      + f"  {'ok' if s['ok'] else 'FAIL'}", flush=True)
+            await pg.probe("layers", "mark")
+            if await activate(pg, t) and (layers := await pg.probe("layers", "diff") or []):
+                if (r := await fn(f"{screen}~{slug(t['label'] or t['id'])}", t, layers)) is not None:
+                    out.append(r)
         except Exception as e:  # one odd control must not sink the run (re-rendered DOM, navigation, …)
             print(f"  ↳ {t['label'][:30]!r}: skipped ({type(e).__name__}: {str(e)[:80]})", flush=True)
         await reset(pg, url, t, settle)
-    return states
+    return out
 
 
-async def state(pg, t, screen, bounds, modes, alpha, shots):
-    """activate one trigger → measured state, or None when nothing floating appeared"""
-    await pg.probe("layers", "mark")
-    if not await activate(pg, t):
-        return None
-    layers = await pg.probe("layers", "diff") or []
-    if not layers:
-        return None
-    key = f"{screen}~{slug(t['label'] or t['id'])}"
-    modes_m = await measure(pg, key, layers, bounds, modes, alpha, shots)
-    return {"key": key, "trigger": t, "layers": layers, "modes": modes_m, "ok": all(m["ok"] for m in modes_m.values())}
+async def explore(pg, bounds, screen="page", modes=("dark", "light"), alpha=0.45, shots=None, settle=3, max_triggers=MAX_TRIGGERS):
+    """→ [{key, trigger, layers, modes: {mode: metrics}, ok}] for every trigger that revealed a floating layer"""
+    async def one(key, t, layers):
+        modes_m = await measure(pg, key, layers, bounds, modes, alpha, shots)
+        s = {"key": key, "trigger": t, "layers": layers, "modes": modes_m, "ok": all(m["ok"] for m in modes_m.values())}
+        print(f"  ↳ {s['key']:38s} " + "  ".join(f"{md} surface {m['surface']:4.0%} opacity {m['opacity']:.2f}"
+              f"{'' if m['over_content'] else ' (clear)'} contrast {min(m['contrast']):4.0%}" for md, m in modes_m.items())
+              + f"  {'ok' if s['ok'] else 'FAIL'}", flush=True)
+        return s
+    return await visit(pg, screen, one, settle=settle, max_triggers=max_triggers)

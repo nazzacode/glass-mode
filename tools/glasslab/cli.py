@@ -6,7 +6,8 @@
   ./glasslab new-site NAME URL [--content-first] [--dark-only]        scaffold style + registry + test screen
   ./glasslab wallpapers DIR|FILE…                                     backdrops + contrast bounds from your wallpapers
   ./glasslab report [RUN]                                             local HTML report (default: latest run)
-  ./glasslab shots [FILTER] [--out DIR] [--modes dark,light]          showcase gallery shots (private screens scrambled)
+  ./glasslab shots [FILTER] [--out DIR] [--modes dark,light] [--all]  showcase shots; --all: test tiles, every screen + hidden UI
+  ./glasslab site [--run RUN]                                         public site (site/index.html) + README sites table
 """
 import argparse, subprocess, sys
 from pathlib import Path
@@ -41,6 +42,8 @@ def main(argv=None):
     r = sub.add_parser("report"); r.add_argument("run", nargs="?")
     s = sub.add_parser("shots"); s.add_argument("filter", nargs="?", default=""); s.add_argument("--out")
     s.add_argument("--modes", default="dark,light"); s.add_argument("--build", action="store_true")
+    s.add_argument("--all", action="store_true")
+    p = sub.add_parser("site"); p.add_argument("--run"); p.add_argument("--out")
     a = ap.parse_args(argv)
 
     if a.cmd == "test":
@@ -64,7 +67,10 @@ def main(argv=None):
         report.main(run)
     if a.cmd == "shots":
         from . import shots
-        return shots.main(xpi(a.build), a.filter, a.out, a.modes.split(","))
+        return (shots.main_all if a.all else shots.main)(xpi(a.build), a.filter, a.out, a.modes.split(","))
+    if a.cmd == "site":
+        from . import site
+        return site.main(Path(a.run) if a.run else None, Path(a.out) if a.out else None)
     return 0
 
 

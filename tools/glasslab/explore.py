@@ -40,8 +40,8 @@ async def activate(pg, t):
     return True
 
 
-async def restored(pg, url):
-    return not await pg.probe("layers", "diff") and await pg.eval("location.href") == url
+async def restored(pg, url, t=None):
+    return not await pg.probe("layers", "diff", t and t["sel"]) and await pg.eval("location.href") == url
 
 
 async def reset(pg, url, t, settle):
@@ -59,7 +59,7 @@ async def reset(pg, url, t, settle):
         else:
             await pg.eval("document.activeElement && document.activeElement.blur()")
         await asyncio.sleep(0.4)
-        if await restored(pg, url):
+        if await restored(pg, url, t):
             return
     await pg.goto(url, settle)
 
@@ -98,7 +98,7 @@ async def visit(pg, screen, fn, triggers=None, settle=3, max_triggers=MAX_TRIGGE
     for t in triggers if triggers is not None else await pg.probe("triggers", DANGER, max_triggers) or []:
         try:
             await pg.probe("layers", "mark")
-            if await activate(pg, t) and (layers := await pg.probe("layers", "diff") or []):
+            if await activate(pg, t) and (layers := await pg.probe("layers", "diff", t["sel"]) or []):
                 if (r := await fn(f"{screen}~{slug(t['label'] or t['id'])}", t, layers)) is not None:
                     out.append(r)
         except Exception as e:  # one odd control must not sink the run (re-rendered DOM, navigation, …)

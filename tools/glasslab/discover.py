@@ -158,17 +158,18 @@ def slug(name):
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
-def add_registry(name, host, css, dark_only):
-    p = ROOT / "data/ContentScripts.json"
+def add_registry(name, host, css, dark_only, path=None):
+    """new entry FIRST: the registry's first match wins, and a regenerated site must beat its old entry"""
+    p = path or ROOT / "data/ContentScripts.json"
     s = p.read_bytes().decode()
     if f"./styles/websites/{css}" in s:
         return False
     nl = "\r\n" if "\r\n" in s else "\n"
     rx = "^https?://(www\\\\.)?" + host.replace(".", "\\\\.") + "/"
-    entry = (f"\t\t}},{nl}\t\t{{{nl}\t\t\t\"name\": \"{name}\",{nl}\t\t\t\"matches\": [\"{rx}\"],{nl}"
+    entry = (f"\t\t{{{nl}\t\t\t\"name\": \"{name}\",{nl}\t\t\t\"matches\": [\"{rx}\"],{nl}"
              f"\t\t\t\"css\": [\"./styles/websites/{css}\"],{nl}" + (f"\t\t\t\"glass\": \"dark\",{nl}" if dark_only else "")
-             + f"\t\t\t\"run_at\": \"document_start\",{nl}\t\t\t\"favicon\": \"https://icons.duckduckgo.com/ip3/{host}.ico\"{nl}")
-    i = s.rstrip().rfind(f"\t\t}}{nl}\t]")
+             + f"\t\t\t\"run_at\": \"document_start\",{nl}\t\t\t\"favicon\": \"https://icons.duckduckgo.com/ip3/{host}.ico\"{nl}\t\t}},{nl}")
+    i = s.index("[", s.index('"supportedWebsites"')) + 1 + len(nl)
     p.write_bytes((s[:i] + entry + s[i:]).encode())
     json.loads(p.read_text())  # still valid
     return True

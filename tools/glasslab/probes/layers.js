@@ -1,6 +1,7 @@
 // layers: hidden UI a trigger revealed. 'mark' remembers what is on screen now; 'diff' → roots of newly visible subtrees that
 // float (positioned absolute/fixed themselves or via an ancestor, top layer, or a popup role), ≥ 1200 px², largest first.
-((mode) => {
+// trigger: selector of the activated control — anything new INSIDE it (Material ripple, focus ring) is not a layer.
+((mode, trigger) => {
   const all = [...document.body.querySelectorAll('*')];
   if (mode === 'mark') { window.__glxSeen = new WeakSet(all.filter(onScreen)); return 'true'; }
   const seen = window.__glxSeen || new WeakSet();
@@ -18,7 +19,8 @@
   const textual = all.filter(e => seen.has(e) && [...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim()) && onScreen(e));
   const hits = (a, b) => a.left < b.right - 2 && b.left < a.right - 2 && a.top < b.bottom - 2 && b.top < a.bottom - 2;
   const over = p => { const r = p.getBoundingClientRect(); return textual.some(t => !t.contains(p) && !p.contains(t) && hits(t.getBoundingClientRect(), r)); };
-  const roots = [...fresh].filter(e => !fresh.has(e.parentElement) && floats(e))
+  let inside = null; try { inside = trigger && document.querySelector(trigger); } catch (_) {}
+  const roots = [...fresh].filter(e => !fresh.has(e.parentElement) && floats(e) && !(inside && inside.contains(e)))
     .map(e => ({ sel: path(e), label: label(e), rect: rectOf(e), panel: rectOf(panel(e)), over: over(panel(e)) }))
     .filter(l => l.rect[2] * l.rect[3] >= 1200)
     .sort((a, b) => b.rect[2] * b.rect[3] - a.rect[2] * a.rect[3]);

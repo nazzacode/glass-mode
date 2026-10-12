@@ -90,3 +90,8 @@ def test_survives_a_broken_trigger(fixture_url, tmp_path):
             await pg.goto(fixture_url("app.html"), settle=1)
             return await explore.activate(pg, {"sel": "div:::nonsense", "kind": "click"})
     assert asyncio.run(go()) is False
+
+
+def test_ripple_inside_the_trigger_is_not_a_layer(explored):
+    s = state(explored, "ripple-btn")
+    assert s and [l["sel"] for l in s["layers"]] == ["#menu-sort"], s and s["layers"]

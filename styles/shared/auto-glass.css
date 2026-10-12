@@ -4,10 +4,10 @@
 
 /* the tint lives on the root (= the whole canvas), not on <body>'s box: many pages have a narrow centred body, and bars
    or banners classified "clear" (frame) must still have the frame tint under them */
-:root.tz-auto {
+:root.tz-auto.tz-initialized:not(#tz-glass) {
 	background: var(--g-body, var(--g-frame)) !important;
 }
-:root.tz-auto body {
+:root.tz-auto.tz-initialized:not(#tz-glass) body {
 	background: transparent !important;
 }
 

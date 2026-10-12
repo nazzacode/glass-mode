@@ -39,10 +39,12 @@
     <button id="menu-good-btn" aria-haspopup="menu" aria-expanded="false">View menu</button>
     <input id="search" type="search" role="combobox" aria-expanded="false" placeholder="Search mail" aria-controls="suggest">
     <button id="dialog-btn" aria-haspopup="dialog">Settings</button>
+    <button id="ripple-btn" aria-haspopup="menu" aria-expanded="false" style="position: relative; overflow: hidden">Sort</button>
     <button id="danger-btn" aria-haspopup="dialog">Delete everything</button>
     <button id="drawer-btn" aria-expanded="false" aria-controls="drawer">Details</button>
     <div id="menu-bad" class="pop" role="menu" hidden><div role="menuitem">New window</div><div role="menuitem">Open recent file</div></div>
     <div id="menu-good" class="pop" role="menu" hidden><div role="menuitem">Compact density</div><div role="menuitem">Show preview pane</div></div>
+    <div id="menu-sort" class="pop" role="menu" style="left: 420px; background: var(--raised)" hidden><div role="menuitem">Newest first</div><div role="menuitem">Oldest first</div></div>
     <div id="suggest" class="pop" role="listbox" hidden><div role="option">liquid glass design</div><div role="option">liquid glass wallpapers</div></div>
   </div>
   <h2>Welcome back</h2>
@@ -62,6 +64,11 @@
     document.querySelectorAll('.bar [aria-haspopup][aria-expanded], #search').forEach(b => b.setAttribute('aria-expanded', 'false')); };
   toggle($('menu-bad-btn'), $('menu-bad'));
   toggle($('menu-good-btn'), $('menu-good'));
+  toggle($('ripple-btn'), $('menu-sort'));
+  // Material ripple: a translucent span created inside the button on its first click — not a menu
+  $('ripple-btn').addEventListener('click', () => { if ($('ripple-btn').querySelector('.ripple')) return;
+    const r = document.createElement('span'); r.className = 'ripple';
+    r.style.cssText = 'position:absolute;inset:0;background:rgba(127,127,127,.12)'; $('ripple-btn').append(r); });
   $('search').addEventListener('input', () => { closeAll(); $('suggest').hidden = !$('search').value; });
   // drawer ignores Escape (like Gmail's quick settings): only its toggle closes it
   $('drawer-btn').addEventListener('click', e => { e.stopPropagation(); $('drawer').hidden = !$('drawer').hidden; $('drawer-btn').setAttribute('aria-expanded', !$('drawer').hidden); });

@@ -118,11 +118,13 @@
 :root.tz-initialized[data-tz-glass="light"] {
 	color-scheme: light;
 }
-:root.tz-initialized,
-:root.tz-initialized body {
+/* :not(#tz-glass) = id-level specificity: sites style the root with long !important selectors
+   (Perplexity: html[data-color-scheme="dark"]:not(.todesktop)) and must not win over the glass */
+:root.tz-initialized:not(#tz-glass),
+:root.tz-initialized:not(#tz-glass) body {
 	background: transparent !important;
 }
-:root.tz-initialized body {
+:root.tz-initialized:not(#tz-glass) body {
 	background: var(--g-body, var(--g-frame)) !important;
 }
 

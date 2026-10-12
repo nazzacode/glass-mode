@@ -7,12 +7,12 @@ type State = { opacity: number; theme: GlassTheme; report: string; reportLabel: 
 type Change = { opacity?: number; theme?: GlassTheme };
 
 const CSS = `
-:host { all: initial; position: fixed; z-index: 2147483647; top: 16px; right: 16px; font: 13px/1.4 system-ui, sans-serif; }
+:host { all: initial; position: fixed; z-index: 2147483647; top: 72px; right: 20px; font: 13px/1.4 system-ui, sans-serif; }
 .card { width: 260px; padding: 14px 16px 12px; border-radius: 10px; display: grid; gap: 10px; color: var(--fg);
   background: var(--bg); backdrop-filter: blur(24px) saturate(160%); border: 1px solid var(--rim);
   box-shadow: 0 12px 32px rgba(0,0,0,.28), inset 0 1px 0 var(--sheen); }
-:host([data-mode=dark]) { --fg: #f2f2f5; --muted: #a8a8b0; --bg: rgba(30,30,34,.86); --rim: rgba(255,255,255,.1); --sheen: rgba(255,255,255,.08); --seg: rgba(255,255,255,.07); --on: rgba(10,132,255,.35); }
-:host([data-mode=light]) { --fg: #1c1c1e; --muted: #55555c; --bg: rgba(250,250,252,.9); --rim: rgba(255,255,255,.8); --sheen: rgba(255,255,255,.7); --seg: rgba(0,0,0,.05); --on: rgba(0,122,255,.16); }
+:host([data-mode=dark]) { --fg: #f2f2f5; --muted: #a8a8b0; --bg: rgba(30,30,34,.95); --rim: rgba(255,255,255,.1); --sheen: rgba(255,255,255,.08); --seg: rgba(255,255,255,.07); --on: rgba(10,132,255,.35); }
+:host([data-mode=light]) { --fg: #1c1c1e; --muted: #55555c; --bg: rgba(250,250,252,.95); --rim: rgba(255,255,255,.8); --sheen: rgba(255,255,255,.7); --seg: rgba(0,0,0,.05); --on: rgba(0,122,255,.16); }
 .head { display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
 button { all: unset; cursor: pointer; }
 .x { color: var(--muted); padding: 0 4px; }

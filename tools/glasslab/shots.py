@@ -88,6 +88,11 @@ async def run(xpi, screens, out, wanted, log):
                 walls.setdefault(w, wallgen.make(w))
                 paths = showcase.save(showcase.render(black, white, walls[w]), out / f"{sc['id']}.{mode}")
                 print(f"  {mode:5s} on {w:7s} → {paths[0]}", flush=True)
+                if sc.get("crop"):   # detail at full capture resolution (README: the panel), page over its blurred wallpaper
+                    page = composite(black, white, showcase.blurred(walls[w].resize(black.size)))
+                    l, t, r, b = sc["crop"]
+                    W, H = page.size
+                    page.crop((int(l * W), int(t * H), int(r * W), int(b * H))).save(out / f"{sc['id']}.{mode}.crop.webp", quality=88)
 
 
 # ── --sweep: the one knob, animated ─────────────────────────────────────────────────────────────────────────────────

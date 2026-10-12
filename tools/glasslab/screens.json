@@ -331,8 +331,7 @@
    "settle": 10,
    "private": [
     "body"
-   ],
-   "showcase": true
+   ]
   },
   {
    "id": "gdrive-new",
@@ -348,14 +347,12 @@
    "settle": 12,
    "private": [
     "body"
-   ],
-   "showcase": true
+   ]
   },
   {
    "id": "perplexity-home",
    "url": "https://www.perplexity.ai/",
    "settle": 10,
-   "showcase": true,
    "logged_out": [
     "perplexity.ai",
     "google.com"
@@ -363,8 +360,7 @@
   },
   {
    "id": "notion-home",
-   "url": "https://notion.notion.site/",
-   "showcase": true
+   "url": "https://notion.notion.site/"
   },
   {
    "id": "notion-careers",
@@ -432,7 +428,13 @@
     "modes": [
      "dark"
     ]
-   }
+   },
+   "crop": [
+    0.55,
+    0.0,
+    1.0,
+    0.5
+   ]
   }
  ]
 }

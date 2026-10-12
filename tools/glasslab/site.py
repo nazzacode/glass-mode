@@ -209,64 +209,77 @@ def update_readme(raw, block):
 # tests forbid em-dashes and sales words here.
 COPY = {
     "title": "Transparent Zen",
-    "lead": "Websites rendered as translucent glass in Zen Browser, readable on any wallpaper.",
-    "facts": [
-        "Styles for {n} sites, all on one set of glass tiers, so every site reads the same way.",
-        "Auto glass for sites without a style (beta).",
-        "One opacity setting: the popup slider, or Alt+Shift+Up/Down in any window. Alt+Shift+G switches auto, dark and light.",
-        "Web-app windows for any site, with their own launcher entry (Linux).",
-        "Every screen, menu and dialog is tested for contrast against the brightest and darkest wallpaper.",
+    "lead": "Make websites see-through in Zen Browser, without losing readable text.",
+    "features": [
+        "{n} sites styled, including {examples}.",
+        "Auto glass for every other site (beta).",
+        "One setting, opacity. Change it from any window with Alt+Shift+Up and Down.",
+        "Light and dark glass that follows your desktop.",
+        "Web apps: any site in its own window, glass included (Linux).",
+    ],
+    "why": [
+        "Glass desktops stop at the browser. Every website paints a solid box over your wallpaper, and simply making "
+        "pages see-through leaves text unreadable over a busy background.",
+        "Transparent Zen gives each site frosted panels and menus with a minimum text contrast, checked on every screen "
+        "and menu of every supported site.",
+        "It needs Zen because Zen has built-in window transparency, so the desktop can show through a web page. "
+        "Chrome-based browsers can't do this. Firefox might, with manual setup we haven't tested.",
     ],
     "install": [
-        "In Zen, open `about:config` and set `browser.tabs.allow_transparent_browser` to `true`.",
-        "Linux: also set `zen.widget.linux.transparency` to `true`. The blur comes from your compositor: Hyprland blurs "
-        "out of the box, KDE needs [kwin-effects-forceblur](https://github.com/taj-ny/kwin-effects-forceblur), GNOME "
-        "needs [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/).",
-        "Windows 11: also set `widget.windows.mica` to `true`. macOS is untested.",
-        "Download the `.xpi` from [Releases]({repo}/releases/latest) and open it in Zen.",
-        "Turn off Dark Reader for glass sites. It repaints them opaque.",
+        "Download `transparent-zen.xpi` from [Releases]({repo}/releases/latest) and open it in Zen.",
+        "Turn on transparency: in `about:config`, set `browser.tabs.allow_transparent_browser` to `true`, then the "
+        "setting for your system below.",
     ],
-    "control": [
-        "Glass has one setting, opacity. Use the slider in the toolbar popup, or press Alt+Shift+Up and Alt+Shift+Down "
-        "in any window, including web-app windows, which have no toolbar.",
-        "Alt+Shift+G cycles the mode: auto follows your desktop's light or dark theme, then dark, then light.",
-        "Text keeps a minimum contrast at every opacity, so low settings show more desktop without becoming unreadable.",
+    "install_os": [
+        "Linux: `zen.widget.linux.transparency` = `true`. The blur comes from your compositor. Hyprland blurs out of "
+        "the box; KDE needs [kwin-effects-forceblur](https://github.com/taj-ny/kwin-effects-forceblur); GNOME needs "
+        "[Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/).",
+        "Windows 11: `widget.windows.mica` = `true`.",
+        "macOS: untested. Reports welcome.",
+        "Dark Reader repaints pages solid. Turn it off for glass sites.",
     ],
+    "use": [
+        "Press Alt+Shift+G in any page to open the glass panel. It works in web-app windows too, which have no "
+        "toolbar. The toolbar popup has the same controls.",
+        "Alt+Shift+Up and Alt+Shift+Down make glass more or less opaque.",
+    ],
+    "opacity": "Low opacity shows more desktop; high is nearly solid. Text stays readable at every step, so panes "
+               "with long text stay denser than sidebars.",
+    "modes": "Auto follows your desktop's light or dark setting. Dark glass suits dark wallpapers. Light glass is "
+             "frosted and suits bright ones.",
     "webapps": [
-        "`webapp/zen-webapp` turns a site into its own Zen window with a launcher entry and taskbar icon. It uses "
-        "Firefox's Taskbar Tabs and shares your normal profile. Linux only.",
+        "`webapp/zen-webapp` opens a site in its own Zen window, with a launcher entry and taskbar icon. It uses your "
+        "normal Zen profile, so you stay logged in. Linux only.",
     ],
     "webapps_cmd": './webapp/zen-webapp add "WhatsApp" https://web.whatsapp.com/ --icon auto',
+    "sites": "Each site is tested in light and dark, including its menus, dropdowns and dialogs.",
     "add": [
-        "One command discovers which of the site's own colour variables paint it, writes a style that maps them onto "
-        "the glass tiers, registers the site and runs the tests.",
-        "With `--agent`, a coding agent fixes what fails. Each edit is kept only if the test scores go up, and it can "
-        "only change that site's style file.",
-        "Or [request a site]({request}). A maintainer labels the request and CI opens a pull request.",
+        "Something unreadable? Open the panel and choose Report a problem. It opens a pre-filled issue.",
+        "Missing a site? Turn on auto glass in the toolbar popup, or [request the site]({request}).",
+        "To add one yourself:",
     ],
-    "add_cmd": './glasslab add "Linear" https://linear.app/\n./glasslab add "Linear" https://linear.app/ --agent',
-    "testing": [
-        "Each page is captured over pure black and pure white, which gives the exact colour and transparency of every pixel.",
-        "Contrast: every line of text, through its real stack of layers, against the darkest and the brightest blurred "
-        "wallpaper (APCA; body text Lc 75, labels 60). Glass never reads worse than the site's own design.",
-        "Unity: every surface is one of the shared tiers and every grey text colour is a shared ink.",
-        "Hidden UI: the lab opens every menu, dropdown, dialog and search suggestion it can find and tests each one. "
-        "It never clicks anything that sends, deletes, buys or signs out.",
-        "CI runs the same suite on local test pages in headless Firefox on every push.",
-    ],
-    "auto": [
-        "For sites without a style, auto glass sorts the page's painted boxes into the same tiers (page, panel, menu, "
-        "control) and maps grey text onto the shared inks by contrast. Brand colours, images and code keep their colours.",
-        "Switch it on in the popup. It is in beta: good on documentation, news and simple apps.",
+    "add_cmd": './glasslab add "Linear" https://linear.app/            # style, register, test\n'
+               './glasslab add "Linear" https://linear.app/ --agent    # an agent fixes what fails',
+    "add_after": ["With `--agent`, edits are kept only if the test scores go up. Full guide: [docs/GLASS.md](docs/GLASS.md)."],
+    "how": [
+        "Each style maps the site's own colours onto shared glass layers: page, sidebar, content, menu. That is why "
+        "every site looks and reads the same.",
+        "A test lab opens every screen and menu in a headless browser, measures text contrast against the brightest "
+        "and darkest wallpaper, and checks every surface is glass. It never clicks anything that sends or deletes.",
+        "Sites without a style get auto glass: the same layers, guessed from the page's layout.",
     ],
     "credits": [
-        "Fork of [Transparent Zen](https://github.com/frostybiscuit/transparent-zen) by FrostyBiscuit, which made the "
-        "extension and the per-site idea. Glass system, test lab, auto glass and web apps by nazzacode. MIT licence.",
+        "Fork of [Transparent Zen](https://github.com/frostybiscuit/transparent-zen) by FrostyBiscuit. Glass system, "
+        "test lab, auto glass and web apps by nazzacode. MIT licence.",
     ],
 }
+EXAMPLES = ["Gmail", "Google Calendar", "Spotify", "WhatsApp", "GitHub", "DuckDuckGo"]
+README_SHOTS = {"hero": "gcal-week.dark", "panel": "panel.dark", "light": "wiki-article.light", "dark": "wiki-article.dark",
+                "strip": ["gcal-week.dark.op10", "gcal-week.dark.op45", "gcal-week.dark.op90"],
+                "gallery": ["spotify-artist.dark", "gmail-inbox.light", "reader-doc.dark", "linear-home.dark"]}
 
 GROUPS = [("Start", [("overview", "Overview"), ("install", "Install"), ("control", "Control"), ("web-apps", "Web apps")]),
-          ("Project", [("add", "Add a site"), ("testing", "How it's tested"), ("auto", "Auto glass"), ("credits", "Credits")])]
+          ("Project", [("add", "Add a site"), ("testing", "How it works"), ("credits", "Credits")])]
 DOT = {"verified": "live", "pending": "partial", "untested": "planned", "auto": "planned"}
 
 
@@ -275,8 +288,10 @@ def gh(repo, path=""):
 
 
 def fill(text, c):
+    names = {s["name"] for s in c["sites"]}
+    ex = [e for e in EXAMPLES if e in names] or EXAMPLES
     return text.format(n=sum(s["status"] == "verified" for s in c["sites"]), repo=gh(c["repo"]),
-                       request=issue_url("site-request", repo=c["repo"]))
+                       request=issue_url("site-request", repo=c["repo"]), examples=", ".join(ex[:-1]) + " and " + ex[-1])
 
 
 def inline(text):
@@ -313,19 +328,19 @@ def picture(shot, alt):
 
 def hero_shot(c):
     by = {s["screen"]: s for s in c["shots"]}
-    return next((by[k] for k in ("gcal-week", "gmail-inbox", "spotify-artist") if k in by), c["shots"][0] if c["shots"] else None)
+    return next((by[k] for k in (README_SHOTS["hero"].split(".")[0], "gmail-inbox", "spotify-artist") if k in by),
+                c["shots"][0] if c["shots"] else None)
 
 
 def overview(c):
     hero = hero_shot(c)
-    fig = f'<figure class="hero">{picture(hero, "Transparent Zen")}<figcaption>Real capture through the extension on a ' \
-          f'blurred wallpaper. Personal apps are shown with every word and photo scrambled.</figcaption></figure>' if hero else ""
+    fig = f'<figure class="hero">{picture(hero, "Transparent Zen")}</figure>' if hero else ""
+    feats = "".join(f"<li>{inline(fill(f, c))}</li>" for f in COPY["features"])
     names = c["names"]
     grid = "".join(f'<figure>{picture(s, view_name(s["screen"], names)[0])}<figcaption>{esc(view_name(s["screen"], names)[0])}'
                    f'</figcaption></figure>' for s in c["shots"] if s is not hero)
-    facts = "".join(f"<li>{inline(fill(f, c))}</li>" for f in COPY["facts"])
-    return (f'<article id="overview"><h1>{esc(COPY["title"])}</h1><p class="sub">{esc(COPY["lead"])}</p>{fig}<ul>{facts}</ul>'
-            + (f'<h2>Gallery</h2><div class="grid">{grid}</div>' if grid else "") + "</article>")
+    return (f'<article id="overview"><h1>{esc(COPY["title"])}</h1><p class="sub">{esc(COPY["lead"])}</p>{fig}<ul>{feats}</ul>'
+            f'<h2>Why</h2>{paras(COPY["why"], c)}' + (f'<h2>Gallery</h2><div class="grid">{grid}</div>' if grid else "") + "</article>")
 
 
 def steps(lines, c):
@@ -397,14 +412,14 @@ def render(c):
     listed = [s for s in c["sites"] if s["screens"]]
     articles = "".join([
         overview(c),
-        f'<article id="install"><h1>Install</h1>{steps(COPY["install"], c)}</article>',
-        text_page("control", "Control", COPY["control"], c),
+        f'<article id="install"><h1>Install</h1>{steps(COPY["install"], c)}<ul>'
+        + "".join(f"<li>{inline(fill(l, c))}</li>" for l in COPY["install_os"]) + "</ul></article>",
+        text_page("control", "Control", COPY["use"] + [COPY["opacity"], COPY["modes"]], c),
         text_page("web-apps", "Web apps", COPY["webapps"], c, pre(COPY["webapps_cmd"]) + '<p><a href="'
                   + gh(c["repo"], "/blob/master/webapp/README.md") + '">webapp/README.md</a></p>'),
         sites_page(c), *(site_page(s, c) for s in listed),
-        text_page("add", "Add a site", COPY["add"][:1], c, pre(COPY["add_cmd"]) + paras(COPY["add"][1:], c)),
-        text_page("testing", "How it's tested", COPY["testing"], c),
-        text_page("auto", "Auto glass", COPY["auto"], c),
+        text_page("add", "Add a site", COPY["add"], c, pre(COPY["add_cmd"]) + paras(COPY["add_after"], c)),
+        text_page("testing", "How it works", COPY["how"], c),
         text_page("credits", "Credits", COPY["credits"], c),
     ])
     return f"""<!doctype html>
@@ -441,28 +456,47 @@ def md_lines(lines, c, prefix=""):
     return "\n\n".join(prefix + fill(l, c) for l in lines)
 
 
+def shot(name, alt, width=None):
+    """README image from site/shots (webp); empty when the file isn't there"""
+    f = SITE / "shots" / f"{name}.webp"
+    if not f.is_file():
+        return ""
+    return f'<img src="site/shots/{name}.webp" alt="{alt}" width="{width}">' if width else f"![{alt}](site/shots/{name}.webp)"
+
+
 def readme_md(c):
-    hero = hero_shot(c)
-    names = c["names"]
-    shots = [s for s in c["shots"] if s is not hero][:4]
-    img = lambda s: f"![{view_name(s['screen'], names)[0]}](site/shots/{s['dark'] or s['light']})"
-    gallery = ("\n| | |\n|---|---|\n" + "".join(f"| {img(a)} | {img(b)} |\n" for a, b in zip(shots[::2], shots[1::2]))) if len(shots) >= 2 else ""
+    R = README_SHOTS
     site_url = f"https://{c['repo'].split('/')[0]}.github.io/{c['repo'].split('/')[1]}/"
-    return "\n".join([
-        f"# {COPY['title']}", "", COPY["lead"], "",
-        f"![{COPY['title']}](site/shots/{hero['light'] or hero['dark']})" if hero else "", gallery,
-        f"Screenshots of every tested site, screen and menu: [{site_url}]({site_url})", "",
-        "\n".join(f"- {fill(f, c)}" for f in COPY["facts"]), "",
+    strip = [shot(n, f"opacity {n[-2:]}%") for n in R["strip"]]
+    gallery = [shot(n, n.split("-")[0].split(".")[0].title()) for n in R["gallery"]]
+    gallery = [g for g in gallery if g]
+    md = [
+        f"# {COPY['title']}", "", COPY["lead"], "", shot(R["hero"], "Google Calendar as dark glass"), "",
+        "\n".join(f"- {fill(f, c)}" for f in COPY["features"]), "",
+        "## Why", "", md_lines(COPY["why"], c), "",
         "## Install", "", "\n".join(f"{i}. {fill(l, c)}" for i, l in enumerate(COPY["install"], 1)), "",
-        "## Control", "", md_lines(COPY["control"], c), "",
+        "<details><summary>Settings for your system</summary>", "",
+        "\n".join(f"- {fill(l, c)}" for l in COPY["install_os"]), "", "</details>", "",
+        "## Use", "", shot(R["panel"], "The glass panel", 360), "", md_lines(COPY["use"], c), "",
+    ]
+    if all(strip):
+        md += ["| 10 % | 45 % (default) | 90 % |", "|---|---|---|", "| " + " | ".join(strip) + " |", "", COPY["opacity"], ""]
+    if shot(R["dark"], "x") and shot(R["light"], "x"):
+        md += ["| Dark | Light |", "|---|---|", f"| {shot(R['dark'], 'Wikipedia, dark glass')} | {shot(R['light'], 'Wikipedia, light glass')} |",
+               "", COPY["modes"], ""]
+    if len(gallery) >= 2:
+        md += ["## Gallery", "", "| | |", "|---|---|"] + [f"| {a} | {b} |" for a, b in zip(gallery[::2], gallery[1::2])]
+        md += ["", f"Every site, screen and menu: [{site_url}]({site_url})", ""]
+    md += [
         "## Web apps", "", md_lines(COPY["webapps"], c), "", "```sh", COPY["webapps_cmd"], "```", "",
-        "## Sites", "", START, readme_table(c["sites"], c["repo"]).strip(), END, "",
-        "## Add a site", "", md_lines(COPY["add"][:1], c), "", "```sh", COPY["add_cmd"], "```", "", md_lines(COPY["add"][1:], c), "",
-        "Full guide: [docs/GLASS.md](docs/GLASS.md).", "",
-        "## How it's tested", "", "\n".join(f"- {fill(l, c)}" for l in COPY["testing"]), "",
-        "## Auto glass", "", md_lines(COPY["auto"], c), "",
+        "## Sites", "", fill(COPY["sites"], c), "", "<details><summary>All sites and test results</summary>", "",
+        START, readme_table(c["sites"], c["repo"]).strip(), END, "", "</details>", "",
+        "## Add a site, report a problem", "", md_lines(COPY["add"], c), "", "```sh", COPY["add_cmd"], "```", "",
+        md_lines(COPY["add_after"], c), "",
+        "## How it works", "", "\n".join(f"- {fill(l, c)}" for l in COPY["how"]), "",
         "## Credits", "", md_lines(COPY["credits"], c), "",
-    ])
+    ]
+    return "\n".join(md)
 
 
 def main(run=None, out=None):

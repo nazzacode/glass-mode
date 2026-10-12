@@ -167,7 +167,7 @@ def test_page_escapes_and_links(html):
 def test_page_is_a_docs_shell(html):
     """docs layout (Nathan: 'no sales, tight docs, sidebar + selectable feature list'): one article per topic + per site"""
     assert html.count("<nav") == 1
-    for a in ("overview", "install", "control", "web-apps", "sites", "add", "testing", "auto", "credits"):
+    for a in ("overview", "install", "control", "web-apps", "sites", "add", "testing", "credits"):
         assert f'<article id="{a}"' in html and f'href="#{a}"' in html, a
 
 
@@ -175,7 +175,7 @@ def test_readme_comes_from_the_same_copy(html):
     ctx = site.context(REGISTRY, SCREENS, NUMBERS, [], [], repo="a/b")
     md = site.readme_md(ctx)
     assert site.COPY["lead"] in md and site.COPY["lead"] in html
-    for line in site.COPY["facts"]:
+    for line in site.COPY["features"]:
         assert site.fill(line, ctx).split(".")[0] in md
     assert site.START in md and site.END in md and "Old Site" in md
 

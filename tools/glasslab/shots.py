@@ -50,8 +50,21 @@ def private(sc):
     return sc.get("private") or None
 
 
+def order(screens):
+    """logged-out screens last: their cookie deletion must not log later screens out (one lab session)"""
+    return sorted(screens, key=lambda s: bool(s.get("logged_out")))
+
+
+async def logout(pg, domains):
+    """public pages are shot logged out (`"logged_out": [domains]`): your avatar, handle, recommendations never show"""
+    for d in domains:
+        for dom in (d, "." + d):
+            await pg.b.call("storage.deleteCookies", filter={"domain": dom})
+
+
 async def capture(pg, sc, wanted):
     """→ [(mode, black, white)] for one screen"""
+    await logout(pg, sc.get("logged_out", []))
     await pg.goto(sc["url"], sc.get("settle", 7), sc.get("act"))
     if private(sc):
         print(f"  scrambled {await scramble(pg, sc)}", flush=True)   # raises if the scrambler didn't run
@@ -68,7 +81,7 @@ async def run(xpi, screens, out, wanted, log):
     async with lab.session(xpi, log, VIEWPORT) as pg:
         await pg.b.call("browsingContext.setViewport", context=pg.ctx,
                         viewport={"width": VIEWPORT[0], "height": VIEWPORT[1]}, devicePixelRatio=DPR)
-        for sc in screens:
+        for sc in order(screens):
             print(f"· {sc['id']}", flush=True)
             for mode, black, white in await capture(pg, sc, wanted):
                 w = wallpaper(sc, mode)
@@ -194,6 +207,7 @@ async def snap(pg, sc, ms, st, out, walls):
 
 async def capture_all(pg, sc, wanted, out, walls):
     """one screen → index rows: base view per mode, then every explored state per mode"""
+    await logout(pg, sc.get("logged_out", []))
     await pg.goto(sc["url"], sc.get("settle", 7), sc.get("act"))
     if sc.get("auto"):
         await pg.eval(AUTO)
@@ -223,7 +237,7 @@ async def run_all(xpi, screens, out, wanted, log):
     old = json.loads(index_path.read_text())["tiles"] if index_path.exists() else []
     new = []
     async with lab.session(xpi, log, TILE_VIEWPORT) as pg:
-        for sc in screens:
+        for sc in order(screens):
             print(f"· {sc['id']}", flush=True)
             try:
                 new += await capture_all(pg, sc, wanted, out, walls)

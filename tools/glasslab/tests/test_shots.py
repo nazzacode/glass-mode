@@ -1,5 +1,7 @@
 """shots planning (pure): which screens, modes, wallpapers, private scopes; screens.json schema sanity"""
 import json
+
+import pytest
 from pathlib import Path
 
 from tools.glasslab import shots, wallgen
@@ -45,8 +47,10 @@ def test_registry_schema():
             assert s.get("private"), s["id"]                             # personal apps never shot unscrambled
         for m in shots.modes(s, ["dark", "light"]) if s.get("showcase") else []:
             assert shots.wallpaper(s, m) in wallgen.PRESETS
-    for pub in ("youtube-home", "google-search"):   # public pages: only small scopes (avatar, account) are scrambled
-        assert byid[pub].get("showcase") and "body" not in (byid[pub].get("private") or [])
+    # showcase = visually vetted: logged-in public pages leaked avatars/handles/interests → shot logged out or dropped
+    for s in data:
+        if s.get("logged_out"):
+            assert isinstance(s["logged_out"], list) and all("." in d for d in s["logged_out"])
     assert len(shots.select(data)) >= 5
 
 
@@ -133,3 +137,24 @@ def test_animation_written(tmp_path):
     p = shots.save_animation(frames, tmp_path / "x.webp", 120)
     im = Image.open(p)
     assert im.n_frames == 4 and im.size == (8, 5)
+
+
+# ── logged-out showcase screens (public pages shot with your account → your avatar, interests, handle) ──
+def test_logged_out_screens_go_last():
+    s = [{"id": "a", "logged_out": ["x.com"]}, {"id": "b"}, {"id": "c"}]
+    assert [x["id"] for x in shots.order(s)] == ["b", "c", "a"]
+
+
+@pytest.mark.e2e
+def test_logout_deletes_the_sites_cookies(fixture_url, tmp_path):
+    import asyncio
+    from tools.glasslab import lab
+
+    async def go():
+        async with lab.session(None, tmp_path / "browser.log") as pg:
+            await pg.goto(fixture_url("app.html"), settle=0.5)
+            await pg.eval("document.cookie = 'session=secret; max-age=3600; path=/'")
+            await shots.logout(pg, ["127.0.0.1"])
+            await pg.goto(fixture_url("app.html"), settle=0.5)
+            return await pg.eval("document.cookie")
+    assert "secret" not in asyncio.run(go())

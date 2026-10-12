@@ -1,5 +1,5 @@
 {
- "_doc": "glasslab test screens. id = <site>-<view>; act = JS run after load (READ-ONLY: never send/archive/mark; open only already-read items); modes = restrict glass modes (forced-dark sites); settle = seconds to wait after load (default 7). private = selectors scrambled before showcase shots (probes/scramble.js; [\"body\"] = whole app). showcase = gallery screen for `glasslab shots`: true | {wallpaper: preset | {dark|light: preset}, modes: [...]} (wallpaper presets: tools/glasslab/wallgen.py; default per mode). auto = site without a style: measure auto glass (on-the-fly mode).",
+ "_doc": "glasslab test screens. id = <site>-<view>; act = JS run after load (READ-ONLY: never send/archive/mark; open only already-read items); modes = restrict glass modes (forced-dark sites); settle = seconds to wait after load (default 7). private = selectors scrambled before showcase shots (probes/scramble.js; [\"body\"] = whole app). showcase = gallery screen for `glasslab shots`: true | {wallpaper: preset | {dark|light: preset}, modes: [...]} (wallpaper presets: tools/glasslab/wallgen.py; default per mode). auto = site without a style: measure auto glass (on-the-fly mode). logged_out = cookie domains deleted before shots (public pages shown logged out: no avatar, handle or recommendations).",
  "screens": [
   {
    "id": "gcal-week",
@@ -65,8 +65,7 @@
    "url": "https://claude.ai/new",
    "private": [
     "body"
-   ],
-   "showcase": true
+   ]
   },
   {
    "id": "claude-recents",
@@ -78,38 +77,32 @@
   {
    "id": "substack-home",
    "url": "https://substack.com/home",
-   "showcase": {
-    "wallpaper": {
-     "dark": "tide"
-    }
-   },
    "private": [
-    "[class*='ubscriptions']",
-    "[class*='recommend']",
-    "img[src*='avatar'], img[alt*='avatar' i]"
+    "body"
    ]
   },
   {
    "id": "youtube-home",
    "url": "https://www.youtube.com/",
-   "showcase": true,
    "private": [
     "#avatar-btn",
     "ytd-topbar-menu-button-renderer",
     "#guide-inner-content #sections > :nth-child(2)"
+   ],
+   "logged_out": [
+    "youtube.com",
+    "google.com"
    ]
   },
   {
    "id": "google-search",
    "url": "https://www.google.com/search?q=liquid+glass+design",
-   "showcase": {
-    "wallpaper": {
-     "dark": "tide"
-    }
-   },
    "private": [
     "[aria-label^='Google Account']",
     "a[href*='SignOutOptions']"
+   ],
+   "logged_out": [
+    "google.com"
    ]
   },
   {
@@ -216,10 +209,12 @@
    "id": "reddit-sub",
    "url": "https://www.reddit.com/r/unixporn/",
    "settle": 9,
-   "showcase": true,
    "private": [
     "reddit-sidebar-nav",
     "#left-sidebar-container"
+   ],
+   "logged_out": [
+    "reddit.com"
    ]
   },
   {
@@ -230,6 +225,9 @@
    "private": [
     "reddit-sidebar-nav",
     "#left-sidebar-container"
+   ],
+   "logged_out": [
+    "reddit.com"
    ]
   },
   {
@@ -264,13 +262,15 @@
    "id": "x-profile",
    "url": "https://x.com/zen_browser",
    "settle": 9,
-   "showcase": true
+   "logged_out": [
+    "x.com",
+    "twitter.com"
+   ]
   },
   {
    "id": "discord-login",
    "url": "https://discord.com/login",
-   "settle": 9,
-   "showcase": true
+   "settle": 9
   },
   {
    "id": "whatsapp-home",
@@ -349,7 +349,11 @@
    "id": "perplexity-home",
    "url": "https://www.perplexity.ai/",
    "settle": 10,
-   "showcase": true
+   "showcase": true,
+   "logged_out": [
+    "perplexity.ai",
+    "google.com"
+   ]
   },
   {
    "id": "notion-home",
@@ -389,11 +393,16 @@
   {
    "id": "translate-text",
    "url": "https://translate.google.com/?sl=en&tl=de&text=The%20quick%20brown%20fox%20jumps%20over%20the%20lazy%20dog.&op=translate",
-   "showcase": true
+   "logged_out": [
+    "google.com"
+   ]
   },
   {
    "id": "translate-home",
-   "url": "https://translate.google.com/"
+   "url": "https://translate.google.com/",
+   "logged_out": [
+    "google.com"
+   ]
   }
  ]
 }

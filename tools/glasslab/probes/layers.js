@@ -8,10 +8,12 @@
   const floats = e => { if (e.matches('dialog[open], :popover-open, [role=dialog], [role=alertdialog], [role=menu], [role=listbox], [role=tooltip]')) return true;
     for (let x = e; x && x !== document.body; x = x.parentElement) if (/^(absolute|fixed)$/.test(getComputedStyle(x).position)) return true;
     return false; };
-  // the painted panel of a layer: the root if it paints, else its largest painting descendant (wrappers are often clear)
+  // the painted panel of a layer: the largest painting element in it smaller than the viewport — wrappers are often
+  // clear, and modal roots are often a full-screen scrim whose dialog is the panel that holds the text
   const paints = e => (rgba(getComputedStyle(e).backgroundColor) || [0, 0, 0, 0])[3] > 0.02;
   const area = e => { const r = e.getBoundingClientRect(); return r.width * r.height; };
-  const panel = e => paints(e) ? e : [...e.querySelectorAll('*')].filter(paints).sort((a, b) => area(b) - area(a))[0] || e;
+  const panel = e => [e, ...e.querySelectorAll('*')].filter(x => paints(x) && area(x) < 0.8 * W * H)
+    .sort((a, b) => area(b) - area(a))[0] || e;
   // does the layer cover text that was already on screen? (menus over content need popover opacity; a drawer over clear glass doesn't)
   const textual = all.filter(e => seen.has(e) && [...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim()) && onScreen(e));
   const hits = (a, b) => a.left < b.right - 2 && b.left < a.right - 2 && a.top < b.bottom - 2 && b.top < a.bottom - 2;

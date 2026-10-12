@@ -1,0 +1,71 @@
+<!doctype html>
+<!-- glasslab fixture: an ordinary site with NO glass style (light theme, hard-coded colours, no tokens) — ground truth for
+     auto glass (tests/test_autoglass.py): every neutral surface → a glass tier, neutral text → glass inks, brand colours,
+     images and code kept legible, menus/dialogs → popover. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Plain site</title>
+<style>
+  body { margin: 0; background: #f0f2f5; color: #1c1e21; font: 15px/1.5 sans-serif; }
+  header { position: sticky; top: 0; height: 56px; display: flex; align-items: center; gap: 16px; padding: 0 20px; background: #ffffff;
+    border-bottom: 1px solid #dddfe2; box-shadow: 0 1px 2px rgba(0,0,0,.1); z-index: 2; }
+  header b { font-size: 20px; }
+  aside { position: fixed; top: 56px; left: 0; bottom: 0; width: 240px; padding: 16px; box-sizing: border-box; background: #f7f8fa; }
+  aside a { display: block; padding: 8px; color: #65676b; text-decoration: none; border-radius: 6px; }
+  aside a.on { background: #e7f3ff; color: #1877f2; }
+  main { margin-left: 260px; padding: 20px; max-width: 760px; }
+  .card { background: #ffffff; border: 1px solid #dddfe2; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .meta { color: #8a8d91; font-size: 13px; }
+  .muted { color: #65676b; }
+  a { color: #0064d1; }
+  .btn { background: #1877f2; color: #fff; border: 0; border-radius: 6px; padding: 8px 16px; font: inherit; font-weight: 600; }
+  .ghost { background: #e4e6eb; color: #050505; border: 0; border-radius: 6px; padding: 8px 16px; font: inherit; }
+  input { background: #ffffff; border: 1px solid #ccd0d5; border-radius: 6px; padding: 8px 12px; font: inherit; color: #1c1e21; }
+  pre { background: #f6f8fa; color: #24292f; padding: 12px; border-radius: 6px; }
+  .tag { background: #ffe8a3; color: #6b4e00; padding: 2px 8px; border-radius: 10px; font-size: 13px; }
+  #menu { position: absolute; top: 48px; right: 20px; width: 220px; background: #ffffff; border-radius: 8px; padding: 8px;
+    box-shadow: 0 12px 28px rgba(0,0,0,.2); }
+  #menu div { padding: 8px; color: #050505; }
+  #menu[hidden], #dialog-wrap[hidden] { display: none; }
+  #dialog-wrap { position: fixed; inset: 0; background: rgba(255,255,255,.8); display: grid; place-items: center; z-index: 5; }
+  #dialog { width: 380px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 12px 28px rgba(0,0,0,.2); }
+  .pic { width: 100%; height: 120px; border-radius: 6px; background: linear-gradient(135deg, #f6a04d, #c0392b); }
+</style>
+</head>
+<body>
+<header>
+  <b>Plainbook</b><input type="search" placeholder="Search Plainbook">
+  <span style="flex:1"></span>
+  <button id="menu-btn" class="ghost" aria-haspopup="menu">Menu</button>
+  <div id="menu" role="menu" hidden><div role="menuitem">Settings and privacy</div><div role="menuitem">Help and support</div><div role="menuitem">Display options</div></div>
+</header>
+<aside>
+  <a class="on" href="#">Home feed</a><a href="#">Friends list</a><a href="#">Saved posts</a><a href="#">Groups</a>
+</aside>
+<main>
+  <div class="card">
+    <h2>Glass by default</h2>
+    <p>Ordinary websites paint opaque white boxes. Auto glass turns their neutral surfaces into the shared glass tiers while keeping the text readable.</p>
+    <p class="meta">Posted 3 hours ago · <a href="#">12 comments</a></p>
+    <button class="btn">Publish update</button> <button class="ghost">Save draft</button> <span class="tag">Beta</span>
+  </div>
+  <div class="card">
+    <h3>Secondary text</h3>
+    <p class="muted">Muted grey text must map to a shared secondary ink instead of staying grey on dark glass.</p>
+    <pre>const glass = tiers.map(surface);</pre>
+    <div class="pic" role="img" aria-label="sunset"></div>
+  </div>
+  <button id="dialog-btn" class="ghost" aria-haspopup="dialog">Open dialog</button>
+</main>
+<div id="dialog-wrap" hidden><div id="dialog" role="dialog"><h3>Display options</h3><p class="muted">Dialogs are popovers.</p><button id="close" class="btn">Done</button></div></div>
+<script>
+  const $ = id => document.getElementById(id);
+  $('menu-btn').addEventListener('click', e => { e.stopPropagation(); $('menu').hidden = !$('menu').hidden; });
+  $('dialog-btn').addEventListener('click', e => { e.stopPropagation(); $('dialog-wrap').hidden = false; });
+  $('close').addEventListener('click', () => { $('dialog-wrap').hidden = true; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { $('menu').hidden = true; $('dialog-wrap').hidden = true; } });
+  document.addEventListener('click', () => { $('menu').hidden = true; });
+</script>
+</body>
+</html>

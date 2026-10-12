@@ -1,0 +1,31 @@
+/* auto glass: sites without a style. src/main/modules/autoglass marks boxes (data-tz-tier) and text (data-tz-ink);
+   this maps the marks onto the shared tiers — same colours as every hand-made site style. */
+@import url("./glass.css");
+
+:root.tz-auto [data-tz-tier="clear"] {
+	background-color: transparent !important;
+}
+:root.tz-auto [data-tz-tier="content"] {
+	background-color: var(--g-content) !important;
+}
+:root.tz-auto [data-tz-tier="fill"] {
+	background-color: var(--g-fill) !important;
+}
+:root.tz-auto [data-tz-tier="popover"] {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+}
+:root.tz-auto [data-tz-tier="scrim"] {
+	background-color: var(--g-scrim) !important;
+}
+:root.tz-auto :is([data-tz-tier="clear"], [data-tz-tier="content"], [data-tz-tier="fill"], [data-tz-tier="popover"]) {
+	border-color: var(--g-line) !important;
+}
+:root.tz-auto [data-tz-ink="1"] { color: var(--g-fg) !important; }
+:root.tz-auto [data-tz-ink="2"] { color: var(--g-fg-2) !important; }
+:root.tz-auto [data-tz-ink="3"] { color: var(--g-fg-3) !important; }
+:root.tz-auto [data-tz-ink="red"] { color: var(--g-red) !important; }
+:root.tz-auto [data-tz-ink="orange"] { color: var(--g-orange) !important; }
+:root.tz-auto [data-tz-ink="green"] { color: var(--g-green) !important; }
+:root.tz-auto [data-tz-ink="blue"] { color: var(--g-blue) !important; }
+:root.tz-auto [data-tz-ink="purple"] { color: var(--g-purple) !important; }

@@ -1,11 +1,11 @@
-import { insertStyles } from "./modules/Styles";
+import { insertStyles, removeStyles } from "./modules/Styles";
 import { showHud } from "./modules/Hud";
 import type { GlassTheme } from "../shared/Glass";
 import type { Browser } from "webextension-polyfill-ts";
 import type { ContentScripts, SupportedWebsite } from "../types/ContentScripts";
 import type { ExtensionSettings, SiteSpecificSetting } from "../types/ExtensionSettings";
 import type { Message } from "../types/Message";
-import { DynamicTransparency } from "./modules/DynamicTransparency";
+import { AutoGlass } from "./modules/autoglass/engine";
 import { SupportedSite } from "./modules/SupportedSite";
 import { WebInspector } from "./modules/WebInspector";
 import "./transparent-zen.css";
@@ -13,7 +13,8 @@ import "./transparent-zen.css";
 declare const browser: Browser;
 
 class TransparentZen {
-	private dynamicTransparency: DynamicTransparency | undefined;
+	private autoGlass = new AutoGlass();
+	private autoOn = false;
 	private supportedSite: SupportedSite | undefined;
 	private webInspector: WebInspector | undefined;
 	private transparentZenSettings: ExtensionSettings["transparentZenSettings"] | undefined;
@@ -35,8 +36,10 @@ class TransparentZen {
 				if (!contentScript) {
 					console.info("Website is not supported by Transparent Zen");
 					this.webInspector = new WebInspector(this.transparentZenSettings);
-					this.dynamicTransparency = new DynamicTransparency(this.transparentZenSettings, this.removeLoadingScreen, this.initExtensionSettingsStyles.bind(this));
-					await this.dynamicTransparency?.initDynamicTransparency();
+					this.setAuto(this.autoAllowed());
+					// lab/test hook (glasslab): same as switching auto glass on for this page
+					document.addEventListener("tz-auto-glass", () => this.setAuto(true));
+					this.removeLoadingScreen();
 					this.initSiteSpecificSettings();
 					this.initBrowserEvents();
 				} else {
@@ -119,51 +122,13 @@ class TransparentZen {
 		browser.runtime.onMessage.addListener((request: Message) => {
 			switch (request.action) {
 				case "toggleTransparency": {
-					if (this.isSupportedWebsite) break;
-
-					if (request.enabled) {
-						insertStyles("styles/shared/dynamic-transparency.css");
-						if (!this.transparentZenSettings?.lightweightTransparency) {
-							this.dynamicTransparency?.processPage(true);
-						}
-					} else {
-						this.dynamicTransparency?.removeTransparencyRules();
-					}
-					break;
-				}
-				case "toggleLightweight": {
-					if (this.isSupportedWebsite) break;
-
-					if (request.enabled) {
-						this.dynamicTransparency?.removeTransparencyRules();
-						insertStyles("styles/shared/dynamic-transparency.css");
-					} else {
-						this.dynamicTransparency?.processPage(true);
-					}
+					if (!this.isSupportedWebsite) this.setAuto(!!request.enabled);
 					break;
 				}
 				case "toggleWhitelist": {
-					if (!this.transparentZenSettings?.blacklistedDomains || this.isSupportedWebsite) break;
-
-					if (request.enabled) {
-						if (this.transparentZenSettings?.blacklistedDomains.indexOf(window.location.hostname) >= 0) {
-							insertStyles("styles/shared/dynamic-transparency.css");
-							if (!this.transparentZenSettings?.lightweightTransparency) {
-								this.dynamicTransparency?.processPage(true);
-							}
-						} else {
-							this.dynamicTransparency?.removeTransparencyRules();
-						}
-					} else {
-						if (this.transparentZenSettings?.blacklistedDomains.indexOf(window.location.hostname) >= 0) {
-							this.dynamicTransparency?.removeTransparencyRules();
-						} else {
-							insertStyles("styles/shared/dynamic-transparency.css");
-							if (!this.transparentZenSettings?.lightweightTransparency) {
-								this.dynamicTransparency?.processPage(true);
-							}
-						}
-					}
+					if (this.isSupportedWebsite || !this.transparentZenSettings) break;
+					this.transparentZenSettings.enableWhitelist = !!request.enabled;
+					this.setAuto(this.autoAllowed());
 					break;
 				}
 				case "toggleInspector": {
@@ -267,6 +232,28 @@ class TransparentZen {
 				showHud(r.text);
 			});
 		}, true);
+	}
+
+	// auto glass (sites without a style): global switch + per-domain black/whitelist, as upstream's dynamic mode
+	private autoAllowed(): boolean {
+		const s = this.transparentZenSettings;
+		if (!s?.enableTransparency) return false;
+		const listed = (s.blacklistedDomains ?? []).includes(window.location.hostname);
+		return s.enableWhitelist ? listed : !listed;
+	}
+
+	private setAuto(on: boolean): void {
+		if (on === this.autoOn) return;
+		this.autoOn = on;
+		if (!on) {
+			this.autoGlass.stop();
+			removeStyles("styles/shared/auto-glass.css");
+			return;
+		}
+		insertStyles("styles/shared/auto-glass.css");
+		const go = () => this.autoOn && this.autoGlass.start();
+		if (document.body) go();
+		else document.addEventListener("DOMContentLoaded", go, { once: true });
 	}
 
 	private initLoadingScreen(): void {

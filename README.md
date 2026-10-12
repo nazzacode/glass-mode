@@ -1,46 +1,47 @@
-# Transparent Zen — websites as glass
+# Transparent Zen
 
-Your mail, calendar, chat and music, rendered as translucent glass over your blurred desktop. One design system for every
-site, and a test lab that opens every screen and every menu to prove the text stays readable on any wallpaper.
+Websites rendered as translucent glass in Zen Browser, readable on any wallpaper.
 
-![Spotify as glass](site/shots/spotify-artist.dark.webp)
+![Transparent Zen](site/shots/gcal-week.light.webp)
 
 | | |
 |---|---|
-| ![Gmail, light glass](site/shots/gmail-inbox.light.webp) | ![Calendar, dark glass](site/shots/gcal-week.dark.webp) |
-| ![DuckDuckGo, dark glass](site/shots/ddg-search.dark.webp) | ![GitHub, dark glass](site/shots/github-repo.dark.webp) |
+| ![Gmail](site/shots/gmail-inbox.dark.webp) | ![Readwise Reader](site/shots/reader-doc.dark.webp) |
+| ![Spotify](site/shots/spotify-artist.dark.webp) | ![DuckDuckGo](site/shots/ddg-search.dark.webp) |
 
-*Real captures through the extension. Personal apps are shown with every word and photo scrambled.*
-**[Gallery, every tested screen and the sites database →](https://nazzacode.github.io/transparent-zen/)**
+Screenshots of every tested site, screen and menu: [https://nazzacode.github.io/transparent-zen/](https://nazzacode.github.io/transparent-zen/)
+
+- Styles for 24 sites, all on one set of glass tiers, so every site reads the same way.
+- Auto glass for sites without a style (beta).
+- One opacity setting: the popup slider, or Alt+Shift+Up/Down in any window. Alt+Shift+G switches auto, dark and light.
+- Web-app windows for any site, with their own launcher entry (Linux).
+- Every screen, menu and dialog is tested for contrast against the brightest and darkest wallpaper.
 
 ## Install
 
-1. **Zen Browser with a transparent window.** In `about:config` set `browser.tabs.allow_transparent_browser` = `true`, then:
-   - **Linux:** `zen.widget.linux.transparency` = `true`, plus a compositor that blurs what's behind windows: Hyprland
-     (blur on by default), KDE ([kwin-effects-forceblur](https://github.com/taj-ny/kwin-effects-forceblur), add `zen`),
-     GNOME ([Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/) → Applications).
-   - **Windows 11:** `widget.windows.mica` = `true` (optionally [MicaForEveryone](https://github.com/MicaForEveryone/MicaForEveryone) → Acrylic for a stronger blur).
-   - **macOS:** untested by us — reports welcome.
-2. **The extension:** download the `.xpi` from [Releases](https://github.com/nazzacode/transparent-zen/releases) and drop it onto Zen.
-3. **Optional — web apps.** Chromeless app windows for any site (Gmail, WhatsApp, Claude…) that show the glass, with their
-   own taskbar icon: [`webapp/zen-webapp`](webapp/README.md) (Linux).
-   ```sh
-   ./webapp/zen-webapp add "WhatsApp" https://web.whatsapp.com/ --icon auto
-   ```
+1. In Zen, open `about:config` and set `browser.tabs.allow_transparent_browser` to `true`.
+2. Linux: also set `zen.widget.linux.transparency` to `true`. The blur comes from your compositor: Hyprland blurs out of the box, KDE needs [kwin-effects-forceblur](https://github.com/taj-ny/kwin-effects-forceblur), GNOME needs [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/).
+3. Windows 11: also set `widget.windows.mica` to `true`. macOS is untested.
+4. Download the `.xpi` from [Releases](https://github.com/nazzacode/transparent-zen/releases/latest) and open it in Zen.
+5. Turn off Dark Reader for glass sites. It repaints them opaque.
 
-If you use Dark Reader, switch it off for glass sites — it repaints them opaque.
+## Control
 
-## One knob
+Glass has one setting, opacity. Use the slider in the toolbar popup, or press Alt+Shift+Up and Alt+Shift+Down in any window, including web-app windows, which have no toolbar.
 
-Glass has a single variable: **opacity**. Drag the slider in the toolbar popup, or from any window — including web-app
-windows, which have no toolbar — press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd>.
-<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> cycles **Auto** (follows your desktop's light/dark) → Dark → Light.
-Every site follows the same tiers, so one setting changes everything consistently; text keeps a readability floor at any setting.
+Alt+Shift+G cycles the mode: auto follows your desktop's light or dark theme, then dark, then light.
+
+Text keeps a minimum contrast at every opacity, so low settings show more desktop without becoming unreadable.
+
+## Web apps
+
+`webapp/zen-webapp` turns a site into its own Zen window with a launcher entry and taskbar icon. It uses Firefox's Taskbar Tabs and shares your normal profile. Linux only.
+
+```sh
+./webapp/zen-webapp add "WhatsApp" https://web.whatsapp.com/ --icon auto
+```
 
 ## Sites
-
-Every site in the table is styled on the shared system and tested in dark and light — the page itself, and every menu,
-dropdown, dialog and search box the lab could open.
 
 <!-- sites:start -->
 Generated by `./glasslab site` from the test baseline (default opacity 45 %). [Request a site](https://github.com/nazzacode/transparent-zen/issues/new?template=site-request.yml&title=Add+) · tested screens: see the project page.
@@ -77,44 +78,39 @@ Generated by `./glasslab site` from the test baseline (default opacity 45 %). [R
 | developer.mozilla.org | auto glass benchmark | 1 | 8 | 1/9 | 1/9 |
 | docs.python.org | auto glass benchmark | 1 | — | 1/1 | 1/1 |
 | lobste.rs | auto glass benchmark | 1 | — | 1/1 | 1/1 |
+| onthemarket.com | auto glass benchmark | 2 | — | — | — |
 | stackoverflow.com | auto glass benchmark | 1 | 1 | 2/2 | 2/2 |
 <!-- sites:end -->
 
-**Not listed?** Turn on *Auto glass* in the popup: it classifies any page's surfaces into the same tiers on the fly
-(beta — good on documentation, news and simple apps). Then [request the site](https://github.com/nazzacode/transparent-zen/issues/new?template=site-request.yml)
-or add it yourself (below). Something off on a listed site? The popup's **Report a glass problem** button opens a
-prefilled issue.
+## Add a site
 
-## Add a site in one command
+One command discovers which of the site's own colour variables paint it, writes a style that maps them onto the glass tiers, registers the site and runs the tests.
 
 ```sh
-nix-shell        # or: Node 22 + Python 3 with websockets, pillow, numpy
-./glasslab add "Linear" https://linear.app/          # discover → scaffold → test every screen and menu → report
-./glasslab add "Linear" https://linear.app/ --agent  # + an AI agent fixes what fails; each edit kept only if scores improve
+./glasslab add "Linear" https://linear.app/
+./glasslab add "Linear" https://linear.app/ --agent
 ```
 
-`add` finds which of the site's own design tokens actually paint it (it changes each candidate and watches), writes a
-style that maps them onto the shared tiers, registers the site, and runs the test lab. It uses your Zen cookies in a
-throwaway headless profile, so logged-in apps work, and it never touches your open browser. Contributors without Zen:
-`GLASSLAB_BROWSER=firefox`. Full guide: [docs/GLASS.md](docs/GLASS.md).
+With `--agent`, a coding agent fixes what fails. Each edit is kept only if the test scores go up, and it can only change that site's style file.
+
+Or [request a site](https://github.com/nazzacode/transparent-zen/issues/new?template=site-request.yml&title=Add+). A maintainer labels the request and CI opens a pull request.
+
+Full guide: [docs/GLASS.md](docs/GLASS.md).
 
 ## How it's tested
 
-The lab renders each page headless over pure black and pure white, which gives every pixel's exact colour and
-transparency, then composites it onto blurred wallpapers. It checks:
+- Each page is captured over pure black and pure white, which gives the exact colour and transparency of every pixel.
+- Contrast: every line of text, through its real stack of layers, against the darkest and the brightest blurred wallpaper (APCA; body text Lc 75, labels 60). Glass never reads worse than the site's own design.
+- Unity: every surface is one of the shared tiers and every grey text colour is a shared ink.
+- Hidden UI: the lab opens every menu, dropdown, dialog and search suggestion it can find and tests each one. It never clicks anything that sends, deletes, buys or signs out.
+- CI runs the same suite on local test pages in headless Firefox on every push.
 
-- **contrast** — every line of text, through its real stack of layers, against the darkest and the brightest
-  blurred-wallpaper patch (APCA; body text Lc 75, labels 60). Glass may never read worse than the site's own design.
-- **unity** — every surface is one of the shared glass tiers, and every neutral text colour is a shared ink, so
-  WhatsApp looks like Gmail looks like Spotify.
-- **hidden UI** — an explorer opens every menu, dropdown, dialog and search suggestion it can find, read-only (it never
-  clicks anything that sends, deletes or navigates), and scores each one, including whether it is opaque enough that
-  the page underneath doesn't bleed through.
+## Auto glass
 
-CI runs the same suite against local fixture pages in headless Firefox on every push.
+For sites without a style, auto glass sorts the page's painted boxes into the same tiers (page, panel, menu, control) and maps grey text onto the shared inks by contrast. Brand colours, images and code keep their colours.
+
+Switch it on in the popup. It is in beta: good on documentation, news and simple apps.
 
 ## Credits
 
-Fork of [Transparent Zen](https://github.com/frostybiscuit/transparent-zen) by FrostyBiscuit — the extension, the
-per-site idea and the original styles. Glass design system, test lab, auto glass and web apps by
-[nazzacode](https://github.com/nazzacode). MIT.
+Fork of [Transparent Zen](https://github.com/frostybiscuit/transparent-zen) by FrostyBiscuit, which made the extension and the per-site idea. Glass system, test lab, auto glass and web apps by nazzacode. MIT licence.

@@ -204,6 +204,95 @@ def update_readme(raw, block):
     return new.replace("\n", "\r\n") if crlf else new
 
 
+# ── copy: one source for the site and the README ─────────────────────────────────────────────────────────────────
+# Nathan's brief for docs: no sales, tight docs, sidebar + feature list, one good shot first. Plain sentences; the
+# tests forbid em-dashes and sales words here.
+COPY = {
+    "title": "Transparent Zen",
+    "lead": "Websites rendered as translucent glass in Zen Browser, readable on any wallpaper.",
+    "facts": [
+        "Styles for {n} sites, all on one set of glass tiers, so every site reads the same way.",
+        "Auto glass for sites without a style (beta).",
+        "One opacity setting: the popup slider, or Alt+Shift+Up/Down in any window. Alt+Shift+G switches auto, dark and light.",
+        "Web-app windows for any site, with their own launcher entry (Linux).",
+        "Every screen, menu and dialog is tested for contrast against the brightest and darkest wallpaper.",
+    ],
+    "install": [
+        "In Zen, open `about:config` and set `browser.tabs.allow_transparent_browser` to `true`.",
+        "Linux: also set `zen.widget.linux.transparency` to `true`. The blur comes from your compositor: Hyprland blurs "
+        "out of the box, KDE needs [kwin-effects-forceblur](https://github.com/taj-ny/kwin-effects-forceblur), GNOME "
+        "needs [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/).",
+        "Windows 11: also set `widget.windows.mica` to `true`. macOS is untested.",
+        "Download the `.xpi` from [Releases]({repo}/releases/latest) and open it in Zen.",
+        "Turn off Dark Reader for glass sites. It repaints them opaque.",
+    ],
+    "control": [
+        "Glass has one setting, opacity. Use the slider in the toolbar popup, or press Alt+Shift+Up and Alt+Shift+Down "
+        "in any window, including web-app windows, which have no toolbar.",
+        "Alt+Shift+G cycles the mode: auto follows your desktop's light or dark theme, then dark, then light.",
+        "Text keeps a minimum contrast at every opacity, so low settings show more desktop without becoming unreadable.",
+    ],
+    "webapps": [
+        "`webapp/zen-webapp` turns a site into its own Zen window with a launcher entry and taskbar icon. It uses "
+        "Firefox's Taskbar Tabs and shares your normal profile. Linux only.",
+    ],
+    "webapps_cmd": './webapp/zen-webapp add "WhatsApp" https://web.whatsapp.com/ --icon auto',
+    "add": [
+        "One command discovers which of the site's own colour variables paint it, writes a style that maps them onto "
+        "the glass tiers, registers the site and runs the tests.",
+        "With `--agent`, a coding agent fixes what fails. Each edit is kept only if the test scores go up, and it can "
+        "only change that site's style file.",
+        "Or [request a site]({request}). A maintainer labels the request and CI opens a pull request.",
+    ],
+    "add_cmd": './glasslab add "Linear" https://linear.app/\n./glasslab add "Linear" https://linear.app/ --agent',
+    "testing": [
+        "Each page is captured over pure black and pure white, which gives the exact colour and transparency of every pixel.",
+        "Contrast: every line of text, through its real stack of layers, against the darkest and the brightest blurred "
+        "wallpaper (APCA; body text Lc 75, labels 60). Glass never reads worse than the site's own design.",
+        "Unity: every surface is one of the shared tiers and every grey text colour is a shared ink.",
+        "Hidden UI: the lab opens every menu, dropdown, dialog and search suggestion it can find and tests each one. "
+        "It never clicks anything that sends, deletes, buys or signs out.",
+        "CI runs the same suite on local test pages in headless Firefox on every push.",
+    ],
+    "auto": [
+        "For sites without a style, auto glass sorts the page's painted boxes into the same tiers (page, panel, menu, "
+        "control) and maps grey text onto the shared inks by contrast. Brand colours, images and code keep their colours.",
+        "Switch it on in the popup. It is in beta: good on documentation, news and simple apps.",
+    ],
+    "credits": [
+        "Fork of [Transparent Zen](https://github.com/frostybiscuit/transparent-zen) by FrostyBiscuit, which made the "
+        "extension and the per-site idea. Glass system, test lab, auto glass and web apps by nazzacode. MIT licence.",
+    ],
+}
+
+GROUPS = [("Start", [("overview", "Overview"), ("install", "Install"), ("control", "Control"), ("web-apps", "Web apps")]),
+          ("Project", [("add", "Add a site"), ("testing", "How it's tested"), ("auto", "Auto glass"), ("credits", "Credits")])]
+DOT = {"verified": "live", "pending": "partial", "untested": "planned", "auto": "planned"}
+
+
+def gh(repo, path=""):
+    return f"https://github.com/{repo}{path}"
+
+
+def fill(text, c):
+    return text.format(n=sum(s["status"] == "verified" for s in c["sites"]), repo=gh(c["repo"]),
+                       request=issue_url("site-request", repo=c["repo"]))
+
+
+def inline(text):
+    """tiny markdown → html: `code`, [text](url); everything else escaped"""
+    out, pos = [], 0
+    for m in re.finditer(r"`([^`]+)`|\[([^\]]+)\]\(([^)]+)\)", text):
+        out.append(esc(text[pos:m.start()]))
+        out.append(f"<code>{esc(m[1])}</code>" if m[1] else f'<a href="{esc(m[3])}">{esc(m[2])}</a>')
+        pos = m.end()
+    return "".join(out) + esc(text[pos:])
+
+
+def paras(lines, c):
+    return "".join(f"<p>{inline(fill(l, c))}</p>" for l in lines)
+
+
 # ── page ─────────────────────────────────────────────────────────────────────────────────────────────────────────────
 def view_name(screen, names):
     """'gmail-inbox' → ('Gmail', 'inbox')"""
@@ -214,253 +303,166 @@ def pct(v):
     return f"{round(v * 100)}%"
 
 
-def mark(ok):
-    return '<span class="ok">pass</span>' if ok else '<span class="bad">fail</span>'
-
-
-def gh(repo, path=""):
-    return f"https://github.com/{repo}{path}"
-
-
-def picture(shot, alt, cls=""):
-    """dark + light pair → <picture> following the OS scheme"""
+def picture(shot, alt):
+    """dark + light pair → <picture> following the viewer's scheme"""
     d, l = shot["dark"], shot["light"]
-    src = d or l
-    alt_ = f' alt="{esc(alt)}"'
-    if d and l:
-        return (f'<picture class="{cls}"><source srcset="shots/{esc(l)}" media="(prefers-color-scheme: light)">'
-                f'<img src="shots/{esc(d)}"{alt_} width="1280" height="800" decoding="async"></picture>')
-    return f'<picture class="{cls}"><img src="shots/{esc(src)}"{alt_} width="1280" height="800" decoding="async"></picture>'
+    img = f'<img src="shots/{esc(d or l)}" alt="{esc(alt)}" width="1280" height="800" decoding="async" loading="lazy">'
+    return f'<picture><source srcset="shots/{esc(l)}" media="(prefers-color-scheme: light)">{img}</picture>' if d and l \
+        else f"<picture>{img}</picture>"
 
 
-def hero(c):
-    shot = next((s for s in c["shots"] if s["dark"] and s["light"]), c["shots"][0] if c["shots"] else None)
-    pic = picture(shot, "{} {} as liquid glass over a blurred wallpaper".format(*view_name(shot["screen"], c["names"])), "hero-shot") if shot else ""
-    verified = sum(s["status"] == "verified" for s in c["sites"])
-    return f"""<section class="hero wrap-wide">
-  <h1>Websites, as glass.</h1>
-  <p class="lede">A Zen Browser extension that turns the sites you live in (mail, calendar, chat, music) into translucent
-  glass over your blurred desktop. One design system for every site, and a test lab that keeps every screen readable on any wallpaper.</p>
-  <p class="cta"><a class="btn" href="#install">Install</a> <a class="btn quiet" href="{gh(c['repo'])}">Source on GitHub</a>
-  <span class="meta">Free · MIT · {verified} verified sites</span></p>
-</section>
-<figure class="hero-fig wrap-wide">{pic}</figure>"""
+def hero_shot(c):
+    by = {s["screen"]: s for s in c["shots"]}
+    return next((by[k] for k in ("gcal-week", "gmail-inbox", "spotify-artist") if k in by), c["shots"][0] if c["shots"] else None)
 
 
-def gallery(c):
-    figs = []
-    for s in c["shots"]:
-        site_name, view = view_name(s["screen"], c["names"])
-        imgs = "".join(f'<img class="{m[0]}" src="shots/{esc(s[m])}" alt="{esc(site_name)} {esc(view)}, {m} glass" '
-                       f'loading="lazy" decoding="async" width="1280" height="800">' for m in MODES if s[m])
-        only = "" if s["dark"] and s["light"] else f' data-only="{"dark" if s["dark"] else "light"}"'
-        figs.append(f'<figure class="shot"{only}><div class="frame">{imgs}</div><figcaption><b>{esc(site_name)}</b> {esc(view)}</figcaption></figure>')
-    return f"""<section id="gallery" class="wrap-wide">
-  <input type="radio" name="gm" id="gm-dark" class="sr"><input type="radio" name="gm" id="gm-light" class="sr">
-  <div class="head"><h2>Gallery</h2>
-    <div class="seg" role="group" aria-label="Glass mode"><label for="gm-dark">Dark</label><label for="gm-light">Light</label></div></div>
-  <p class="note wrap-in">Real captures through the extension, composited onto our own wallpapers. Personal apps are shot with every word and photo scrambled.</p>
-  <div class="grid">{''.join(figs)}</div>
-</section>"""
+def overview(c):
+    hero = hero_shot(c)
+    fig = f'<figure class="hero">{picture(hero, "Transparent Zen")}<figcaption>Real capture through the extension on a ' \
+          f'blurred wallpaper. Personal apps are shown with every word and photo scrambled.</figcaption></figure>' if hero else ""
+    names = c["names"]
+    grid = "".join(f'<figure>{picture(s, view_name(s["screen"], names)[0])}<figcaption>{esc(view_name(s["screen"], names)[0])}'
+                   f'</figcaption></figure>' for s in c["shots"] if s is not hero)
+    facts = "".join(f"<li>{inline(fill(f, c))}</li>" for f in COPY["facts"])
+    return (f'<article id="overview"><h1>{esc(COPY["title"])}</h1><p class="sub">{esc(COPY["lead"])}</p>{fig}<ul>{facts}</ul>'
+            + (f'<h2>Gallery</h2><div class="grid">{grid}</div>' if grid else "") + "</article>")
 
 
-def install(c):
-    rel = gh(c["repo"], "/releases/latest")
-    return f"""<section id="install">
-  <h2>Install</h2>
-  <ol class="steps">
-    <li><h3>Let Zen be transparent</h3>
-      <p>In <a href="https://zen-browser.app">Zen Browser</a> open <code>about:config</code> and set to <code>true</code>:</p>
-      <dl class="os"><dt>Linux</dt><dd><code>browser.tabs.allow_transparent_browser</code> · <code>zen.widget.linux.transparency</code>.
-        The blur comes from your compositor: Hyprland blurs out of the box; KDE needs <a href="https://github.com/taj-ny/kwin-effects-forceblur">kwin-effects-forceblur</a>.</dd>
-      <dt>Windows 11</dt><dd><code>browser.tabs.allow_transparent_browser</code> · <code>widget.transparent-windows</code> · <code>widget.windows.mica</code>.
-        Optional: <a href="https://github.com/MicaForEveryone/MicaForEveryone">MicaForEveryone</a> with Acrylic for zen.</dd></dl></li>
-    <li><h3>Add the extension</h3>
-      <p>Download the <code>.xpi</code> from <a href="{rel}">GitHub Releases</a>, then in Zen: <code>about:addons</code> → ⚙ → <i>Install Add-on From File</i>.</p></li>
-    <li><h3>Optional: web apps</h3>
-      <p>Give a site its own chromeless window and launcher entry, glass straight through to the desktop (Linux):</p>
-      <pre><code>./webapp/zen-webapp add "Gmail" https://mail.google.com --icon auto</code></pre></li>
-  </ol>
-</section>"""
+def steps(lines, c):
+    return "<ol>" + "".join(f"<li>{inline(fill(l, c))}</li>" for l in lines) + "</ol>"
 
 
-def control(c):
-    o = c["opacity"]
-    return f"""<section id="control">
-  <h2>One control</h2>
-  <p>Everything follows a single variable: how much of the desktop shows through. Text, menus and panels keep their
-  readability floors whatever you choose.</p>
-  <dl class="keys">
-    <dt>Popup slider</dt><dd>opacity {o.get('min', 10)}–{o.get('max', 90)} %, default {o.get('default', 45)} %</dd>
-    <dt><kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>↑</kbd> / <kbd>↓</kbd></dt><dd>more / less glass, in {o.get('step', 5)} % steps, in any window (web apps too)</dd>
-    <dt><kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>G</kbd></dt><dd>glass mode: auto → dark → light</dd>
-  </dl>
-</section>"""
+def rate(p):
+    return f'<span class="{"ok" if p and p[0] == p[1] else "warn" if p else "dim"}">{frac(p)}</span>'
 
 
-def rate_cell(p):
-    if not p:
-        return '<span class="dim">—</span>'
-    ok, n = p
-    cls = "ok" if ok == n else "warn" if ok >= 0.75 * n else "bad"
-    return f'<span class="{cls}">{ok}/{n}</span>'
-
-
-def sites_table(c):
-    has_tiles = {c["names"].get(t["screen"]) for t in c["tiles"]}
-    rows = []
-    upstream = [s for s in c["sites"] if s["status"] == "untested"]
-    for s in (s for s in c["sites"] if s["status"] != "untested"):
-        tests = f'<a href="#t-{s["id"]}">screens</a>' if s["name"] in has_tiles else ""
-        report = f'<a href="{esc(issue_url("site-bug", s["host"], c["repo"]))}">report a problem</a>' if s["host"] else ""
-        forced = ' <span class="tag">dark only</span>' if s.get("forced") == "dark" else ""
-        rows.append(f'<tr class="st-{s["status"]}"><td data-l="Site"><b>{esc(s["name"])}</b>{"" if s["host"] == s["name"] else f" <small>{esc(s['host'])}</small>"}{forced}</td>'
-                    f'<td data-l="Status"><span class="pill {s["status"]}">{STATUS[s["status"]]}</span></td>'
-                    f'<td data-l="Screens" class="num">{len(s["screens"]) or "—"}</td>'
-                    f'<td data-l="Hidden UI" class="num">{s["states"] or "—"}</td>'
-                    f'<td data-l="Dark" class="num">{rate_cell(s["pass"].get("dark"))}</td>'
-                    f'<td data-l="Light" class="num">{rate_cell(s["pass"].get("light"))}</td>'
-                    f'<td data-l="" class="links">{" · ".join(x for x in (tests, report) if x)}</td></tr>')
-    return f"""<section id="sites" class="wrap-mid">
-  <div class="head"><h2>Sites</h2><a class="btn small" href="{esc(issue_url('site-request', repo=c['repo']))}">Request a site</a></div>
-  <p>Every supported site and what the test lab checked, at the default opacity. <b>Hidden UI</b> = menus, dropdowns,
-  dialogs and suggestions the explorer opened and tested. Pass = screens and states that meet every readability and
-  consistency target. Sites without a style get <b>auto glass</b>; a few are measured as a benchmark.</p>
-  <table class="db"><thead><tr><th>Site</th><th>Status</th><th>Screens</th><th>Hidden UI</th><th>Dark</th><th>Light</th><th></th></tr></thead>
-  <tbody>{''.join(rows)}</tbody></table>
-  {upstream_list(upstream, c["repo"])}
-</section>"""
-
-
-def upstream_list(sites, repo):
-    if not sites:
-        return ""
-    items = " · ".join(f'<a href="{esc(issue_url("site-bug", s["host"], repo))}" title="report a problem on {esc(s["host"])}">'
-                       f'{esc(s["name"])}</a>' for s in sites)
-    return (f'<p class="upstream"><b>Also styled, from upstream, not yet on the glass system or tested:</b> {items}. '
-            f'Click one to report a problem.</p>')
+def sites_page(c):
+    rows = "".join(
+        f'<tr><td><a href="#site-{esc(s["id"])}">{esc(s["name"])}</a></td><td><span class="dot {DOT[s["status"]]}"></span>'
+        f'{esc(STATUS[s["status"]])}</td><td>{len(s["screens"]) or "–"}</td><td>{s["states"] or "–"}</td>'
+        f'<td>{rate(s["pass"].get("dark"))}</td><td>{rate(s["pass"].get("light"))}</td></tr>'
+        for s in c["sites"] if s["screens"])
+    return (f'<article id="sites"><h1>Sites</h1><p class="sub">Every styled site and what the lab checked at the default '
+            f'opacity ({c["opacity"]} %). Hidden UI counts the menus and dialogs it opened.</p>'
+            f'<div class="tbl"><table><thead><tr><th>Site</th><th>Status</th><th>Screens</th><th>Hidden UI</th><th>Dark</th>'
+            f'<th>Light</th></tr></thead><tbody>{rows}</tbody></table></div>'
+            f'<p><a href="{esc(issue_url("site-request", repo=c["repo"]))}">Request a site</a></p></article>')
 
 
 def tile_html(t, names):
     _, view = view_name(t["screen"], names)
     title = esc(t["state"]) if t["state"] else esc(view)
-    sub = (esc(view) if t["state"].startswith("hidden UI") else f"{esc(view)} · hidden UI") if t["state"] else "screen"
     n = t["n"]
-    if n:
-        extra = (f'<span>layer α {n["opacity"]:.2f}</span>' if "opacity" in n else
-                 f'<span>glass {pct(n["glass"])}</span>' if "glass" in n else "")
-        nums = (f'{mark(n["ok"])}<span title="characters meeting their APCA target on the darkest and brightest wallpaper">'
-                f'contrast {pct(n["contrast"])}</span><span title="surfaces that are glass tiers">surface {pct(n["surface"])}</span>{extra}')
-    else:
-        nums = '<span class="dim">not measured yet</span>'
+    nums = (f'<span class="{"ok" if n["ok"] else "bad"}">{"pass" if n["ok"] else "fail"}</span> contrast {pct(n["contrast"])} '
+            f'· surface {pct(n["surface"])}' if n else '<span class="dim">not measured</span>')
     return (f'<figure class="tile"><img src="tests/{esc(t["file"])}" alt="{esc(view)} {title} ({t["mode"]})" loading="lazy" '
-            f'decoding="async" width="960" height="600"><figcaption><div class="t"><b>{title}</b><span class="mode {t["mode"]}">{t["mode"]}</span></div>'
-            f'<div class="sub">{sub}</div><div class="nums">{nums}</div></figcaption></figure>')
+            f'decoding="async" width="960" height="600"><figcaption><b>{title}</b> <span class="dim">{t["mode"]}</span>'
+            f'<br>{nums}</figcaption></figure>')
 
 
-def tests(c):
-    order = {s["id"]: i for i, s in enumerate(c["screens"])}
-    groups = []
-    all_n = [t["n"] for t in c["tiles"] if t["n"]]
-    for s in c["sites"]:
-        mine = sorted((t for t in c["tiles"] if t["screen"] in s["screens"]),
-                      key=lambda t: (order[t["screen"]], t["state"] is not None, t["file"].rsplit(".", 2)[0], MODES.index(t["mode"])))
-        if not mine:
-            continue
-        p = " · ".join(f"{m} {rate_cell(s['pass'][m])}" for m in MODES if m in s["pass"])
-        groups.append(f'<section class="group" id="t-{s["id"]}"><div class="ghead"><h3>{esc(s["name"])}</h3>'
-                      f'<span class="pill {s["status"]}">{STATUS[s["status"]]}</span><span class="rates">{p}</span>'
-                      f'<a class="rep" href="{esc(issue_url("site-bug", s["host"], c["repo"]))}">report a problem</a></div>'
-                      f'<div class="tiles">{"".join(tile_html(t, c["names"]) for t in mine)}</div></section>')
-    ok = sum(bool(n["ok"]) for n in all_n)
-    summary = (f'<p class="summary"><b>{len(c["tiles"])}</b> captures · <b>{len({t["screen"] for t in c["tiles"]})}</b> screens · '
-               f'<b>{sum(t["state"] is not None for t in c["tiles"])}</b> hidden-UI states · '
-               f'<b>{ok}/{len(all_n)}</b> measured captures pass</p>') if c["tiles"] else '<p class="summary dim">No test captures yet: <code>./glasslab shots --all</code>.</p>'
-    return f"""<section id="tests" class="wrap-wide">
-  <div class="wrap-in"><h2>Tested screens</h2>
-  <p>Every screen the lab tests, and every menu or dialog it opened, at the default opacity in each mode: the exact
-  capture composited onto a blurred wallpaper. Numbers: <b>contrast</b> = share of text meeting its APCA target on both the
-  darkest and brightest wallpaper; <b>surface</b> = share of surfaces that are design-system glass; <b>glass</b> = share of the
-  window the desktop shows through; <b>layer α</b> = how opaque a menu is (≥ 0.80 where page sits beneath it).</p>
-  {summary}</div>
-  {''.join(groups)}
-</section>"""
+def site_page(s, c):
+    shots = [x for x in c["shots"] if x["screen"] in s["screens"]]
+    tiles = [t for t in c["tiles"] if t["screen"] in s["screens"]]
+    pd, pl = s["pass"].get("dark"), s["pass"].get("light")
+    return (f'<article id="site-{esc(s["id"])}"><span class="status"><span class="dot {DOT[s["status"]]}"></span>'
+            f'{esc(STATUS[s["status"]])}</span><h1>{esc(s["name"])}</h1><p class="sub">{esc(s["host"] or "")}. Passing at '
+            f'default opacity: dark {frac(pd)}, light {frac(pl)}.'
+            + (" Dark only." if s.get("forced") == "dark" else "") + "</p>"
+            + "".join(f"<figure>{picture(x, s['name'])}</figure>" for x in shots)
+            + (f'<h2>Tested screens and hidden UI</h2><div class="grid tiles">{"".join(tile_html(t, c["names"]) for t in tiles)}</div>'
+               if tiles else "")
+            + f'<p><a href="{esc(issue_url("site-bug", s["host"], c["repo"]))}">Report a problem on {esc(s["name"])}</a></p></article>')
 
 
-DIAGRAM = """<svg class="diagram" viewBox="0 0 880 200" role="img" aria-label="Test pipeline: capture over black and white, exact alpha, composite on blurred wallpapers, score contrast and unity">
-  <defs><marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="currentColor"/></marker></defs>
-  <g class="box"><rect x="4" y="22" width="120" height="66" rx="5" class="blk"/><text x="64" y="60">over black</text>
-  <rect x="4" y="112" width="120" height="66" rx="5" class="wht"/><text x="64" y="150" class="ink">over white</text></g>
-  <path d="M128 55 L178 92 M128 145 L178 108" class="ln" marker-end="url(#ar)"/>
-  <g class="box"><rect x="184" y="70" width="140" height="60" rx="5"/><text x="254" y="96">exact colour</text><text x="254" y="114">+ alpha</text></g>
-  <path d="M328 100 L372 100" class="ln" marker-end="url(#ar)"/>
-  <g class="box"><rect x="378" y="70" width="160" height="60" rx="5" class="wall"/><text x="458" y="96">on blurred</text><text x="458" y="114">wallpapers</text></g>
-  <path d="M542 92 L588 46 M542 100 L588 100 M542 108 L588 154" class="ln" marker-end="url(#ar)"/>
-  <g class="box"><rect x="594" y="18" width="282" height="52" rx="5"/><text x="735" y="49">APCA contrast · darkest + brightest</text>
-  <rect x="594" y="76" width="282" height="48" rx="5"/><text x="735" y="105">surface + text unity (glass tiers)</text>
-  <rect x="594" y="130" width="282" height="52" rx="5"/><text x="735" y="161">explorer: menus, dialogs (read-only)</text></g>
-</svg>"""
+def text_page(id_, title, lines, c, extra=""):
+    return f'<article id="{id_}"><h1>{esc(title)}</h1>{paras(lines, c)}{extra}</article>'
 
 
-def how(c):
-    return f"""<section id="how" class="wrap">
-  <h2>How it works</h2>
-  <p>Every site style maps the site's own colours onto one shared set of glass tiers: frame (sidebars, top bars),
-  content panes, popovers, fills and text. Each tier has a readability floor, because a compositor blur can't adapt to
-  what's behind it the way Apple's glass does.</p>
-  <p>The test lab opens each screen headless, captures it over pure black
-  and pure white to recover the exact colour and alpha of every pixel, composites that onto blurred wallpapers, and scores
-  every text run with APCA against the darkest and brightest wallpaper. Surfaces must be design-system tiers, text must
-  use the shared inks, and glass may never read worse than the site did natively. An explorer then opens menus,
-  dropdowns, dialogs and search suggestions (read-only: never sends, deletes or posts) and scores each one the same way.</p>
-  {DIAGRAM}
-</section>"""
+def pre(text):
+    return f"<pre><code>{esc(text)}</code></pre>"
 
 
-def add(c):
-    return f"""<section id="add" class="wrap">
-  <h2>Add a site in one command</h2>
-  <pre><code>./glasslab add "Linear" https://linear.app/ --agent</code></pre>
-  <p>Discovers what actually paints the page, scaffolds a style onto the glass tiers, then tests every screen and menu.
-  With <code>--agent</code> a coding agent iterates until the tests pass. Or <a href="{esc(issue_url('site-request', repo=c['repo']))}">request a site</a>:
-  a maintainer labels it and CI opens the pull request. Details in <a href="{gh(c['repo'], '/blob/release/docs/GLASS.md')}">docs/GLASS.md</a>.</p>
-</section>"""
-
-
-def footer(c):
-    return f"""<footer class="wrap">
-  <p>Built on <a href="{UPSTREAM}">Transparent Zen</a> by FrostyBiscuit. MIT licensed.
-  <a href="{gh(c['repo'])}">{esc(c['repo'])}</a> · <a href="{gh(c['repo'], '/issues')}">issues</a></p>
-</footer>"""
+def sidebar(c):
+    groups = "".join(f'<div class="group">{g}</div>' + "".join(f'<a href="#{i}">{t}</a>' for i, t in items) for g, items in GROUPS)
+    listed = [s for s in c["sites"] if s["screens"] and s["status"] != "auto"]   # auto benchmarks: in the table only
+    sites = '<div class="group"><a class="grouplink" href="#sites">Sites</a></div>' + "".join(
+        f'<a href="#site-{esc(s["id"])}"><span class="dot {DOT[s["status"]]}"></span>{esc(s["name"])}</a>' for s in listed)
+    return (f'<nav class="pane"><div class="brand"><b>{esc(COPY["title"])}</b><small>Glass for Zen Browser</small>'
+            f'<small><a href="{gh(c["repo"])}">GitHub</a> · <a href="{gh(c["repo"], "/releases/latest")}">Download</a></small></div>'
+            f'{groups}{sites}<div class="legend"><span><span class="dot live"></span>tested</span>'
+            f'<span><span class="dot partial"></span>pending</span><span><span class="dot planned"></span>auto</span></div></nav>')
 
 
 def render(c):
+    listed = [s for s in c["sites"] if s["screens"]]
+    articles = "".join([
+        overview(c),
+        f'<article id="install"><h1>Install</h1>{steps(COPY["install"], c)}</article>',
+        text_page("control", "Control", COPY["control"], c),
+        text_page("web-apps", "Web apps", COPY["webapps"], c, pre(COPY["webapps_cmd"]) + '<p><a href="'
+                  + gh(c["repo"], "/blob/master/webapp/README.md") + '">webapp/README.md</a></p>'),
+        sites_page(c), *(site_page(s, c) for s in listed),
+        text_page("add", "Add a site", COPY["add"][:1], c, pre(COPY["add_cmd"]) + paras(COPY["add"][1:], c)),
+        text_page("testing", "How it's tested", COPY["testing"], c),
+        text_page("auto", "Auto glass", COPY["auto"], c),
+        text_page("credits", "Credits", COPY["credits"], c),
+    ])
     return f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Transparent Zen · liquid glass for Zen Browser</title>
-<meta name="description" content="A Zen Browser extension that renders websites as translucent liquid glass over your blurred desktop, with every screen tested for readability.">
-<meta name="color-scheme" content="dark light">
+<title>{esc(COPY["title"])}</title>
+<meta name="description" content="{esc(COPY["lead"])}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="top wrap-wide"><a class="name" href="#">Transparent Zen</a>
-  <nav><a href="#gallery">Gallery</a><a href="#install">Install</a><a href="#sites">Sites</a><a href="#tests">Tests</a><a href="{gh(c['repo'])}">GitHub</a></nav></header>
-<main>
-{hero(c)}
-{gallery(c) if c['shots'] else ''}
-<div class="pair wrap">{install(c)}{control(c)}</div>
-{sites_table(c)}
-{tests(c)}
-{how(c)}
-{add(c)}
-</main>
-{footer(c)}
+<div class="shell">
+{sidebar(c)}
+<main class="pane">{articles}</main>
+</div>
+<script>
+// one article at a time (docs layout); #site-x deep links work, unknown hash → overview
+const show = () => {{ const id = location.hash.slice(1); const a = document.getElementById(id) || document.getElementById('overview');
+  document.querySelectorAll('article').forEach(x => x.classList.toggle('on', x === a));
+  document.querySelectorAll('nav a[href^="#"]').forEach(l => l.toggleAttribute('aria-current', l.getAttribute('href') === '#' + a.id));
+  if (id) scrollTo(0, 0); }};
+addEventListener('hashchange', show); show();
+</script>
 </body>
 </html>
 """
+
+
+# ── README: same copy, markdown ─────────────────────────────────────────────────────────────────────────────────────
+def md_lines(lines, c, prefix=""):
+    return "\n\n".join(prefix + fill(l, c) for l in lines)
+
+
+def readme_md(c):
+    hero = hero_shot(c)
+    names = c["names"]
+    shots = [s for s in c["shots"] if s is not hero][:4]
+    img = lambda s: f"![{view_name(s['screen'], names)[0]}](site/shots/{s['dark'] or s['light']})"
+    gallery = ("\n| | |\n|---|---|\n" + "".join(f"| {img(a)} | {img(b)} |\n" for a, b in zip(shots[::2], shots[1::2]))) if len(shots) >= 2 else ""
+    site_url = f"https://{c['repo'].split('/')[0]}.github.io/{c['repo'].split('/')[1]}/"
+    return "\n".join([
+        f"# {COPY['title']}", "", COPY["lead"], "",
+        f"![{COPY['title']}](site/shots/{hero['light'] or hero['dark']})" if hero else "", gallery,
+        f"Screenshots of every tested site, screen and menu: [{site_url}]({site_url})", "",
+        "\n".join(f"- {fill(f, c)}" for f in COPY["facts"]), "",
+        "## Install", "", "\n".join(f"{i}. {fill(l, c)}" for i, l in enumerate(COPY["install"], 1)), "",
+        "## Control", "", md_lines(COPY["control"], c), "",
+        "## Web apps", "", md_lines(COPY["webapps"], c), "", "```sh", COPY["webapps_cmd"], "```", "",
+        "## Sites", "", START, readme_table(c["sites"], c["repo"]).strip(), END, "",
+        "## Add a site", "", md_lines(COPY["add"][:1], c), "", "```sh", COPY["add_cmd"], "```", "", md_lines(COPY["add"][1:], c), "",
+        "Full guide: [docs/GLASS.md](docs/GLASS.md).", "",
+        "## How it's tested", "", "\n".join(f"- {fill(l, c)}" for l in COPY["testing"]), "",
+        "## Auto glass", "", md_lines(COPY["auto"], c), "",
+        "## Credits", "", md_lines(COPY["credits"], c), "",
+    ])
 
 
 def main(run=None, out=None):
@@ -470,10 +472,9 @@ def main(run=None, out=None):
     c = context(reg, screens, numbers, load_tiles(out / "tests", screens, numbers), load_shots(out / "shots", screens), rp)
     (out / "index.html").write_text(render(c))
     readme = ROOT / "README.md"
-    text = readme.read_bytes().decode()
-    new = update_readme(text, readme_table(c["sites"], rp))
-    if new != text:
-        readme.write_bytes(new.encode())
-    print(f"site: {out / 'index.html'}  ({len(c['sites'])} sites, {len(c['tiles'])} test tiles, {len(c['shots'])} shots)"
-          + ("" if START in text else f"\nREADME: no {START} … {END} markers → table not written"))
+    crlf = "\r\n" in readme.read_bytes().decode()
+    text = readme_md(c)
+    readme.write_bytes((text.replace("\n", "\r\n") if crlf else text).encode())
+    print(f"site: {out / 'index.html'}  ({len(c['sites'])} sites, {len(c['tiles'])} test tiles, {len(c['shots'])} shots)\n"
+          f"README.md regenerated from the same copy")
     return 0

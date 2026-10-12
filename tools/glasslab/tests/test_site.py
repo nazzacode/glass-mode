@@ -1,6 +1,6 @@
 """site generator (pure): sites database rows, tile safety (private screens only via scrambled shots tiles), links +
 escaping, README table between markers (idempotent)."""
-import json
+import json, re
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
@@ -159,9 +159,31 @@ def test_page_escapes_and_links(html):
     assert "Settings &lt;menu&gt;" in html
     assert "https://github.com/a/b/issues/new?template=site-bug.yml" in html
     assert "template=site-request.yml" in html
-    assert 'id="t-mail-pro"' in html and 'href="#t-mail-pro"' in html
+    assert 'id="site-mail-pro"' in html and 'href="#site-mail-pro"' in html
     assert "https://github.com/a/b/releases/latest" in html
     assert "FrostyBiscuit" in html
+
+
+def test_page_is_a_docs_shell(html):
+    """docs layout (Nathan: 'no sales, tight docs, sidebar + selectable feature list'): one article per topic + per site"""
+    assert html.count("<nav") == 1
+    for a in ("overview", "install", "control", "web-apps", "sites", "add", "testing", "auto", "credits"):
+        assert f'<article id="{a}"' in html and f'href="#{a}"' in html, a
+
+
+def test_readme_comes_from_the_same_copy(html):
+    ctx = site.context(REGISTRY, SCREENS, NUMBERS, [], [], repo="a/b")
+    md = site.readme_md(ctx)
+    assert site.COPY["lead"] in md and site.COPY["lead"] in html
+    for line in site.COPY["facts"]:
+        assert site.fill(line, ctx).split(".")[0] in md
+    assert site.START in md and site.END in md and "Old Site" in md
+
+
+def test_copy_has_no_sales_tics():
+    prose = json.dumps(site.COPY, ensure_ascii=False)
+    assert "—" not in prose and "!" not in prose
+    assert not re.search(r"\b(seamless|stunning|beautiful|effortless|supercharge|unleash|magic)\b", prose, re.I)
 
 
 def test_page_only_references_safe_tiles(html):
@@ -196,6 +218,6 @@ def test_readme_line_endings_kept():
     assert site.update_readme("a\n" + raw.replace("\r\n", "\n"), "z") .count("\r") == 0
 
 
-def test_real_readme_has_markers_once():
+def test_real_readme_is_generated_and_has_markers_once():
     text = (Path(site.ROOT) / "README.md").read_text()
     assert text.count(site.START) == 1 and text.count(site.END) == 1

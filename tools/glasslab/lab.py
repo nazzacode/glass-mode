@@ -1,5 +1,10 @@
-"""Headless Zen driver: throwaway profile inside the Flatpak sandbox, extension sideloaded unsigned, cookies copied from
-the live profile (logged-in pages), driven over WebDriver BiDi. Never touches the user's session or focus."""
+"""Headless browser driver over WebDriver BiDi. Never touches the user's session or focus.
+
+GLASSLAB_BROWSER=zen (default): Zen Flatpak, throwaway profile inside the sandbox, extension sideloaded unsigned, cookies
+  copied from the live Zen profile → logged-in pages.
+GLASSLAB_BROWSER=firefox: any Firefox ≥ 138 on PATH (or GLASSLAB_FIREFOX=path) — CI and contributors without Zen. Extension
+  installed as a temporary add-on over BiDi (unsigned OK); cookies from a Zen profile if one exists, else logged out.
+Same engine (Gecko), same CSS — results match except for login state."""
 import asyncio, base64, configparser, contextlib, io, itertools, json, os, shutil, sqlite3, subprocess, time
 from pathlib import Path
 
@@ -9,7 +14,9 @@ from PIL import Image
 APP = "app.zen_browser.zen"
 SANDBOX = Path.home() / ".var/app" / APP
 PORT = int(os.environ.get("GLASSLAB_PORT", 9333))  # one lab per port → parallel runs: GLASSLAB_PORT=9334 ./glasslab …
-LAB = SANDBOX / f"glasslab-{PORT}"               # throwaway profile (sandbox can only read its own dir)
+BROWSER = os.environ.get("GLASSLAB_BROWSER", "zen")
+LAB = (SANDBOX / f"glasslab-{PORT}" if BROWSER == "zen"     # throwaway profile (the sandbox can only read its own dir)
+       else Path.home() / ".cache/glasslab" / f"{BROWSER}-{PORT}")
 EXT_ID = "transparent-zen@nazzacode"
 PROBES = Path(__file__).parent / "probes"
 KEY = {"Escape": "\uE00C", "Backspace": "\uE003", "Control": "\uE009", "Tab": "\uE004", "Enter": "\uE007"}  # WebDriver key values
@@ -31,23 +38,30 @@ PREFS = {
 
 
 def live_profile():
-    """the profile Zen actually launches (profiles.ini [Install…] Default=), not a hard-coded name"""
+    """the profile Zen actually launches (profiles.ini [Install…] Default=), not a hard-coded name; None if no Zen"""
     ini = configparser.ConfigParser(interpolation=None)
     ini.optionxform = str
     ini.read(SANDBOX / ".zen/profiles.ini")
-    for s in ini.sections():
-        if s.startswith("Install") and "Default" in ini[s]:
-            return SANDBOX / ".zen" / ini[s]["Default"]
-    raise SystemExit("glasslab: no Zen profile found (run Zen once)")
+    return next((SANDBOX / ".zen" / ini[s]["Default"] for s in ini.sections() if s.startswith("Install") and "Default" in ini[s]), None)
+
+
+def command():
+    common = ["--headless", "--no-remote", "--profile", str(LAB), f"--remote-debugging-port={PORT}"]
+    if BROWSER == "zen":
+        return ["flatpak", "run", "--command=/app/zen/zen", APP, *common]
+    return [os.environ.get("GLASSLAB_FIREFOX", "firefox"), *common]
 
 
 def setup(xpi):
     shutil.rmtree(LAB, ignore_errors=True)
     (LAB / "extensions").mkdir(parents=True)
-    if xpi:  # None → plain browser (fixture pages carry their own style)
+    if xpi and BROWSER == "zen":  # None → plain browser (fixture pages carry their own style); firefox: BiDi install
         shutil.copy(xpi, LAB / "extensions" / f"{EXT_ID}.xpi")
     (LAB / "user.js").write_text("".join(f'user_pref("{k}", {json.dumps(v)});\n' for k, v in PREFS.items()))
     live = live_profile()
+    if live is None:
+        print("glasslab: no Zen profile → logged-out pages", flush=True)
+        return
     # live Zen holds an exclusive lock → copy raw db + WAL, then fold the WAL in on the copy
     for ext in ("", "-wal"):
         if (live / f"cookies.sqlite{ext}").exists():
@@ -59,7 +73,9 @@ def setup(xpi):
 
 
 def kill():
-    subprocess.run(["pkill", "-f", f"^/app/zen/zen .*--profile {LAB}"], check=False)
+    """by profile path, anchored on the binary (an unanchored pattern also matches ssh/editor argv mentioning the path)"""
+    binary = "/app/zen/zen" if BROWSER == "zen" else r"\S*firefox\S*"
+    subprocess.run(["pkill", "-f", f"^{binary} .*--profile {LAB}"], check=False)
 
 
 class Bidi:
@@ -154,12 +170,11 @@ class Page:
 
 @contextlib.asynccontextmanager
 async def session(xpi, log_path, viewport=(1400, 1000)):
-    """start headless Zen with a fresh lab profile → Page; always cleaned up"""
+    """start the headless browser with a fresh lab profile → Page; always cleaned up"""
     kill()
     time.sleep(1)
     setup(xpi)
-    zen = subprocess.Popen(["flatpak", "run", "--command=/app/zen/zen", APP, "--headless", "--no-remote", "--profile", str(LAB),
-                            f"--remote-debugging-port={PORT}"], stdout=open(log_path, "w"), stderr=subprocess.STDOUT)
+    proc = subprocess.Popen(command(), stdout=open(log_path, "w"), stderr=subprocess.STDOUT)
     try:
         for _ in range(60):
             try:
@@ -168,13 +183,17 @@ async def session(xpi, log_path, viewport=(1400, 1000)):
             except OSError:
                 await asyncio.sleep(1)
         else:
-            raise SystemExit("glasslab: Zen did not open the BiDi port")
+            raise SystemExit(f"glasslab: {BROWSER} did not open the BiDi port (log: {log_path})")
         b = Bidi(ws)
         await b.call("session.new", capabilities={})
+        if xpi and BROWSER != "zen":
+            await b.call("webExtension.install", extensionData={"type": "archivePath", "path": str(Path(xpi).resolve())})
         ctx = (await b.call("browsingContext.getTree"))["contexts"][0]["context"]
+        if BROWSER != "zen":  # Firefox's first context needs -remote-allow-system-access to resize → use a fresh tab
+            ctx = (await b.call("browsingContext.create", type="tab"))["context"]
         await b.call("browsingContext.setViewport", context=ctx, viewport={"width": viewport[0], "height": viewport[1]})
         yield Page(b, ctx)
         await ws.close()
     finally:
-        zen.terminate()  # reaches only the flatpak wrapper; the sandboxed zen lives on → kill by profile
+        proc.terminate()  # zen: reaches only the flatpak wrapper; the sandboxed zen lives on → kill by profile
         kill()

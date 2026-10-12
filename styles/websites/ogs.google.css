@@ -1,0 +1,26 @@
+@import url("../shared/gm3.css");
+
+/* Google apps launcher + account widget: a cross-origin iframe on every Google app (ogs.google.com). The extension runs
+   in this one frame only (manifest: all_frames for ogs.google.com) → the panel becomes a popover like every other menu.
+   Probes can't see into it from the parent page; verified via a BiDi child-frame context. */
+:root {
+	--g-body: transparent; /* the panel is the surface, not the frame document */
+}
+.EHzcec {
+	background: var(--g-popover) !important;
+}
+.LVal7b {
+	background: var(--g-fill) !important; /* "your favourites" card */
+}
+.XOaCHd {
+	background: var(--g-fill-selected) !important;
+}
+.Rq5Gcb {
+	color: var(--g-fg) !important; /* app names */
+}
+:is(.kejiBe, .ne2Ple-oshW8e-V67aGc) {
+	color: var(--g-fg-2) !important;
+}
+a.NQV3m {
+	color: var(--g-blue) !important;
+}

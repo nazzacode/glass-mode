@@ -166,12 +166,14 @@ def add_registry(name, host, css, dark_only, path=None):
         return False
     nl = "\r\n" if "\r\n" in s else "\n"
     rx = "^https?://(www\\\\.)?" + host.replace(".", "\\\\.") + "/"
-    entry = (f"\t\t{{{nl}\t\t\t\"name\": \"{name}\",{nl}\t\t\t\"matches\": [\"{rx}\"],{nl}"
-             f"\t\t\t\"css\": [\"./styles/websites/{css}\"],{nl}" + (f"\t\t\t\"glass\": \"dark\",{nl}" if dark_only else "")
-             + f"\t\t\t\"run_at\": \"document_start\",{nl}\t\t\t\"favicon\": \"https://icons.duckduckgo.com/ip3/{host}.ico\"{nl}\t\t}},{nl}")
+    j = json.dumps   # names/hosts escaped; regex stays as written
+    entry = (f"\t\t{{{nl}\t\t\t\"name\": {j(name)},{nl}\t\t\t\"matches\": [\"{rx}\"],{nl}"
+             f"\t\t\t\"css\": [{j('./styles/websites/' + css)}],{nl}" + (f"\t\t\t\"glass\": \"dark\",{nl}" if dark_only else "")
+             + f"\t\t\t\"run_at\": \"document_start\",{nl}\t\t\t\"favicon\": {j('https://icons.duckduckgo.com/ip3/' + host + '.ico')}{nl}\t\t}},{nl}")
     i = s.index("[", s.index('"supportedWebsites"')) + 1 + len(nl)
-    p.write_bytes((s[:i] + entry + s[i:]).encode())
-    json.loads(p.read_text())  # still valid
+    out = s[:i] + entry + s[i:]
+    json.loads(out)  # validate BEFORE writing: a broken registry breaks every site
+    p.write_bytes(out.encode())
     return True
 
 

@@ -22,3 +22,10 @@ def test_registering_twice_is_a_no_op(tmp_path):
     p.write_bytes(REG.encode())
     discover.add_registry("Example", "example.com", "example.com.css", False, path=p)
     assert not discover.add_registry("Example", "example.com", "example.com.css", False, path=p)
+
+
+def test_names_are_json_escaped(tmp_path):
+    p = tmp_path / "ContentScripts.json"
+    p.write_bytes(REG.encode())
+    discover.add_registry('Say "hi"', "example.com", "example.com.css", False, path=p)
+    assert json.loads(p.read_text())["supportedWebsites"][0]["name"] == 'Say "hi"'

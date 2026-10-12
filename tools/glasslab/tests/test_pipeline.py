@@ -64,3 +64,45 @@ def test_prompt_is_deterministic_and_scoped():
     p1 = pipeline.prompt("site.css", "css here", "report here")
     assert p1 == pipeline.prompt("site.css", "css here", "report here")
     assert "site.css" in p1 and "var(--g-" in p1 and "report here" in p1 and "only" in p1.lower()
+
+
+# ── agent sandbox: the agent edits a copy, only lint-clean CSS comes back ──
+def test_report_for_agents_has_no_page_text():
+    rows = [row("a.dark.45", False, contrast=0.6, failing=[{"sel": "div.x", "lc": [30, 20], "target": 60, "fg": "rgb(1, 1, 1)", "t": "Secret subject line", "chars": 9}])]
+    assert "Secret subject" in pipeline.report_md(rows)              # local report: the human sees it
+    assert "Secret subject" not in pipeline.report_md(rows, page_text=False)
+
+
+def test_css_lint_allows_only_glass_mappings():
+    ok = '@import url("../shared/glass.css");\n.x { color: var(--g-fg) !important; }'
+    assert pipeline.lint_css(ok) == []
+    for bad in ['.x { background: url(https://evil.example/?q) }', '@import url("https://evil.example/x.css");',
+                '.x { background-image: image-set("x.png" 1x) }', '.x::after { content: attr(value) }']:
+        assert pipeline.lint_css(bad), bad
+
+
+def test_sandbox_round_returns_only_the_css(tmp_path):
+    root = tmp_path / "repo"
+    (root / "styles/websites").mkdir(parents=True)
+    (root / "styles/shared").mkdir(parents=True)
+    (root / "docs").mkdir()
+    (root / "styles/shared/glass.css").write_text(":root{}")
+    (root / "docs/GLASS.md").write_text("rules")
+    css = root / "styles/websites/site.css"
+    css.write_text("old")
+
+    def agent(prompt, cwd):
+        assert not (cwd / ".git").exists() and (cwd / "docs/GLASS.md").exists()
+        (cwd / "styles/websites/site.css").write_text(".x { color: var(--g-fg) }")
+        (cwd / "evil.sh").write_text("rm -rf /")
+    pipeline.sandboxed(agent, root, css)("prompt")
+    assert css.read_text() == ".x { color: var(--g-fg) }" and not (root / "evil.sh").exists()
+
+
+def test_sandbox_rejects_unsafe_css(tmp_path):
+    root = tmp_path / "repo"
+    (root / "styles/websites").mkdir(parents=True)
+    css = root / "styles/websites/site.css"
+    css.write_text("old")
+    pipeline.sandboxed(lambda p, cwd: (cwd / "styles/websites/site.css").write_text(".x{background:url(//evil)}"), root, css)("p")
+    assert css.read_text() == "old"

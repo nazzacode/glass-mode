@@ -3,9 +3,11 @@
 Deterministic core: discover (causal tokens) → scaffold style + registry + test screen → build → test + explore → report.
 Optional agent loop (--agent): an LLM edits ONLY the site's CSS from a fixed prompt (rules + current CSS + report); every
 round is re-verified by the suite and kept only if the score improves — otherwise reverted. Monotone by construction, so
-the agent can be anything (`GLASSLAB_AGENT`, default Claude Code; e.g. `codex exec`). Files other than the site CSS that
-the agent touches are restored."""
-import json, os, shlex, subprocess, time
+the agent can be anything (`GLASSLAB_AGENT`, default Claude Code; e.g. `codex exec`).
+Sandbox: the agent works in a temp copy holding only the docs, the shared tokens and its CSS (no .git, no build files, no
+credentials); only that CSS comes back, and only if it passes `lint_css` (no url()/imports/attr() — a site style may only
+map onto var(--g-…)). Its prompt carries selectors and numbers, never page text (logged-in pages, prompt injection)."""
+import json, os, re, shlex, shutil, subprocess, tempfile, time
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -14,7 +16,9 @@ from . import cli, discover, suite
 ROOT = Path(__file__).resolve().parents[2]
 OUT = Path.home() / ".cache/glasslab/add"
 DEFAULT = f".{int(suite.DEFAULT_ALPHA * 100)}"
-GUARDED = ("styles", "data", "tools", "src")     # anything here but the site CSS is restored after an agent round
+SANDBOX = ("docs/GLASS.md", "styles/shared")     # what the agent may read besides its CSS
+UNSAFE = re.compile(r"url\(|image-set\(|attr\(|expression\(|javascript:|-moz-binding|behavior\s*:", re.I)
+SHARED_IMPORT = re.compile(r'^@import url\("\.\./shared/[\w.-]+\.css"\);\s*$')
 
 RULES = """You are improving ONE liquid-glass site style for the Transparent Zen extension. Edit only {css}.
 Rules (docs/GLASS.md):
@@ -45,8 +49,8 @@ def green(rows):
     return all(r["ok"] for r in default_rows(rows))
 
 
-def report_md(rows):
-    """what to fix, worst first: per failing row its foreign surfaces + failing text"""
+def report_md(rows, page_text=True):
+    """what to fix, worst first: per failing row its foreign surfaces + failing text (page text only for humans)"""
     out = [f"{sum(r['ok'] for r in default_rows(rows))}/{len(default_rows(rows))} rows pass at the default slider.\n"]
     for r in sorted((r for r in default_rows(rows) if not r["ok"]), key=lambda r: min(r["contrast"]) + r["surface"]):
         where = f"{r['key']}" + (f" (opened: {r['state']})" if r.get("state") else "")
@@ -54,7 +58,8 @@ def report_md(rows):
                    + (f" · opacity {r['opacity']:.2f}{' over page content' if r.get('over_content') else ''}" if "opacity" in r else ""))
         out += [f"- foreign surface `{f}` ×{n}" for f, n in r.get("surface_foreign", [])]
         out += [f"- foreign text colour `{f}` ×{n}" for f, n in r.get("text_foreign", [])]
-        out += [f"- text `{g['sel']}` “{g['t']}” Lc {min(g['lc'])} < {g['target']} (fg {g['fg']})" for g in r.get("failing", [])]
+        out += [f"- text `{g['sel']}`" + (f" “{g['t']}”" if page_text else "") + f" Lc {min(g['lc'])} < {g['target']} (fg {g['fg']})"
+                for g in r.get("failing", [])]
         out.append("")
     return "\n".join(out)
 
@@ -70,7 +75,7 @@ def improve(lab, agent, read, write, rounds=4, css="site.css"):
         if green(rows):
             break
         before = read()
-        agent(prompt(css, before, report_md(rows)))
+        agent(prompt(css, before, report_md(rows, page_text=False)))
         new = lab()
         kept = progress(new) > progress(rows)
         log.append({"round": i + 1, "before": progress(rows), "after": progress(new), "kept": kept})
@@ -82,27 +87,48 @@ def improve(lab, agent, read, write, rounds=4, css="site.css"):
     return rows, log
 
 
-def snapshot():
-    return {p: p.read_bytes() for d in GUARDED for p in (ROOT / d).rglob("*") if p.is_file() and "__pycache__" not in p.parts}
+def lint_css(text):
+    """problems that make agent CSS unsafe to ship: anything that loads or leaks (url(), imports other than the shared
+    tokens, attr() content, legacy script hooks)"""
+    probs = []
+    for i, line in enumerate(text.splitlines(), 1):
+        if line.lstrip().startswith("@import") and not SHARED_IMPORT.match(line.strip()):
+            probs.append(f"{i}: only @import url(\"../shared/….css\") allowed")
+        elif not SHARED_IMPORT.match(line.strip()) and UNSAFE.search(line):
+            probs.append(f"{i}: {UNSAFE.search(line).group(0)} not allowed")
+    return probs
 
 
-def restore_others(snap, keep):
-    for p in {p for d in GUARDED for p in (ROOT / d).rglob("*") if p.is_file() and "__pycache__" not in p.parts} - set(snap) - {keep}:
-        p.unlink()
-    for p, data in snap.items():
-        if p != keep and (not p.exists() or p.read_bytes() != data):
-            p.write_bytes(data)
-
-
-def cli_agent(css_path):
-    """GLASSLAB_AGENT (default Claude Code, edits allowed, no shell) run in the repo with the prompt as last argument"""
-    cmd = shlex.split(os.environ.get("GLASSLAB_AGENT", "claude -p --permission-mode acceptEdits --allowedTools Read,Edit"))
+def sandboxed(agent, root, css):
+    """agent(prompt, cwd) runs in a temp copy (docs + shared tokens + its CSS); only lint-clean CSS is copied back"""
+    rel = css.relative_to(root)
 
     def run(text):
-        snap = snapshot()
-        subprocess.run([*cmd, text], cwd=ROOT, check=False, timeout=900)
-        restore_others(snap, css_path)
+        with tempfile.TemporaryDirectory(prefix="glasslab-agent-") as tmp:
+            tmp = Path(tmp)
+            for item in SANDBOX:
+                src = root / item
+                if src.is_dir():
+                    shutil.copytree(src, tmp / item)
+                elif src.exists():
+                    (tmp / item).parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy(src, tmp / item)
+            (tmp / rel).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(css, tmp / rel)
+            agent(text, tmp)
+            new = (tmp / rel).read_bytes().decode()
+        if probs := lint_css(new):
+            print("agent CSS rejected:", *probs, sep="\n  ")
+        else:
+            css.write_bytes(new.encode())
     return run
+
+
+def cli_agent():
+    """GLASSLAB_AGENT (default Claude Code: read + edit only, no shell) with the prompt as last argument, in cwd"""
+    cmd = shlex.split(os.environ.get("GLASSLAB_AGENT", "claude -p --permission-mode acceptEdits --allowedTools Read,Edit "
+                                                       "--disallowedTools Bash,WebFetch,WebSearch"))
+    return lambda text, cwd: subprocess.run([*cmd, text], cwd=cwd, check=False, timeout=900)
 
 
 def add(name, url, act=None, content_first=False, dark_only=False, agent=False, rounds=4, force=False):
@@ -117,11 +143,12 @@ def add(name, url, act=None, content_first=False, dark_only=False, agent=False, 
     def lab():
         rows = suite.run(cli.xpi(True), f"^{sid}-", out / time.strftime("%H%M%S"))
         (out / "report.md").write_text(report_md(rows))
+        (out / "report-public.md").write_text(report_md(rows, page_text=False))   # PR bodies: no page text
         return rows
 
     read = lambda: css.read_bytes().decode()
     write = lambda t: css.write_bytes(t.encode())
-    rows, log = improve(lab, cli_agent(css), read, write, rounds, css.name) if agent else (lab(), [])
+    rows, log = improve(lab, sandboxed(cli_agent(), ROOT, css), read, write, rounds, css.name) if agent else (lab(), [])
     (out / "log.json").write_text(json.dumps(log, indent=1))
     print(f"\n{'GREEN' if green(rows) else 'NOT GREEN'}: {progress(rows)[0]}/{len(default_rows(rows))} rows pass"
           f"\nreport: {out / 'report.md'}\nstyle: {css.relative_to(ROOT)}"

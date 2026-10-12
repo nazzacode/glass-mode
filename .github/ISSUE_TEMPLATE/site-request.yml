@@ -1,0 +1,27 @@
+name: Add a site
+description: Ask for a liquid-glass style for a website or web app
+title: "Add "
+labels: ["site request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks! A maintainer adds the `add-site` label → CI runs `./glasslab add` (discover → scaffold → test every screen and
+        menu, agent-assisted) on the public pages and opens a pull request with the new style + screenshots.
+        Want to do it yourself? `./glasslab add "Name" https://site/` — see docs/GLASS.md.
+  - type: input
+    id: site
+    attributes: { label: Site, description: Host name, placeholder: linear.app }
+    validations: { required: true }
+  - type: input
+    id: url
+    attributes: { label: Start URL, description: The page to style first (public pages can be tested in CI), placeholder: "https://linear.app/" }
+    validations: { required: true }
+  - type: dropdown
+    id: login
+    attributes:
+      label: Does the interesting part need a login?
+      options: ["No — public pages", "Yes — I'll test locally with ./glasslab (uses your browser's cookies)"]
+  - type: textarea
+    id: notes
+    attributes: { label: Anything else?, description: Screens that matter most, dark-only app, etc. }

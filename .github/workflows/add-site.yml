@@ -1,0 +1,88 @@
+# Site request → pull request. A maintainer labels a "site request" issue `add-site`; CI runs the same one command a
+# contributor would (`./glasslab add --agent`) on the PUBLIC pages in headless Firefox, then opens a PR with the style
+# and the test report. The agent only edits the site's CSS and every round is kept only if the test scores improve.
+# Needs repo secret ANTHROPIC_API_KEY (or set GLASSLAB_AGENT to another CLI agent). Logged-in apps: run it locally.
+name: Add site
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  add-site:
+    if: github.event.label.name == 'add-site'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
+
+      - name: Read the request
+        id: req
+        env:
+          BODY: ${{ github.event.issue.body }}   # untrusted: only via env, validated below
+        run: |
+          python - <<'PY'
+          import os, re
+          body = os.environ["BODY"]
+          field = lambda name: (re.search(rf"### {name}\s+(.+?)\s*(?:\n###|\Z)", body, re.S) or [None, ""])[1].strip()
+          site, url = field("Site"), field("Start URL")
+          assert re.fullmatch(r"[a-z0-9.-]+\.[a-z]{2,}", site), f"bad site {site!r}"
+          assert re.fullmatch(r"https://[a-z0-9.-]+(/[\w./?=&%#-]*)?", url), f"bad url {url!r}"
+          name = site.removeprefix("www.").split(".")[0].capitalize()
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"site={site}\nurl={url}\nname={name}\n")
+          PY
+
+      - name: Install
+        run: |
+          npm ci
+          pip install websockets pillow numpy pytest
+          npm install -g @anthropic-ai/claude-code
+
+      - name: glasslab add
+        id: add
+        continue-on-error: true
+        env:
+          GLASSLAB_BROWSER: firefox
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NAME: ${{ steps.req.outputs.name }}
+          URL: ${{ steps.req.outputs.url }}
+        run: python -m tools.glasslab add "$NAME" "$URL" --agent --rounds 4
+
+      - name: Report
+        id: report
+        env:
+          NAME: ${{ steps.req.outputs.name }}
+        run: |
+          slug=$(echo "$NAME" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-')
+          cp ~/.cache/glasslab/add/$slug/report.md report.md || echo "no report" > report.md
+
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          branch: add-site/${{ steps.req.outputs.site }}
+          title: "Add ${{ steps.req.outputs.site }} (glasslab add)"
+          commit-message: "Add ${{ steps.req.outputs.site }} via glasslab add"
+          add-paths: |
+            styles/websites/*.css
+            data/ContentScripts.json
+            tools/glasslab/screens.json
+          body-path: report.md
+          labels: site request
+          draft: ${{ steps.add.outcome != 'success' }}   # not green yet → draft for a human pass
+
+      - name: Tell the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OUTCOME: ${{ steps.add.outcome }}
+        run: gh issue comment ${{ github.event.issue.number }} --body "glasslab add finished ($OUTCOME). Pull request: see linked PRs; report attached there."

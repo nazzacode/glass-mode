@@ -1,0 +1,24 @@
+name: Glass problem on a site
+description: Something on a supported site is unreadable, opaque, or looks off
+title: "[site] "
+labels: ["style bug"]
+body:
+  - type: input
+    id: site
+    attributes: { label: Site, placeholder: web.whatsapp.com }
+    validations: { required: true }
+  - type: input
+    id: url
+    attributes: { label: Page, description: "Origin is filled in; add the path if it isn't private" }
+  - type: input
+    id: setup
+    attributes: { label: Setup, description: Filled in by the extension popup (glass mode, opacity, version) }
+  - type: textarea
+    id: what
+    attributes:
+      label: What looks wrong?
+      description: Which element (menu, dialog, sidebar…), and how (opaque white box, unreadable text, wrong colour). A screenshot helps a lot — crop out anything private.
+    validations: { required: true }
+  - type: textarea
+    id: steps
+    attributes: { label: How to see it, description: e.g. "open the ⋮ menu in a chat", placeholder: "1. …" }

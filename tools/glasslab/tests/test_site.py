@@ -221,3 +221,14 @@ def test_readme_line_endings_kept():
 def test_real_readme_is_generated_and_has_markers_once():
     text = (Path(site.ROOT) / "README.md").read_text()
     assert text.count(site.START) == 1 and text.count(site.END) == 1
+
+
+def test_status_comes_from_the_numbers():
+    """the table never says 'verified' over failing rows (critic: 'Claude 0/2 marked verified')"""
+    ok = {"status": "verified", "pass": {"dark": (3, 3), "light": (3, 3)}}
+    some = {"status": "verified", "pass": {"dark": (1, 9), "light": (9, 9)}}
+    none = {"status": "pending", "pass": {}}
+    assert site.verdict(ok) == "passes"
+    assert site.verdict(some) == "8 of 18 checks fail"
+    assert site.verdict(none) == "not tested yet"
+    assert site.verdict({"status": "auto", "pass": {"dark": (2, 2)}}) == "auto glass, passes"

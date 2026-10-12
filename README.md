@@ -1,73 +1,74 @@
 # Transparent Zen
 
-Make websites see-through in Zen Browser, without losing readable text.
+A Zen Browser extension that turns websites into frosted glass over your desktop. Text stays readable.
 
-![Google Calendar as dark glass](site/shots/gcal-week.dark.webp)
+A fork of FrostyBiscuit's [Transparent Zen](https://github.com/frostybiscuit/transparent-zen), rebuilt around one design system and a test lab.
 
-- 24 sites styled, including Gmail, Google Calendar, Spotify, WhatsApp, GitHub and DuckDuckGo.
-- Auto glass for every other site (beta).
-- One setting, opacity. Change it from any window with Alt+Shift+Up and Down.
-- Light and dark glass that follows your desktop.
-- Web apps: any site in its own window, glass included (Linux).
+![Wikipedia as light glass](site/shots/wiki-article.light.webp)
+
+- Hand-tuned styles for 24 sites: Gmail, Google Calendar, Spotify, WhatsApp, GitHub and DuckDuckGo.
+- Other sites: automatic glass (beta).
+- One slider: opacity. Alt+Shift+Up and Down change it from any page.
+- Light and dark glass. Auto follows your system theme.
+- Linux: run any site as its own app window.
+
+Requirements: Zen Browser on Linux (Hyprland, KDE or GNOME) or Windows 11. macOS is untested.
 
 ## Why
 
-Glass desktops stop at the browser. Every website paints a solid box over your wallpaper, and simply making pages see-through leaves text unreadable over a busy background.
+Transparent desktops stop at the browser. Every website paints a solid box over your wallpaper, and making pages simply see-through leaves text unreadable over a busy background.
 
-Transparent Zen gives each site frosted panels and menus with a minimum text contrast, checked on every screen and menu of every supported site.
+Transparent Zen gives each site frosted panels and menus. Text contrast is measured on every screen and menu, against the brightest and darkest wallpaper.
 
-It needs Zen because Zen has built-in window transparency, so the desktop can show through a web page. Chrome-based browsers can't do this. Firefox might, with manual setup we haven't tested.
+It needs Zen because Zen has built-in window transparency, so your desktop can show through a web page. Chrome-based browsers can't do this. Firefox is untested.
 
 ## Install
 
-1. Download `transparent-zen.xpi` from [Releases](https://github.com/nazzacode/transparent-zen/releases/latest) and open it in Zen.
-2. Turn on transparency: in `about:config`, set `browser.tabs.allow_transparent_browser` to `true`, then the setting for your system below.
+1. Download `transparent-zen.xpi` from [Releases](https://github.com/nazzacode/transparent-zen/releases/latest) and open it in Zen. Until the signed release, first set `xpinstall.signatures.required` to `false` in `about:config`.
+2. In `about:config`, set `browser.tabs.allow_transparent_browser` to `true`, then the setting for your system:
 
-<details><summary>Settings for your system</summary>
-
-- Linux: `zen.widget.linux.transparency` = `true`. The blur comes from your compositor. Hyprland blurs out of the box; KDE needs [kwin-effects-forceblur](https://github.com/taj-ny/kwin-effects-forceblur); GNOME needs [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/).
+- Linux: `zen.widget.linux.transparency` = `true`. Your compositor does the blur: Hyprland out of the box, KDE with [kwin-effects-forceblur](https://github.com/taj-ny/kwin-effects-forceblur), GNOME with [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/).
 - Windows 11: `widget.windows.mica` = `true`.
-- macOS: untested. Reports welcome.
-- Dark Reader repaints pages solid. Turn it off for glass sites.
 
-</details>
+Turn off Dark Reader for glass sites. It repaints them solid.
 
 ## Use
 
-<img src="site/shots/panel.dark.webp" alt="The glass panel" width="360">
+<img src="site/shots/panel.dark.webp" alt="The glass panel" width="420">
 
-Press Alt+Shift+G in any page to open the glass panel. It works in web-app windows too, which have no toolbar. The toolbar popup has the same controls.
+Press Alt+Shift+G in any page to open the glass panel. It also works in web-app windows, which have no toolbar.
 
 Alt+Shift+Up and Alt+Shift+Down make glass more or less opaque.
 
 | 10 % | 45 % (default) | 90 % |
 |---|---|---|
-| ![opacity 10%](site/shots/gcal-week.dark.op10.webp) | ![opacity 45%](site/shots/gcal-week.dark.op45.webp) | ![opacity 90%](site/shots/gcal-week.dark.op90.webp) |
+| ![opacity 10 %](site/shots/opacity-10.webp) | ![opacity 45 %](site/shots/opacity-45.webp) | ![opacity 90 %](site/shots/opacity-90.webp) |
 
-Low opacity shows more desktop; high is nearly solid. Text stays readable at every step, so panes with long text stay denser than sidebars.
+Low opacity shows more desktop; high is nearly solid. Reading panes stay more opaque than sidebars, so text stays readable at every step.
 
 | Dark | Light |
 |---|---|
-| ![Wikipedia, dark glass](site/shots/wiki-article.dark.webp) | ![Wikipedia, light glass](site/shots/wiki-article.light.webp) |
+| ![DuckDuckGo, dark glass](site/shots/ddg-search.dark.webp) | ![DuckDuckGo, light glass](site/shots/ddg-search.light.webp) |
 
-Auto follows your desktop's light or dark setting. Dark glass suits dark wallpapers. Light glass is frosted and suits bright ones.
+Auto follows your system theme. Dark glass suits dark wallpapers, light glass bright ones.
 
 ## Gallery
 
 | | |
 |---|---|
-| ![Spotify](site/shots/spotify-artist.dark.webp) | ![Gmail](site/shots/gmail-inbox.light.webp) |
-| ![Reader](site/shots/reader-doc.dark.webp) | ![Linear](site/shots/linear-home.dark.webp) |
+| ![Spotify](site/shots/spotify-artist.dark.webp) | ![Linear](site/shots/linear-home.dark.webp) |
 
 Every site, screen and menu: [https://nazzacode.github.io/transparent-zen/](https://nazzacode.github.io/transparent-zen/)
 
-## Web apps
+## FAQ
 
-`webapp/zen-webapp` opens a site in its own Zen window, with a launcher entry and taskbar icon. It uses your normal Zen profile, so you stay logged in. Linux only.
+**Permissions.** It needs access to every site to style it. It collects nothing and sends nothing. The settings page only asks GitHub whether a newer version exists.
 
-```sh
-./webapp/zen-webapp add "WhatsApp" https://web.whatsapp.com/ --icon auto
-```
+**Performance.** Site styles are plain CSS. The blur comes from your compositor, not the browser. Automatic glass reads the page once, then only what changes.
+
+**Which sites?** 24 styled and tested, listed below. Every other site can use automatic glass.
+
+**Something unreadable?** Open the panel and choose Report a problem. It opens a pre-filled issue.
 
 ## Sites
 
@@ -80,47 +81,59 @@ Generated by `./glasslab site` from the test baseline (default opacity 45 %). [R
 
 | Site | Status | Screens tested | Hidden UI tested | Pass dark | Pass light |
 |---|---|---|---|---|---|
-| ChatGPT | verified glass | 1 | 3 | 4/4 | 4/4 |
-| Claude | verified glass | 2 | — | 0/2 | 0/2 |
-| Discord | verified glass | 1 | — | 1/1 | 1/1 |
-| DuckDuckGo | verified glass | 4 | 18 | 22/22 | 22/22 |
-| Gemini | verified glass | 1 | 3 | 4/4 | 4/4 |
-| GitHub | verified glass | 4 | 38 | 42/42 | 42/42 |
-| Gmail | verified glass | 2 | 13 | 15/15 | 15/15 |
-| Google | verified glass | 1 | 5 | 6/6 | 6/6 |
-| Google Calendar | verified glass | 3 | 18 | 21/21 | 21/21 |
-| Google Drive | verified glass | 3 | 31 | 34/34 | 34/34 |
-| Google Translate | verified glass | 2 | 11 | 13/13 | 13/13 |
-| Hacker News | verified glass | 2 | — | 2/2 | 2/2 |
-| Linear | verified glass | 3 | 7 | 10/10 | — |
-| Notion | verified glass | 3 | 3 | 3/6 | 5/6 |
-| Perplexity | verified glass | 1 | 1 | 1/2 | 2/2 |
-| Readwise Reader | verified glass | 2 | 5 | 7/7 | 7/7 |
-| Reddit | verified glass | 3 | 5 | 7/8 | 7/8 |
-| Spotify | verified glass | 3 | 3 | 5/5 | — |
-| Substack | verified glass | 1 | 6 | 7/7 | 7/7 |
-| WhatsApp | verified glass | 2 | — | 2/2 | 2/2 |
-| Wikipedia | verified glass | 3 | — | 3/3 | 3/3 |
-| X | verified glass | 2 | 8 | 10/10 | 10/10 |
-| YouTube | verified glass | 1 | 1 | 2/2 | 2/2 |
-| YouTube Music | verified glass | 2 | 2 | 4/4 | — |
-| Google apps launcher | upstream style, not yet tested | — | — | — | — |
-| arstechnica.com | auto glass benchmark | 1 | — | 1/1 | 1/1 |
-| bbc.co.uk | auto glass benchmark | 1 | — | 1/1 | 1/1 |
-| developer.mozilla.org | auto glass benchmark | 1 | 8 | 1/9 | 1/9 |
-| docs.python.org | auto glass benchmark | 1 | — | 1/1 | 1/1 |
-| lobste.rs | auto glass benchmark | 1 | — | 1/1 | 1/1 |
-| onthemarket.com | auto glass benchmark | 2 | — | — | — |
-| stackoverflow.com | auto glass benchmark | 1 | 1 | 2/2 | 2/2 |
+| ChatGPT | passes | 1 | 3 | 4/4 | 4/4 |
+| Claude | 4 of 4 checks fail | 2 | — | 0/2 | 0/2 |
+| Discord | passes | 1 | — | 1/1 | 1/1 |
+| DuckDuckGo | passes | 4 | 18 | 22/22 | 22/22 |
+| Gemini | passes | 1 | 3 | 4/4 | 4/4 |
+| GitHub | passes | 4 | 38 | 42/42 | 42/42 |
+| Gmail | passes | 2 | 13 | 15/15 | 15/15 |
+| Google | passes | 1 | 5 | 6/6 | 6/6 |
+| Google Calendar | passes | 3 | 18 | 21/21 | 21/21 |
+| Google Drive | passes | 3 | 31 | 34/34 | 34/34 |
+| Google Translate | passes | 2 | 11 | 13/13 | 13/13 |
+| Hacker News | passes | 2 | — | 2/2 | 2/2 |
+| Linear | passes | 3 | 7 | 10/10 | — |
+| Notion | 4 of 12 checks fail | 3 | 3 | 3/6 | 5/6 |
+| Perplexity | 1 of 4 checks fail | 1 | 1 | 1/2 | 2/2 |
+| Readwise Reader | passes | 2 | 5 | 7/7 | 7/7 |
+| Reddit | 2 of 16 checks fail | 3 | 5 | 7/8 | 7/8 |
+| Spotify | passes | 3 | 3 | 5/5 | — |
+| Substack | passes | 1 | 6 | 7/7 | 7/7 |
+| WhatsApp | passes | 2 | — | 2/2 | 2/2 |
+| Wikipedia | passes | 3 | — | 3/3 | 3/3 |
+| X | passes | 2 | 8 | 10/10 | 10/10 |
+| YouTube | passes | 1 | 1 | 2/2 | 2/2 |
+| YouTube Music | passes | 2 | 2 | 4/4 | — |
+| Google apps launcher | not tested yet | — | — | — | — |
+| arstechnica.com | auto glass, passes | 1 | — | 1/1 | 1/1 |
+| bbc.co.uk | auto glass, passes | 1 | — | 1/1 | 1/1 |
+| developer.mozilla.org | auto glass, 16 of 18 checks fail | 1 | 8 | 1/9 | 1/9 |
+| docs.python.org | auto glass, passes | 1 | — | 1/1 | 1/1 |
+| lobste.rs | auto glass, passes | 1 | — | 1/1 | 1/1 |
+| onthemarket.com | not tested yet | 2 | — | — | — |
+| stackoverflow.com | auto glass, passes | 1 | 1 | 2/2 | 2/2 |
 <!-- sites:end -->
 
 </details>
 
-## Add a site, report a problem
+## How it works
 
-Something unreadable? Open the panel and choose Report a problem. It opens a pre-filled issue.
+- Each style maps a site's own colours onto four shared layers: page, sidebar, content and menu.
+- A test lab opens every screen and menu in a headless browser, measures text contrast against the brightest and darkest wallpaper, and checks every surface is glass. It never clicks anything that sends or deletes.
+- Sites without a style get the same layers, guessed from the page's layout.
 
-Missing a site? Turn on auto glass in the toolbar popup, or [request the site](https://github.com/nazzacode/transparent-zen/issues/new?template=site-request.yml&title=Add+).
+## Web apps (Linux)
+
+`webapp/zen-webapp` opens a site in its own Zen window, with a launcher entry and taskbar icon. It uses your normal Zen profile, so you stay logged in.
+
+```sh
+./webapp/zen-webapp add "WhatsApp" https://web.whatsapp.com/ --icon auto
+```
+
+## Add a site
+
+Missing a site? Turn on automatic glass in the toolbar popup, or [request the site](https://github.com/nazzacode/transparent-zen/issues/new?template=site-request.yml&title=Add+).
 
 To add one yourself:
 
@@ -131,12 +144,6 @@ To add one yourself:
 
 With `--agent`, edits are kept only if the test scores go up. Full guide: [docs/GLASS.md](docs/GLASS.md).
 
-## How it works
-
-- Each style maps the site's own colours onto shared glass layers: page, sidebar, content, menu. That is why every site looks and reads the same.
-- A test lab opens every screen and menu in a headless browser, measures text contrast against the brightest and darkest wallpaper, and checks every surface is glass. It never clicks anything that sends or deletes.
-- Sites without a style get auto glass: the same layers, guessed from the page's layout.
-
 ## Credits
 
-Fork of [Transparent Zen](https://github.com/frostybiscuit/transparent-zen) by FrostyBiscuit. Glass system, test lab, auto glass and web apps by nazzacode. MIT licence.
+Fork of [Transparent Zen](https://github.com/frostybiscuit/transparent-zen) by FrostyBiscuit. Glass system, test lab, automatic glass and web apps by nazzacode. MIT licence.

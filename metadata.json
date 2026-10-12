@@ -1,8 +1,10 @@
 {
   "summary": {
-    "en-US": "Applies custom styles to make your favorite websites transparent."
+    "en-US": "Websites as frosted glass over your desktop, with readable text. For Zen Browser."
   },
-  "categories": ["appearance"],
+  "categories": [
+    "appearance"
+  ],
   "version": {
     "license": "MIT"
   }

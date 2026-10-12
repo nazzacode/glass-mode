@@ -61,7 +61,9 @@
   const fontOk = new WeakMap();
   const iconFont = el => { if (!fontOk.has(el)) fontOk.set(el, ICON_FONT.test(getComputedStyle(el).fontFamily.split(',')[0]));
     return fontOk.get(el); };
-  const inScope = n => { const el = n.nodeType === 1 ? n : n.parentElement; return !!el && scopes.some(s => el.closest(s)); };
+  st.roots = st.roots || new WeakSet();   // open shadow roots found inside a scope (closest() can't cross into them)
+  const inScope = n => { const el = n.nodeType === 1 ? n : n.parentElement; if (!el) return false;
+    const r = el.getRootNode(); return r instanceof ShadowRoot ? st.roots.has(r) : scopes.some(s => el.closest(s)); };
 
   const text = n => {
     const p = n.parentElement;
@@ -111,27 +113,36 @@
     el.dataset.tzCovered = 1;
     stats.frames++;
   };
+  const LIVE = ['src', 'srcset', 'poster', 'style'];   // lazy images swap these after load
+  const OBSERVE = { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: [...ATTRS, ...LIVE] };
   const scan = root => {
     if (root.nodeType === 3) return text(root);
-    if (root.nodeType !== 1 || SKIP.has(root.tagName)) return;
+    if (root.nodeType !== 1 && root.nodeType !== 11) return;
+    if (root.nodeType === 1 && SKIP.has(root.tagName)) return;
     const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     for (let n = w.nextNode(); n; n = w.nextNode()) text(n);
-    for (const el of [root, ...root.querySelectorAll('*')]) {
+    for (const el of root.nodeType === 11 ? root.querySelectorAll('*') : [root, ...root.querySelectorAll('*')]) {
       if (ATTRS.some(a => el.hasAttribute(a)) || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') attrs(el);
-      if (el.tagName === 'IFRAME') frame(el);
-      if (el.tagName === 'IMG' || el.style.backgroundImage || el.tagName === 'DIV' || el.tagName === 'SPAN' || el.tagName === 'A') image(el);
+      if (/^(IFRAME|CANVAS|VIDEO|EMBED|OBJECT)$/.test(el.tagName)) frame(el);   // pixels we can't rewrite → grey box
+      else image(el);                                                         // <img> or url() background on ANY element
+      if (el.shadowRoot && !st.roots.has(el.shadowRoot)) {                    // open shadow roots (Reddit, web components)
+        st.roots.add(el.shadowRoot);
+        scan(el.shadowRoot);
+        st.obs?.observe(el.shadowRoot, OBSERVE);
+      }
     }
   };
 
-  for (const s of scopes) document.querySelectorAll(s).forEach(scan);
+  // observer first: shadow roots found during the scan get observed too
   if (!st.obs) {
     st.obs = new MutationObserver(ms => { for (const m of ms) {
       if (!inScope(m.target)) continue;
       if (m.type === 'characterData') text(m.target);
-      else if (m.type === 'attributes') attrs(m.target);
+      else if (m.type === 'attributes') LIVE.includes(m.attributeName) ? image(m.target) : attrs(m.target);
       else m.addedNodes.forEach(scan);
     } });
-    st.obs.observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
+    st.obs.observe(document.documentElement, OBSERVE);
   }
+  for (const s of scopes) document.querySelectorAll(s).forEach(scan);
   return JSON.stringify(stats);
 }

@@ -79,7 +79,10 @@ def docs(xpi, fixture_url, tmp_path_factory):  # noqa: F811
             await pg.glass("dark", 0.45)
             unity = await pg.probe("unity")
             runs = await pg.probe("text", BOUNDS, [0, 0, 0, 0])
-            return metrics.score(runs, {}, unity["fgs"], unity)
+            r = metrics.score(runs, {}, unity["fgs"], unity)
+            r["banner"] = await pg.eval("getComputedStyle(document.getElementById('consent')).backgroundColor")
+            r["banner_fg"] = await pg.eval("getComputedStyle(document.getElementById('consent')).color")
+            return r
     return asyncio.run(go())
 
 
@@ -142,3 +145,8 @@ def test_rewalk_context_matches_first_pass(modern):
 
 def test_state_class_recolour_is_reread(modern):
     assert modern["sel"] == "keep", modern   # oklch(93% .03 255) = a light blue selection: brand/data colour
+
+
+def test_stacked_id_important_rules_still_get_glass(docs):
+    """cookie widgets (#ccc #consent { … !important }): background AND text both remapped, never just one"""
+    assert docs["banner"].startswith("rgba(") and docs["banner_fg"] == "rgb(242, 242, 245)", (docs["banner"], docs["banner_fg"])

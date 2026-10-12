@@ -403,6 +403,16 @@
    "logged_out": [
     "google.com"
    ]
+  },
+  {
+   "id": "auto-onthemarket-home",
+   "url": "https://www.onthemarket.com/",
+   "auto": true
+  },
+  {
+   "id": "auto-onthemarket-search",
+   "url": "https://www.onthemarket.com/for-sale/property/london/",
+   "auto": true
   }
  ]
 }

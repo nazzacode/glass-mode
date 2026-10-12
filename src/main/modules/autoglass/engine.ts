@@ -1,5 +1,6 @@
 // auto glass engine: measures painted boxes + text in the page, applies classify.ts decisions as data attributes that
 // styles/shared/auto-glass.css maps onto glass.css tiers. One pass at start, then only mutated subtrees.
+import { mark, unmark } from "../RootMarks";
 import { type Rgb, type Rgba, type Tier, classify, contentFirst, inkFor, inkRanks, neutral, parseColor, statusInk } from "./classify";
 
 const SKIP = new Set(["SCRIPT", "STYLE", "LINK", "META", "NOSCRIPT", "TEMPLATE", "IMG", "VIDEO", "CANVAS", "IFRAME", "SVG", "PICTURE", "svg"]);
@@ -28,7 +29,7 @@ export class AutoGlass {
 	start(): number {
 		const t0 = performance.now();
 		const root = document.documentElement;
-		root.classList.add("tz-initialized", "tz-auto");
+		mark("tz-initialized", "tz-auto");
 		this.base = rgb(getComputedStyle(document.body).backgroundColor) ?? rgb(getComputedStyle(root).backgroundColor) ?? [255, 255, 255];
 		this.chars = { page: 0, pane: 0 };
 		this.process(document.body);
@@ -49,7 +50,7 @@ export class AutoGlass {
 	stop(): void {
 		this.observer?.disconnect();
 		this.observer = undefined;
-		document.documentElement.classList.remove("tz-auto");
+		unmark("tz-auto");
 		document.documentElement.style.removeProperty("--g-body");
 		for (const el of document.querySelectorAll<HTMLElement>("[data-tz-tier], [data-tz-ink], [data-tz-bg]")) {
 			delete el.dataset.tzTier;

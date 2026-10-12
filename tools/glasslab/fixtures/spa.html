@@ -1,0 +1,7 @@
+<!doctype html>
+<!-- glasslab fixture: an SPA that overwrites <html class> after boot (Discord does) — the extension's root marks must survive -->
+<html lang="en"><head><meta charset="utf-8"><title>SPA</title>
+<style>body { margin: 0; padding: 32px; background: #fff; color: #222; font: 16px sans-serif; }</style></head>
+<body><p>App shell.</p>
+<script>setTimeout(() => { document.documentElement.className = 'theme-dark app-ready'; }, 800);</script>
+</body></html>

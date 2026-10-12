@@ -1,6 +1,8 @@
 import { insertStyles, removeStyles } from "./modules/Styles";
 import { showHud } from "./modules/Hud";
 import type { GlassTheme } from "../shared/Glass";
+import { glassKey } from "./modules/GlassKeys";
+import { mark } from "./modules/RootMarks";
 import type { Browser } from "webextension-polyfill-ts";
 import type { ContentScripts, SupportedWebsite } from "../types/ContentScripts";
 import type { ExtensionSettings, SiteSpecificSetting } from "../types/ExtensionSettings";
@@ -119,18 +121,15 @@ class TransparentZen {
 	}
 
 	private initBrowserEvents(): void {
+		// auto glass switches (global, whitelist, per-domain list) follow storage — one source of truth for every tab
+		browser.storage.onChanged.addListener((changes) => {
+			const next = changes.transparentZenSettings?.newValue as ExtensionSettings["transparentZenSettings"] | undefined;
+			if (!next || this.isSupportedWebsite) return;
+			this.transparentZenSettings = next;
+			this.setAuto(this.autoAllowed());
+		});
 		browser.runtime.onMessage.addListener((request: Message) => {
 			switch (request.action) {
-				case "toggleTransparency": {
-					if (!this.isSupportedWebsite) this.setAuto(!!request.enabled);
-					break;
-				}
-				case "toggleWhitelist": {
-					if (this.isSupportedWebsite || !this.transparentZenSettings) break;
-					this.transparentZenSettings.enableWhitelist = !!request.enabled;
-					this.setAuto(this.autoAllowed());
-					break;
-				}
 				case "toggleInspector": {
 					if (request.enabled) {
 						this.webInspector?.enableInspector();
@@ -221,9 +220,8 @@ class TransparentZen {
 	// Alt+Shift+↑/↓ = glass more/less opaque, Alt+Shift+G = cycle auto/dark/light. A page listener (not manifest commands):
 	// web-app windows have no browser chrome, and Zen's own shortcuts can't shadow it. Capture phase, before the site.
 	private initGlassKeys(): void {
-		const keys: Record<string, string> = { ArrowUp: "glass-more", ArrowDown: "glass-less", KeyG: "glass-mode" };
 		window.addEventListener("keydown", (e) => {
-			const command = e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey ? keys[e.code] : undefined;
+			const command = glassKey(e);
 			if (!command) return;
 			e.preventDefault();
 			e.stopPropagation();
@@ -306,7 +304,7 @@ class TransparentZen {
 	}
 
 	private initExtensionSettingsStyles(): void {
-		document.documentElement.classList.add("tz-initialized");
+		mark("tz-initialized");
 		if (this.transparentZenSettings?.primaryColor) {
 			this.applyCustomProperty("--color-primary", this.transparentZenSettings.primaryColor);
 		}

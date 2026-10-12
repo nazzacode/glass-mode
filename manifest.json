@@ -53,7 +53,10 @@
       "js": [
         "dist/transparent-zen.js"
       ],
-      "run_at": "document_start"
+      "run_at": "document_start",
+      "exclude_matches": [
+        "https://ogs.google.com/*"
+      ]
     },
     {
       "matches": [

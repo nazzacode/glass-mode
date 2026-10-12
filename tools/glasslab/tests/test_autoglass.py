@@ -89,3 +89,14 @@ def test_content_first_page_is_readable(docs):
 
 def test_late_ui_without_mutations_is_glass(docs):
     assert docs["surface"] >= 0.9 and docs["text"] >= 0.85, (docs["surface_foreign"], docs["text_foreign"])
+
+
+def test_root_marks_survive_spa_class_rewrite(xpi, fixture_url, tmp_path):  # noqa: F811
+    async def go():
+        async with lab.session(xpi, tmp_path / "browser.log") as pg:
+            await pg.goto(fixture_url("spa.html"), settle=0.3)
+            await pg.eval(START)
+            await asyncio.sleep(2)
+            return await pg.eval("document.documentElement.className")
+    cls = asyncio.run(go()).split()
+    assert {"app-ready", "tz-initialized", "tz-auto"} <= set(cls), cls

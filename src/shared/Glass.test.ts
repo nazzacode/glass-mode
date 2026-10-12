@@ -1,7 +1,8 @@
 // unit tests for the glass control logic (node --test, no deps): npm run test:unit
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { OPACITY, REPO, hudText, issueUrl, nextTheme, stepOpacity } from "./Glass.ts";
+import { glassKey } from "../main/modules/GlassKeys.ts";
+import { OPACITY, REPO, hudText, issueUrl, nextTheme, serial, stepOpacity } from "./Glass.ts";
 
 test("opacity steps by 5 within the slider range", () => {
 	assert.equal(stepOpacity(45, +1), 50);
@@ -34,4 +35,35 @@ test("issue links prefill the GitHub form for this site", () => {
 	const r = new URL(issueUrl("site-request", { host: "example.com", url: "https://example.com/app" }));
 	assert.equal(r.searchParams.get("template"), "site-request.yml");
 	assert.equal(r.searchParams.get("url"), "https://example.com/app");
+});
+
+const key = (o: object) => ({ altKey: true, shiftKey: true, ctrlKey: false, metaKey: false, code: "ArrowUp", target: { tagName: "BODY", isContentEditable: false }, ...o });
+
+test("glass keys: Alt+Shift+↑/↓/G, nothing else", () => {
+	assert.equal(glassKey(key({})), "glass-more");
+	assert.equal(glassKey(key({ code: "ArrowDown" })), "glass-less");
+	assert.equal(glassKey(key({ code: "KeyG" })), "glass-mode");
+	assert.equal(glassKey(key({ ctrlKey: true })), undefined);
+	assert.equal(glassKey(key({ shiftKey: false })), undefined);
+});
+
+test("glass keys leave code editors alone (Monaco = textarea, CodeMirror = contenteditable: move line up/down)", () => {
+	assert.equal(glassKey(key({ target: { tagName: "TEXTAREA", isContentEditable: false } })), undefined);
+	assert.equal(glassKey(key({ target: { tagName: "DIV", isContentEditable: true } })), undefined);
+	assert.equal(glassKey(key({ target: { tagName: "INPUT", isContentEditable: false } })), "glass-more");
+});
+
+test("serial runs async jobs one after another, in call order (held key = no lost steps)", async () => {
+	let value = 45;
+	const log: number[] = [];
+	const step = serial(async (d: number) => {
+		const v = value; // read-modify-write with an await in between: races without serial
+		await new Promise((r) => setTimeout(r, 5));
+		value = v + d;
+		log.push(value);
+		return value;
+	});
+	const results = await Promise.all([step(5), step(5), step(-5)]);
+	assert.deepEqual(log, [50, 55, 50]);
+	assert.deepEqual(results, [50, 55, 50]);
 });

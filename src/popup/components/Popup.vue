@@ -40,6 +40,15 @@ const sortedWebsites = computed(() => {
 	return supportedWebsites.value?.sort((a, b) => a.name.localeCompare(b.name)) ?? [];
 });
 
+// glass changed elsewhere (Alt+Shift keys in another window) → show it, so this popup never saves a stale value back
+browser.storage.onChanged.addListener((changes) => {
+	const next = changes.transparentZenSettings?.newValue as ExtensionSettings["transparentZenSettings"] | undefined;
+	if (!next || !extensionSettings.value) return;
+	extensionSettings.value.glassOpacity = next.glassOpacity;
+	extensionSettings.value.glassTheme = next.glassTheme;
+	extensionSettings.value.glassThemeV2 = next.glassThemeV2;
+});
+
 onMounted(() => {
 	browser.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
 		currentUrl.value = tab?.url;

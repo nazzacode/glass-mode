@@ -25,3 +25,13 @@ export const issueUrl = (kind: "site-bug" | "site-request", i: IssueInfo): strin
 	if (kind === "site-bug") q.set("setup", `glass ${i.theme ?? "auto"}, opacity ${i.opacity ?? OPACITY.default}%, extension ${i.version ?? "?"}`);
 	return `https://github.com/${REPO}/issues/new?${q}`;
 };
+
+/** queue async calls: each runs after the previous settles (read-modify-write of settings from repeated keys) */
+export const serial = <A, R>(f: (a: A) => Promise<R>) => {
+	let last: Promise<unknown> = Promise.resolve();
+	return (a: A): Promise<R> => {
+		const next = last.then(() => f(a));
+		last = next.catch(() => undefined);
+		return next;
+	};
+};

@@ -1,15 +1,15 @@
 import type { Browser, Runtime } from "webextension-polyfill-ts";
 import type { Message } from "../types/Message";
-import { hudText, nextTheme, stepOpacity } from "../shared/Glass";
+import { hudText, nextTheme, serial, stepOpacity } from "../shared/Glass";
 import { sendMessageToAllTabs } from "../shared/MessageHelper";
-import { loadSettings, saveSettings } from "../shared/StorageHelper";
+import { BROWSER_STORAGE_KEY, loadSettings } from "../shared/StorageHelper";
 import { DEFAULT_SETTINGS } from "../shared/Constants";
 
 declare const browser: Browser;
 
 // keyboard glass control (Alt+Shift+↑/↓/G, sent by the content script): works in every window incl. web apps, whose
 // toolbar (and popup) is hidden. Settings are global → every tab follows; the sending page applies the reply + shows the HUD.
-const glassCommand = async (command: string) => {
+const glassCommand = serial(async (command: string) => { // serial: held keys → every step lands, in order
 	const s = { ...DEFAULT_SETTINGS, ...(await loadSettings()) };
 	if (command === "glass-mode") {
 		s.glassTheme = nextTheme(s.glassThemeV2 ? (s.glassTheme ?? "auto") : "auto");
@@ -19,10 +19,10 @@ const glassCommand = async (command: string) => {
 		s.glassOpacity = stepOpacity(s.glassOpacity, command === "glass-more" ? 1 : -1);
 		sendMessageToAllTabs({ action: "changeGlassOpacity", value: s.glassOpacity });
 	}
-	saveSettings(s);
+	await browser.storage.local.set({ [BROWSER_STORAGE_KEY]: s });
 	const text = hudText(command === "glass-mode" ? { theme: s.glassTheme } : { opacity: s.glassOpacity });
 	return { theme: s.glassTheme, opacity: s.glassOpacity, text };
-};
+});
 
 browser.runtime.onMessage.addListener((message: Message, sender: Runtime.MessageSender) => {
 	// from a page → that tab only; from popup/settings (extension page) → every matching tab

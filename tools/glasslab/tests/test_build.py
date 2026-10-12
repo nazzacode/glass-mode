@@ -35,3 +35,16 @@ def test_content_bundle_is_fresh(manifest):
     js = ROOT / manifest["content_scripts"][0]["js"][0]
     newest = max(p.stat().st_mtime for p in (ROOT / "src/main").rglob("*.ts") if not p.name.endswith(".test.ts"))
     assert js.stat().st_mtime >= newest, f"{js} older than src/main — rebuild (npm run build)"
+
+
+def test_package_holds_only_the_extension(manifest):
+    """the .xpi once shipped site/ screenshots, the lab and docs (16 MB): allowlist what a user's browser needs"""
+    import zipfile
+    zips = sorted((ROOT / "builds").glob("*.zip"), key=lambda p: p.stat().st_mtime)
+    if not zips:
+        pytest.skip("no package (npm run build)")
+    z = zipfile.ZipFile(zips[-1])
+    top = {n.split("/")[0] for n in z.namelist()}
+    assert top <= {"manifest.json", "LICENSE", "data", "dist", "styles", "assets"}, top - {"manifest.json", "LICENSE", "data", "dist", "styles", "assets"}
+    assert not [n for n in z.namelist() if n.endswith(".map")]
+    assert zips[-1].stat().st_size < 1_500_000

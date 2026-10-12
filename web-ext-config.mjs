@@ -19,6 +19,17 @@ export default {
 		"vite.config.ts",
 		"web-ext-config.mjs",
 		"biome.json",
+		// not the extension: website, test lab, docs, web-app installer, dev files, source maps
+		"site/",
+		"tools/",
+		"docs/",
+		"webapp/",
+		"glasslab",
+		"shell.nix",
+		"pytest.ini",
+		"metadata.json",
+		"vite.content.config.ts",
+		"dist/**/*.map",
 	],
 	build: {
 		overwriteDest: true,

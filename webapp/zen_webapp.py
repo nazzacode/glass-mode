@@ -69,6 +69,8 @@ def host(url):
 
 
 def add_app(apps, slug, name, url, icon=None):
+    if re.search(r"[\x00-\x1f\x7f]", name + url):   # a newline would inject keys (Exec=…) into the .desktop file
+        raise ValueError("name/url contain control characters")
     if urlsplit(url).scheme not in ("http", "https") or not host(url):
         raise ValueError(f"not an http(s) url: {url}")
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]*", slug):
@@ -281,8 +283,8 @@ def proc_cmdlines():
 
 def is_running(zen, procs):
     """anchored on argv[0]: unanchored matches hit profile paths in other argv (ssh, editors, this tool). Never pkill."""
-    if zen.kind == "flatpak":
-        return any(c[:3] == ["/app/zen/zen", "--name", FLATPAK_APP] for c in procs())
+    if zen.kind == "flatpak":  # the sandboxed main process, whatever its flags; content processes don't count
+        return any(c and c[0] == "/app/zen/zen" and "-contentproc" not in c for c in procs())
     return any(c and Path(c[0]).name in NATIVE_BINS + ("zen-bin",) for c in procs())
 
 
@@ -323,6 +325,7 @@ def cmd_sync(ctx):
 
 def cmd_add(ctx, a):
     slug = a.slug or slugify(a.name)
+    add_app([], slug, a.name, a.url)   # validate slug/name/url BEFORE anything is written (the slug names the icon file)
     icon = get_icon(ctx.env, slug, a.url, a.icon, ctx.fetch, ctx.err) if a.icon else None
     save_apps(ctx.env, add_app(load_apps(ctx.env), slug, a.name, a.url, icon))
     ctx.say(f"added {slug} → {a.url}")

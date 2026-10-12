@@ -395,3 +395,30 @@ def test_doctor_fresh_and_synced(flatpak):
 def test_doctor_without_zen(env):
     code, out, _, _ = run(env, "doctor")
     assert code != 0 and "not found" in out
+
+
+# ── review fixes ──
+def test_running_flatpak_however_launched():
+    """the sandboxed main process is /app/zen/zen whatever its flags (headless lab, -P profile); content procs aren't"""
+    flat = zw.Zen("flatpak", Path("/r"), ["flatpak", "run", APP])
+    assert zw.is_running(flat, lambda: [["/app/zen/zen", "-P", "work"]])
+    assert zw.is_running(flat, lambda: [["/app/zen/zen", "--headless", "--profile", "/x"]])
+    assert not zw.is_running(flat, lambda: [["/app/zen/zen", "-contentproc", "-childID", "3"]])
+
+
+def test_control_characters_rejected():
+    for name, url in [("Chat\nExec=rm -rf ~", "https://chat.example.com/"), ("Chat", "https://chat.example.com/\nExec=x")]:
+        try:
+            zw.add_app([], "chat", name, url)
+        except ValueError:
+            continue
+        raise AssertionError(f"accepted {name!r} {url!r}")
+
+
+def test_bad_slug_fails_before_any_icon_is_written(flatpak):
+    env, _ = flatpak
+    fetched = []
+    code, _, err, _ = run(env, "add", "Chat", "https://chat.example.com/", "--slug", "../../.config/autostart/x",
+                          "--icon", "auto", fetch=lambda url: fetched.append(url) or b"\x00ICO")
+    assert code != 0 and fetched == []
+    assert not any((Path(env["HOME"]) / ".config/autostart").glob("*"))

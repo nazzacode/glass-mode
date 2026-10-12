@@ -100,3 +100,45 @@ def test_root_marks_survive_spa_class_rewrite(xpi, fixture_url, tmp_path):  # no
             return await pg.eval("document.documentElement.className")
     cls = asyncio.run(go()).split()
     assert {"app-ready", "tz-initialized", "tz-auto"} <= set(cls), cls
+
+
+@pytest.fixture(scope="module")
+def modern(xpi, fixture_url, tmp_path_factory):  # noqa: F811
+    async def go():
+        async with lab.session(xpi, tmp_path_factory.mktemp("modern") / "browser.log") as pg:
+            await pg.goto(fixture_url("modern.html"), settle=0.5)
+            await pg.eval(START)
+            await asyncio.sleep(1)
+            r = {"card": await pg.eval("document.querySelector('.card:not(#hero-card)').dataset.tzTier ?? null"),
+                 "muted": await pg.eval("document.querySelector('.muted').dataset.tzInk ?? null")}
+            # one appended row in a 5000-row list: only the new row is walked
+            await pg.eval("document.getElementById('list').append(Object.assign(document.createElement('li'), {textContent: 'new'}))")
+            await asyncio.sleep(0.3)
+            r["walked"] = int(await pg.eval("document.documentElement.dataset.tzAutoWalked"))
+            # a mutation inside the card on the image hero: its new text is inked like the first pass
+            await pg.eval("document.getElementById('hero-card').append(Object.assign(document.createElement('p'), {id: 'late', textContent: 'late text'}))")
+            await asyncio.sleep(0.3)
+            r["late"] = await pg.eval("document.getElementById('late').dataset.tzInk ?? null")
+            r["first"] = await pg.eval("document.getElementById('hero-text').dataset.tzInk ?? null")
+            # a state class recolours a row: re-read the site's colour (not our cached one)
+            await pg.eval("document.querySelector('li').classList.add('sel')")
+            await asyncio.sleep(0.3)
+            r["sel"] = await pg.eval("document.querySelector('li').dataset.tzTier ?? null")
+            return r
+    return asyncio.run(go())
+
+
+def test_oklch_colours_are_seen(modern):
+    assert modern["card"] in ("content", "fill") and modern["muted"] in ("2", "3"), modern
+
+
+def test_appended_row_walks_only_itself(modern):
+    assert modern["walked"] <= 5, modern["walked"]
+
+
+def test_rewalk_context_matches_first_pass(modern):
+    assert modern["late"] == modern["first"] and modern["late"] is not None, modern
+
+
+def test_state_class_recolour_is_reread(modern):
+    assert modern["sel"] == "keep", modern   # oklch(93% .03 255) = a light blue selection: brand/data colour

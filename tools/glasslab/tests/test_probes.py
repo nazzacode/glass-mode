@@ -35,3 +35,15 @@ def test_short_single_line_list_label_is_a_label(probed):
     runs, _ = probed
     row = next(r for r in runs if r["t"].startswith("Row with a state layer"))   # 22 chars, one line, 15px
     assert row["need"] == 60
+
+
+def test_probes_read_oklch(fixture_url, tmp_path):
+    """Firefox keeps oklch() in computed style: probes must convert, else text reads as transparent (Lc 0)"""
+    async def go():
+        async with lab.session(None, tmp_path / "browser.log") as pg:
+            await pg.goto(fixture_url("modern.html"), settle=0.5)
+            return await pg.probe("text", BOUNDS, [0, 0, 0, 0]), await pg.probe("unity")
+    runs, unity = asyncio.run(go())
+    muted = next(r for r in runs if r["t"].startswith("Muted text"))
+    assert min(muted["cr"]) > 30, muted
+    assert unity["foreign"] and "oklch" not in str(unity["foreign"]), unity["foreign"]

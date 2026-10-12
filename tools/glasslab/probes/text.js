@@ -1,8 +1,7 @@
 // text runs: APCA per run through its real paint stack over backdrop bounds.
 // args: bounds [[r,g,b]...], tint [r,g,b,a], scopes — optional selectors: only text inside those roots (explore layers)
 ((bounds, tint, scopes) => {
-  const P = c => { const m = c && c.match(/rgba?\(([^)]+)\)/); if (!m) return [0,0,0,0];
-    const p = m[1].split(/[ ,\/]+/).filter(Boolean).map(Number); return [p[0],p[1],p[2],p.length>3?p[3]:1]; };
+  const P = c => rgba(c) || [0, 0, 0, 0];   // _lib: any CSS colour (incl. oklch) → [r, g, b, a]
   const over = (top, bot) => { const a = top[3]; return [0,1,2].map(i => top[i]*a + bot[i]*(1-a)); };
   const lum = c => { const f = v => (v/=255) <= .03928 ? v/12.92 : ((v+.055)/1.055)**2.4;
     return .2126*f(c[0]) + .7152*f(c[1]) + .0722*f(c[2]); };
@@ -64,7 +63,7 @@
     const tier = (px < 16 ? (label ? 1 : 0) : px < 24 ? 1 : 2) + (bold ? 1 : 0), need = [75, 60, 45, 45][Math.min(tier, 3)];
     const res = bounds.map(bd => { let bg = over(tint, bd); for (const l of layers) bg = over(l, bg); return apca(over(fg, bg), bg); });
     runs.push({ sel: sel(el), t: t.slice(0, 40), x: Math.round(x), y: Math.round(y), n: Math.min(t.length, 200), px: Math.round(px), need, img,
-      cr: res.map(v => Math.round(v)), fg: cs.color, chip });
+      cr: res.map(v => Math.round(v)), fg: fg[3] < 1 ? `rgba(${fg[0]}, ${fg[1]}, ${fg[2]}, ${fg[3]})` : css(fg), chip });
   } }
   return JSON.stringify(runs);
 })

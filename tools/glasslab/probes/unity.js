@@ -1,8 +1,7 @@
 // unity: topmost painted surface on a grid vs glass.css tier colours; returns shared fg colours too.
 // args: scopes — optional selectors (explore layers): 8×6 grid inside each root's rect
 ((scopes) => {
-  const P = c => { const m = c && c.match(/rgba?\(([^)]+)\)/); if (!m) return null;
-    const p = m[1].split(/[ ,\/]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; };
+  const P = c => rgba(c);   // _lib: any CSS colour (incl. oklch) → [r, g, b, a] | null
   const probe = document.createElement('i'); probe.style.cssText = 'position:fixed;left:-9px;width:1px;height:1px'; document.body.append(probe);
   const tok = v => { probe.style.backgroundColor = `var(${v})`; return P(getComputedStyle(probe).backgroundColor); };
   const tiers = ['--g-frame', '--g-window', '--g-content', '--g-content-abs', '--g-popover', '--g-card', '--g-fill', '--g-fill-hover',
@@ -28,7 +27,7 @@
       if ((e.getAttribute('style') || '').includes('background')) break;  // site data colour (event chip, label) — exempt
       const t = tiers.find(([, v]) => near(c, v));
       if (t) { ok++; tally[t[0]] = (tally[t[0]] || 0) + 1; }
-      else { bad++; const k = cs.backgroundColor + ' ' + e.tagName.toLowerCase() + (e.getAttribute('role') ? `[role=${e.getAttribute('role')}]` : '')
+      else { bad++; const k = (c[3] < 1 ? `rgba(${c.join(', ')})` : css(c)) + ' ' + e.tagName.toLowerCase() + (e.getAttribute('role') ? `[role=${e.getAttribute('role')}]` : '')
         + [...e.classList].slice(0, 2).map(x => '.' + x).join(''); foreign.set(k, (foreign.get(k) || 0) + 1); }
       break;
     }

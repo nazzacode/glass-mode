@@ -1,0 +1,22 @@
+<!doctype html>
+<!-- glasslab fixture: modern CSS — oklch() colours (Tailwind v4 default; Firefox keeps them in computed style), a
+     5000-row list (mutation cost), a card on an image-backed hero (re-walk context), a state class that recolours. -->
+<html lang="en"><head><meta charset="utf-8"><title>Modern</title>
+<style>
+  body { margin: 0; background: oklch(98.5% 0 0); color: oklch(21% 0.006 285); font: 15px/1.5 sans-serif; }
+  .card { background: oklch(100% 0 0); border-radius: 10px; padding: 16px; margin: 16px; max-width: 640px; }
+  .muted { color: oklch(55% 0.01 285); }
+  .hero { background: linear-gradient(135deg, #f6a04d, #c0392b); padding: 24px; }
+  .hero .card { margin: 0; }
+  li { padding: 2px 16px; }
+  li.sel { background: oklch(93% 0.03 255); }
+</style></head>
+<body>
+<div class="hero"><div class="card" id="hero-card"><p id="hero-text">Card on an image-backed hero.</p></div></div>
+<div class="card"><h2>Tailwind-style colours</h2><p class="muted">Muted text in oklch must map to a shared ink.</p></div>
+<ul id="list"></ul>
+<script>
+  const ul = document.getElementById('list');
+  for (let i = 0; i < 5000; i++) { const li = document.createElement('li'); li.textContent = 'Row ' + i; ul.append(li); }
+</script>
+</body></html>

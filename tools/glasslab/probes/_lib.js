@@ -1,8 +1,15 @@
 // prelude for every probe (lab.Page.probe prepends it): small DOM helpers. Probes may shadow these names.
 const W = innerWidth, H = innerHeight;
-// css colour → [r, g, b, a] (null for none/unparseable)
-const rgba = c => { const m = c && c.match(/rgba?\(([^)]+)\)/); if (!m) return null;
-  const p = m[1].split(/[ ,\/]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; };
+// css colour → [r, g, b, a] (null for none/unparseable). Firefox keeps oklch()/lab()/color() in computed style
+// (Tailwind v4) → anything not rgb() goes through a 1×1 canvas
+const _cv = document.createElement('canvas').getContext('2d', { willReadFrequently: true }), _cc = new Map();
+const rgba = c => { if (!c || c === 'transparent' || c === 'none') return null;
+  const m = c.match(/^rgba?\(([^)]+)\)/); if (m) { const p = m[1].split(/[ ,\/]+/).filter(Boolean).map(Number);
+    return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; }
+  if (!_cc.has(c)) { _cv.clearRect(0, 0, 1, 1); _cv.fillStyle = c; _cv.fillRect(0, 0, 1, 1); const d = _cv.getImageData(0, 0, 1, 1).data;
+    _cc.set(c, [d[0], d[1], d[2], Math.round(d[3] / 255 * 1000) / 1000]); }
+  return _cc.get(c); };
+const css = c => `rgb(${c[0]}, ${c[1]}, ${c[2]})`;   // normalised colour for reports (Python parses rgb())
 // short human selector (reports): tag#id.class.class[role]
 const label = e => e.tagName.toLowerCase() + (e.id ? '#' + e.id : '') + [...e.classList].slice(0, 2).map(c => '.' + c).join('')
   + (e.getAttribute('role') ? `[role=${e.getAttribute('role')}]` : '');

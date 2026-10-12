@@ -54,7 +54,7 @@ async def capture(pg, sc, wanted):
     """→ [(mode, black, white)] for one screen"""
     await pg.goto(sc["url"], sc.get("settle", 7), sc.get("act"))
     if private(sc):
-        print(f"  scrambled {await pg.probe('scramble', private(sc), SEED)}", flush=True)
+        print(f"  scrambled {await scramble(pg, sc)}", flush=True)   # raises if the scrambler didn't run
     out = []
     for mode in modes(sc, wanted):
         await pg.glass(mode, DEFAULT_ALPHA)
@@ -99,8 +99,7 @@ async def sweep(xpi, sc, mode, out, log):
         await pg.b.call("browsingContext.setViewport", context=pg.ctx,
                         viewport={"width": VIEWPORT[0], "height": VIEWPORT[1]}, devicePixelRatio=DPR)
         await pg.goto(sc["url"], sc.get("settle", 7), sc.get("act"))
-        if private(sc):
-            await pg.probe("scramble", private(sc), SEED)
+        await scramble(pg, sc)   # private scopes; raises if the scrambler didn't run
         wall, frames = wallgen.make(wallpaper(sc, mode)), []
         for a in SWEEP:
             await pg.glass(mode, a)
@@ -133,15 +132,13 @@ def test_modes(sc, wanted=MODES):
 test_modes.__test__ = False         # pytest: not a test
 
 
-def ref(key):
-    """short stable hash: joins a private tile to its result row without carrying the (page-text) state label"""
-    return hashlib.sha1(key.encode()).hexdigest()[:12]
+ref = explore.ref   # kept for site.py's join of older tiles
 
 
 def state_name(sc, i, key, label):
     """explored state i (0-based) → tile stem + public label; private screens: ordinal only + hash ref of the real key"""
-    if private(sc):
-        return {"stem": f"{sc['id']}~ui-{i + 1}", "label": f"hidden UI {i + 1}", "key": None, "ref": ref(key)}
+    if private(sc):   # key is already a hash (explore.state_key): no page text in names, labels or index.json
+        return {"stem": key, "label": f"hidden UI {i + 1}", "key": key}
     return {"stem": key, "label": label, "key": key}
 
 
@@ -215,7 +212,7 @@ async def capture_all(pg, sc, wanted, out, walls):
         got = await snap(pg, sc, ms, st, out, walls)
         print(f"  ↳ {st['stem']}  {len(got)} tiles", flush=True)
         return got
-    for got in await explore.visit(pg, sc["id"], one, triggers=triggers, settle=sc.get("settle", 7)):
+    for got in await explore.visit(pg, sc["id"], one, triggers=triggers, settle=sc.get("settle", 7), private=bool(private(sc))):
         rows += got
     return rows
 

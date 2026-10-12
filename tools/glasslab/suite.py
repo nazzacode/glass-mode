@@ -86,7 +86,7 @@ async def run_screens(xpi, out, screens, bounds, do_explore=True):
             results += await measure_screen(pg, sc, out, bounds)
             if do_explore and sc.get("explore", True):
                 states = await explore.explore(pg, bounds, sc["id"], sc.get("modes", MODES), DEFAULT_ALPHA, out / "raw",
-                                               settle=sc.get("settle", 7))
+                                               settle=sc.get("settle", 7), private=bool(sc.get("private")))
                 results += state_rows(states, sc["id"], DEFAULT_ALPHA)
     return results
 

@@ -28,7 +28,7 @@ N = lambda ok, c=0.95, s=0.97, t=0.9: {"contrast": c, "surface": s, "text": t, "
 NUMBERS = {
     "mail-inbox.dark.10": N(False), "mail-inbox.dark.45": N(True), "mail-inbox.light.45": N(False, c=0.62),
     "mail-thread.dark.45": N(True), "mail-thread.light.45": N(True),
-    "mail-inbox~search-margaret.dark.45": N(True), "mail-inbox~search-margaret.light.45": N(True),
+    "mail-inbox~3f9a2b1c0d4e.dark.45": N(True), "mail-inbox~3f9a2b1c0d4e.light.45": N(True),
     "tube-home.dark.45": N(True), "tube-home~settings.dark.45": N(False, s=0.4),
     "auto-docs.dark.45": N(True), "auto-docs.light.45": N(True),
 }
@@ -89,7 +89,7 @@ def test_numbers_from_run_never_carry_page_text():
 def tiles_dir(tmp_path):
     d = tmp_path / "tests"
     d.mkdir()
-    st = shots.state_name(SCREENS[0], 0, "mail-inbox~search-margaret", "Search Margaret")
+    st = shots.state_name(SCREENS[0], 0, "mail-inbox~3f9a2b1c0d4e", "Search Margaret")
     rows = [shots.entry(SCREENS[0], "dark", {"stem": "mail-inbox", "label": None, "key": "mail-inbox"}),
             shots.entry(SCREENS[0], "dark", st),
             {"file": "mail-thread.dark.webp", "screen": "mail-thread", "state": None, "mode": "dark",
@@ -111,14 +111,14 @@ def tiles_dir(tmp_path):
 def test_tiles_only_safe_existing_and_known(tiles_dir):
     t = site.load_tiles(tiles_dir, SCREENS, NUMBERS)
     files = [x["file"] for x in t]
-    assert files == ["mail-inbox.dark.webp", "mail-inbox~ui-1.dark.webp", "tube-home.dark.webp", "tube-home~settings.dark.webp"]
+    assert files == ["mail-inbox.dark.webp", "mail-inbox~3f9a2b1c0d4e.dark.webp", "tube-home.dark.webp", "tube-home~settings.dark.webp"]
 
 
 def test_tiles_join_numbers_public_by_key_private_by_ref(tiles_dir):
     t = {x["file"]: x for x in site.load_tiles(tiles_dir, SCREENS, NUMBERS)}
     assert t["tube-home~settings.dark.webp"]["n"] == NUMBERS["tube-home~settings.dark.45"]
-    assert t["mail-inbox~ui-1.dark.webp"]["n"] == NUMBERS["mail-inbox~search-margaret.dark.45"]
-    assert t["mail-inbox~ui-1.dark.webp"]["state"] == "hidden UI 1"
+    assert t["mail-inbox~3f9a2b1c0d4e.dark.webp"]["n"] == NUMBERS["mail-inbox~3f9a2b1c0d4e.dark.45"]
+    assert t["mail-inbox~3f9a2b1c0d4e.dark.webp"]["state"] == "hidden UI 1"
 
 
 def test_private_tile_label_never_page_text(tmp_path):
@@ -165,7 +165,7 @@ def test_page_escapes_and_links(html):
 
 
 def test_page_only_references_safe_tiles(html):
-    assert "tests/mail-inbox~ui-1.dark.webp" in html
+    assert "tests/mail-inbox~3f9a2b1c0d4e.dark.webp" in html
     assert "mail-thread.dark.webp" not in html and ".png" not in html and "gone.dark" not in html
     assert "search-margaret" not in html and "Search Margaret" not in html
 

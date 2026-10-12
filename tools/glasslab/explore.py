@@ -4,7 +4,7 @@ that appears like a screen: tier unity, text contrast — and opacity, so a popo
 Read-only by construction: only controls that reveal UI (aria-haspopup / aria-expanded / combobox / search fields) are
 activated; never navigation links, submit buttons, or anything whose label matches DANGER. Typing goes into search fields
 only and is never submitted. After each state the page is restored (Escape → re-click an expanded toggle → blur → reload as a last resort)."""
-import asyncio, json, re
+import asyncio, hashlib, json, re
 
 from PIL import Image
 
@@ -22,6 +22,18 @@ LOCATE = """(sel => { let e = null; try { e = document.querySelector(sel); } cat
 EXPANDED = """(sel => { let e = null; try { e = document.querySelector(sel); } catch (_) {}
   if (!e || e.getAttribute('aria-expanded') !== 'true') return 'null'; const r = e.getBoundingClientRect();
   return JSON.stringify([r.left + r.width / 2, r.top + r.height / 2]); })(%s)"""
+
+
+def ref(text, n=12):
+    """short stable hash: names a private state (and joins tiles to rows) without carrying page text"""
+    return hashlib.sha1(text.encode()).hexdigest()[:n]
+
+
+def state_key(screen, t, private=False):
+    """result key of an explored state: readable + collision-proof (hash of role|label|selector); private screens:
+    hash only — keys land in the committed baseline and in public tile names"""
+    h = ref(f"{t.get('role')}|{t['label']}|{t['sel']}")
+    return f"{screen}~{h}" if private else f"{screen}~{slug(t['label'] or t['id'])}-{h[:4]}"
 
 
 def slug(s):
@@ -90,7 +102,7 @@ async def measure(pg, key, layers, bounds, modes, alpha, shots):
     return out
 
 
-async def visit(pg, screen, fn, triggers=None, settle=3, max_triggers=MAX_TRIGGERS):
+async def visit(pg, screen, fn, triggers=None, settle=3, max_triggers=MAX_TRIGGERS, private=False):
     """open each safe trigger's hidden UI → await fn(key, trigger, layers) while it is open → [non-None results].
     Page restored after every trigger. `triggers` lets a caller enumerate first (on the real page: DANGER needs real labels)."""
     url = await pg.eval("location.href")
@@ -99,7 +111,7 @@ async def visit(pg, screen, fn, triggers=None, settle=3, max_triggers=MAX_TRIGGE
         try:
             await pg.probe("layers", "mark")
             if await activate(pg, t) and (layers := await pg.probe("layers", "diff", t["sel"]) or []):
-                if (r := await fn(f"{screen}~{slug(t['label'] or t['id'])}", t, layers)) is not None:
+                if (r := await fn(state_key(screen, t, private), t, layers)) is not None:
                     out.append(r)
         except Exception as e:  # one odd control must not sink the run (re-rendered DOM, navigation, …)
             print(f"  ↳ {t['label'][:30]!r}: skipped ({type(e).__name__}: {str(e)[:80]})", flush=True)
@@ -107,7 +119,8 @@ async def visit(pg, screen, fn, triggers=None, settle=3, max_triggers=MAX_TRIGGE
     return out
 
 
-async def explore(pg, bounds, screen="page", modes=("dark", "light"), alpha=0.45, shots=None, settle=3, max_triggers=MAX_TRIGGERS):
+async def explore(pg, bounds, screen="page", modes=("dark", "light"), alpha=0.45, shots=None, settle=3, max_triggers=MAX_TRIGGERS,
+                  private=False):
     """→ [{key, trigger, layers, modes: {mode: metrics}, ok}] for every trigger that revealed a floating layer"""
     async def one(key, t, layers):
         modes_m = await measure(pg, key, layers, bounds, modes, alpha, shots)
@@ -116,4 +129,4 @@ async def explore(pg, bounds, screen="page", modes=("dark", "light"), alpha=0.45
               f"{'' if m['over_content'] else ' (clear)'} contrast {min(m['contrast']):4.0%}" for md, m in modes_m.items())
               + f"  {'ok' if s['ok'] else 'FAIL'}", flush=True)
         return s
-    return await visit(pg, screen, one, settle=settle, max_triggers=max_triggers)
+    return await visit(pg, screen, one, settle=settle, max_triggers=max_triggers, private=private)

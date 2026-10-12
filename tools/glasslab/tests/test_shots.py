@@ -45,8 +45,8 @@ def test_registry_schema():
             assert s.get("private"), s["id"]                             # personal apps never shot unscrambled
         for m in shots.modes(s, ["dark", "light"]) if s.get("showcase") else []:
             assert shots.wallpaper(s, m) in wallgen.PRESETS
-    for pub in ("youtube-home", "google-search"):
-        assert byid[pub].get("showcase") and not byid[pub].get("private")
+    for pub in ("youtube-home", "google-search"):   # public pages: only small scopes (avatar, account) are scrambled
+        assert byid[pub].get("showcase") and "body" not in (byid[pub].get("private") or [])
     assert len(shots.select(data)) >= 5
 
 
@@ -72,10 +72,11 @@ def test_state_naming_public_uses_explore_key():
 
 
 def test_state_naming_private_never_carries_page_text():
-    st = shots.state_name(SCREENS[0], 2, "mail-inbox~margaret-thornbury", "Margaret Thornbury")
+    from tools.glasslab import explore
+    key = explore.state_key("mail-inbox", {"label": "Margaret Thornbury", "sel": "#m", "role": "button", "id": ""}, True)
+    st = shots.state_name(SCREENS[0], 2, key, "Margaret Thornbury")
     assert "margaret" not in json.dumps(st).lower()
-    assert st["stem"] == "mail-inbox~ui-3" and st["label"] == "hidden UI 3"
-    assert st["key"] is None and st["ref"] == shots.ref("mail-inbox~margaret-thornbury")
+    assert st["stem"] == key and st["label"] == "hidden UI 3" and st["key"] == key
 
 
 def test_ref_is_short_stable_hash():
@@ -86,9 +87,9 @@ def test_entry_bookkeeping():
     e = shots.entry(SCREENS[0], "dark", {"stem": "mail-inbox", "label": None, "key": "mail-inbox"})
     assert e == {"file": "mail-inbox.dark.webp", "screen": "mail-inbox", "state": None, "mode": "dark",
                  "key": "mail-inbox.dark.45", "scrambled": True}
-    p = shots.entry(SCREENS[0], "light", shots.state_name(SCREENS[0], 0, "mail-inbox~x", "x"))
-    assert p["file"] == "mail-inbox~ui-1.light.webp" and p["key"] is None
-    assert p["ref"] == shots.ref("mail-inbox~x") + ".light.45" and p["scrambled"] is True      # join key, no page text
+    p = shots.entry(SCREENS[0], "light", shots.state_name(SCREENS[0], 0, "mail-inbox~0123abcd4567", "x"))
+    assert p["file"] == "mail-inbox~0123abcd4567.light.webp" and p["key"] == "mail-inbox~0123abcd4567.light.45"
+    assert p["state"] == "hidden UI 1" and p["scrambled"] is True      # hashed key, no page text
     assert shots.entry(SCREENS[2], "light", {"stem": "tube-home", "label": None, "key": "tube-home"})["scrambled"] is False
 
 

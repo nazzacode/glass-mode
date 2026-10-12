@@ -95,6 +95,8 @@ class Bidi:
 
     async def eval(self, ctx, expr):
         r = await self.call("script.evaluate", expression=expr, target={"context": ctx}, awaitPromise=True)
+        if r.get("type") == "exception":  # page script threw → None, but say so (silent Nones hid broken probes)
+            print(f"  eval: {r.get('exceptionDetails', {}).get('text', '?')[:120]}", flush=True)
         return r.get("result", {}).get("value")
 
 

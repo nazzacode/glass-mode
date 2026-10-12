@@ -1,5 +1,5 @@
 // unity: topmost painted surface on a grid vs glass.css tier colours; returns shared fg colours too.
-// args: scopes — optional selectors (explore layers): 8×6 grid inside each root, only surfaces inside it count
+// args: scopes — optional selectors (explore layers): 8×6 grid inside each root's rect
 ((scopes) => {
   const P = c => { const m = c && c.match(/rgba?\(([^)]+)\)/); if (!m) return null;
     const p = m[1].split(/[ ,\/]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; };
@@ -18,7 +18,7 @@
   for (const [root, r, nx, ny] of grids) for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) {
     const x = Math.min(W - 1, Math.max(0, r.left + (i + .5) * r.width / nx)), y = Math.min(H - 1, Math.max(0, r.top + (j + .5) * r.height / ny));
     for (const e of document.elementsFromPoint(x, y)) {
-      if (e === document.documentElement || (root && !root.contains(e))) break;
+      if (e === document.documentElement) break;      // scoped: a clear layer shows what's beneath → that surface counts
       const cs = getComputedStyle(e);
       if (/^(IMG|VIDEO|CANVAS|SVG|PICTURE|IFRAME)$/.test(e.tagName) || (cs.backgroundImage !== 'none' && !cs.backgroundImage.includes('gradient'))) break;
       const c = P(cs.backgroundColor); if (!c || c[3] < .02) continue;

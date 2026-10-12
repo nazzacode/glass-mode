@@ -8,6 +8,9 @@
 	--text: var(--g-fg) !important;
 	--muted: var(--g-fg-2) !important;
 }
+#drawer {
+	background: var(--g-frame) !important; /* side sheet = frame tier (thin glass is fine over empty glass) */
+}
 nav {
 	background: transparent !important; /* frame = body tint */
 }

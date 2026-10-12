@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+"""zen-webapp CLI: see README.md. Thin wrapper so the module stays importable/testable."""
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from zen_webapp import main  # noqa: E402
+
+sys.exit(main(sys.argv[1:]))

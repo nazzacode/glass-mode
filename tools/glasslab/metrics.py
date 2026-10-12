@@ -91,5 +91,6 @@ def verdict(m):
 
 
 def layer_ok(m):
-    """hidden-UI layer (menu, dialog, suggestions): screen verdict + opaque enough that the page doesn't bleed through"""
-    return verdict(m) and m["opacity"] >= LAYER_ALPHA
+    """hidden-UI layer (menu, dialog, suggestions): screen verdict + opaque enough that the page doesn't bleed through —
+    where there is page beneath (over_content); a drawer over clear glass is frame glass and may be thin"""
+    return verdict(m) and (m["opacity"] >= LAYER_ALPHA or not m.get("over_content", True))

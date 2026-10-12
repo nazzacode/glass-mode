@@ -20,6 +20,9 @@
   #menu-bad { left: 0; background: #ffffff; }            /* hard-coded: the bug glass must catch */
   #menu-good { left: 120px; background: var(--raised); }
   #suggest { left: 260px; background: var(--raised); }
+  #drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 260px; padding: 16px; box-sizing: border-box; background: var(--surface); }
+  #drawer[hidden] { display: none; }
+  main { padding-right: 300px; }       /* the drawer's strip stays empty: it slides over clear glass, not content */
   dialog { background: var(--raised); color: var(--text); border: 0; border-radius: 14px; padding: 24px; width: 360px; }
   dialog::backdrop { background: rgba(0,0,0,.3); }
   p { max-width: 60ch; }
@@ -37,6 +40,7 @@
     <input id="search" type="search" role="combobox" aria-expanded="false" placeholder="Search mail" aria-controls="suggest">
     <button id="dialog-btn" aria-haspopup="dialog">Settings</button>
     <button id="danger-btn" aria-haspopup="dialog">Delete everything</button>
+    <button id="drawer-btn" aria-expanded="false" aria-controls="drawer">Details</button>
     <div id="menu-bad" class="pop" role="menu" hidden><div role="menuitem">New window</div><div role="menuitem">Open recent file</div></div>
     <div id="menu-good" class="pop" role="menu" hidden><div role="menuitem">Compact density</div><div role="menuitem">Show preview pane</div></div>
     <div id="suggest" class="pop" role="listbox" hidden><div role="option">liquid glass design</div><div role="option">liquid glass wallpapers</div></div>
@@ -45,6 +49,7 @@
   <p>Glass should show the desktop through the page while every line of text stays readable over the brightest and darkest wallpaper.</p>
   <p style="color: var(--muted)">Secondary text uses the muted token and must map to a shared glass foreground.</p>
 </main>
+<aside id="drawer" hidden><h3>Details</h3><p>Side sheet on frame glass.</p></aside>
 <dialog id="settings"><h3>Settings</h3><p>Dialogs float on the popover tier.</p><button id="close">Close</button></dialog>
 <script>
   const $ = id => document.getElementById(id);
@@ -54,6 +59,7 @@
   toggle($('menu-bad-btn'), $('menu-bad'));
   toggle($('menu-good-btn'), $('menu-good'));
   $('search').addEventListener('input', () => { closeAll(); $('suggest').hidden = !$('search').value; });
+  $('drawer-btn').addEventListener('click', e => { e.stopPropagation(); $('drawer').hidden = !$('drawer').hidden; });
   $('dialog-btn').addEventListener('click', () => $('settings').showModal());
   $('close').addEventListener('click', () => $('settings').close());
   $('danger-btn').addEventListener('click', () => { window.__danger = true; });

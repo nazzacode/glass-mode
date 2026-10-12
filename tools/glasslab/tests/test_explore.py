@@ -30,7 +30,7 @@ def state(explored, trigger_id):
 
 
 def test_opens_every_safe_trigger(explored):
-    for t in ("menu-bad-btn", "menu-good-btn", "search", "dialog-btn"):
+    for t in ("menu-bad-btn", "menu-good-btn", "search", "dialog-btn", "drawer-btn"):
         assert state(explored, t), f"{t} not explored: {[s['trigger'] for s in explored['states']]}"
 
 
@@ -47,7 +47,7 @@ def test_flags_unstyled_menu(explored):
     assert any("255, 255, 255" in f[0] for f in dark["surface_foreign"])
 
 
-@pytest.mark.parametrize("trigger", ["menu-good-btn", "search", "dialog-btn"])
+@pytest.mark.parametrize("trigger", ["menu-good-btn", "search", "dialog-btn", "drawer-btn"])
 def test_styled_layers_pass(explored, trigger):
     s = state(explored, trigger)
     assert s["ok"], {m: (v["surface"], v["alpha"], v["contrast"], v["failing"][:2]) for m, v in s["modes"].items()}
@@ -66,3 +66,21 @@ def test_restores_page_after_each_state(explored):
 def test_saves_state_shots(explored):
     s = state(explored, "menu-bad-btn")
     assert (explored["out"] / f"{s['key']}.dark.45.black.png").exists()
+
+
+def test_drawer_over_empty_glass_is_not_a_popover(explored):
+    s = state(explored, "drawer-btn")
+    assert s["modes"]["dark"]["over_content"] is False and s["modes"]["dark"]["opacity"] < 0.8
+
+
+def test_menus_float_over_content(explored):
+    assert state(explored, "menu-good-btn")["modes"]["dark"]["over_content"] is True
+
+
+def test_survives_a_broken_trigger(fixture_url, tmp_path):
+    """a trigger whose selector no longer resolves (DOM re-rendered) is skipped, not fatal"""
+    async def go():
+        async with lab.session(None, tmp_path / "browser.log") as pg:
+            await pg.goto(fixture_url("app.html"), settle=1)
+            return await explore.activate(pg, {"sel": "div:::nonsense", "kind": "click"})
+    assert asyncio.run(go()) is False

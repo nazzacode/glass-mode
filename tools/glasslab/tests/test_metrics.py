@@ -62,3 +62,10 @@ def test_layer_verdict_needs_opaque_enough_glass():
     assert not metrics.layer_ok({**good, "opacity": 0.5})      # see-through popover: page text bleeds through
     assert not metrics.layer_ok({**good, "surface": 0.5})    # site's own colour (unstyled menu)
     assert not metrics.layer_ok({**good, "contrast": [1.0, 0.6]})
+
+
+def test_layer_over_empty_glass_may_be_thin():
+    # a drawer sliding over clear glass (nothing behind its text) is frame-tier glass, not a popover
+    m = {"surface": 0.95, "opacity": 0.6, "contrast": [1.0, 1.0], "text": 1.0, "exempt_img_share": 0}
+    assert metrics.layer_ok({**m, "over_content": False})
+    assert not metrics.layer_ok({**m, "over_content": True})

@@ -16,8 +16,8 @@ DANGER = (r"delet|remov|discard|trash|spam|archiv|send|repl|forward|\bpost|publi
           r"|empty|cancel|account|profile")
 MAX_TRIGGERS = 12
 QUERY = "the"              # typed into search fields to raise suggestions; never submitted
-LOCATE = """(sel => { const e = document.querySelector(sel); if (!e) return null; const r = e.getBoundingClientRect();
-  return JSON.stringify(r.width && r.height ? [r.left + r.width / 2, r.top + r.height / 2] : null); })(%s)"""
+LOCATE = """(sel => { let e = null; try { e = document.querySelector(sel); } catch (_) {} const r = e && e.getBoundingClientRect();
+  return JSON.stringify(r && r.width && r.height ? [r.left + r.width / 2, r.top + r.height / 2] : null); })(%s)"""
 
 
 def slug(s):
@@ -25,7 +25,7 @@ def slug(s):
 
 
 async def activate(pg, t):
-    pos = json.loads(await pg.eval(LOCATE % json.dumps(t["sel"])))
+    pos = json.loads(await pg.eval(LOCATE % json.dumps(t["sel"])) or "null")
     if not pos:
         return False
     await pg.click(*pos)
@@ -75,6 +75,7 @@ async def measure(pg, key, layers, bounds, modes, alpha, shots):
     for mode, (runs, unity, a) in glass.items():
         m = score(runs, native, unity.get("fgs", []), unity)
         m["opacity"] = a
+        m["over_content"] = any(l["over"] for l in layers)
         m["ok"] = layer_ok(m)
         out[mode] = m
     return out
@@ -85,15 +86,26 @@ async def explore(pg, bounds, screen="page", modes=("dark", "light"), alpha=0.45
     url = await pg.eval("location.href")
     states = []
     for t in await pg.probe("triggers", DANGER, max_triggers) or []:
-        await pg.probe("layers", "mark")
-        if not await activate(pg, t):
-            continue
-        layers = await pg.probe("layers", "diff") or []
-        if layers:
-            key = f"{screen}~{slug(t['label'] or t['id'])}"
-            modes_m = await measure(pg, key, layers, bounds, modes, alpha, shots)
-            states.append({"key": key, "trigger": t, "layers": layers, "modes": modes_m, "ok": all(m["ok"] for m in modes_m.values())})
-            print(f"  ↳ {key:38s} " + "  ".join(f"{md} surface {m['surface']:4.0%} opacity {m['opacity']:.2f} contrast {min(m['contrast']):4.0%}"
-                                                 for md, m in modes_m.items()) + f"  {'ok' if states[-1]['ok'] else 'FAIL'}", flush=True)
+        try:
+            if s := await state(pg, t, screen, bounds, modes, alpha, shots):
+                states.append(s)
+                print(f"  ↳ {s['key']:38s} " + "  ".join(f"{md} surface {m['surface']:4.0%} opacity {m['opacity']:.2f}"
+                      f"{'' if m['over_content'] else ' (clear)'} contrast {min(m['contrast']):4.0%}" for md, m in s["modes"].items())
+                      + f"  {'ok' if s['ok'] else 'FAIL'}", flush=True)
+        except Exception as e:  # one odd control must not sink the run (re-rendered DOM, navigation, …)
+            print(f"  ↳ {t['label'][:30]!r}: skipped ({type(e).__name__}: {str(e)[:80]})", flush=True)
         await reset(pg, url, t, settle)
     return states
+
+
+async def state(pg, t, screen, bounds, modes, alpha, shots):
+    """activate one trigger → measured state, or None when nothing floating appeared"""
+    await pg.probe("layers", "mark")
+    if not await activate(pg, t):
+        return None
+    layers = await pg.probe("layers", "diff") or []
+    if not layers:
+        return None
+    key = f"{screen}~{slug(t['label'] or t['id'])}"
+    modes_m = await measure(pg, key, layers, bounds, modes, alpha, shots)
+    return {"key": key, "trigger": t, "layers": layers, "modes": modes_m, "ok": all(m["ok"] for m in modes_m.values())}

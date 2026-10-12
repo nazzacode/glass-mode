@@ -1,0 +1,16 @@
+/* Zen web-app windows (Firefox Taskbar Tabs, zen-webapp). Merged into the profile's chrome/userChrome.css by `zen-webapp sync`.
+   Firefox renames their root #main-window → #taskbartab-<uuid>, so Zen's own #main-window rules miss them. */
+:root[taskbartab] {
+  --webapp-tint: transparent; /* page owns all tint (transparent-zen styles/shared/glass.css); unstyled sites paint opaque anyway */
+  --zen-element-separation: 0px !important; /* content edge to edge */
+  --zen-border-radius: 0px !important;
+  /* zen-theme.css transparency rule, re-scoped */
+  background: transparent !important;
+  --zen-themed-toolbar-bg-transparent: transparent !important;
+}
+:root[taskbartab] #navigator-toolbox { display: none !important; } /* no sidebar / urlbar */
+/* theme picker leaves these windows on opaque #1b1b1b */
+:root[taskbartab] #zen-browser-background {
+  --zen-main-browser-background: var(--webapp-tint) !important;
+  --zen-main-browser-background-old: var(--webapp-tint) !important;
+}

@@ -12,8 +12,13 @@
   const paints = e => (rgba(getComputedStyle(e).backgroundColor) || [0, 0, 0, 0])[3] > 0.02;
   const area = e => { const r = e.getBoundingClientRect(); return r.width * r.height; };
   const panel = e => paints(e) ? e : [...e.querySelectorAll('*')].filter(paints).sort((a, b) => area(b) - area(a))[0] || e;
+  // does the layer cover text that was already on screen? (menus over content need popover opacity; a drawer over clear glass doesn't)
+  const textual = all.filter(e => seen.has(e) && [...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim()) && onScreen(e));
+  const hits = (a, b) => a.left < b.right - 2 && b.left < a.right - 2 && a.top < b.bottom - 2 && b.top < a.bottom - 2;
+  const over = p => { const r = p.getBoundingClientRect(); return textual.some(t => !t.contains(p) && !p.contains(t) && hits(t.getBoundingClientRect(), r)); };
   const roots = [...fresh].filter(e => !fresh.has(e.parentElement) && floats(e))
-    .map(e => ({ sel: path(e), label: label(e), rect: rectOf(e), panel: rectOf(panel(e)) })).filter(l => l.rect[2] * l.rect[3] >= 1200)
+    .map(e => ({ sel: path(e), label: label(e), rect: rectOf(e), panel: rectOf(panel(e)), over: over(panel(e)) }))
+    .filter(l => l.rect[2] * l.rect[3] >= 1200)
     .sort((a, b) => b.rect[2] * b.rect[3] - a.rect[2] * a.rect[3]);
   return JSON.stringify(roots.slice(0, 6));
 })

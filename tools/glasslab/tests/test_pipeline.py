@@ -106,3 +106,11 @@ def test_sandbox_rejects_unsafe_css(tmp_path):
     css.write_text("old")
     pipeline.sandboxed(lambda p, cwd: (cwd / "styles/websites/site.css").write_text(".x{background:url(//evil)}"), root, css)("p")
     assert css.read_text() == "old"
+
+
+def test_progress_compares_only_rows_both_runs_have():
+    """the explorer may find a different number of states run to run: noise must not decide keep/revert"""
+    before = [row("a.dark.45", False, contrast=0.5)]
+    after = [row("a.dark.45", False, contrast=0.6), row("a~extra.dark.45", True)]
+    assert pipeline.better(after, before)
+    assert not pipeline.better([row("a.dark.45", False, contrast=0.4), row("a~extra.dark.45", True)], before)

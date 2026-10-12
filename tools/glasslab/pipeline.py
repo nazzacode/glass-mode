@@ -45,6 +45,13 @@ def progress(rows):
     return (sum(r["ok"] for r in rs), round(sum(min(r["contrast"]) + r["surface"] + r["text"] for r in rs), 4))
 
 
+def better(new, old):
+    """keep an agent round? progress over the rows BOTH runs measured (live pages vary in explored states)"""
+    common = {r["key"] for r in new} & {r["key"] for r in old}
+    pick = lambda rows: [r for r in rows if r["key"] in common]
+    return progress(pick(new)) > progress(pick(old))
+
+
 def green(rows):
     return all(r["ok"] for r in default_rows(rows))
 
@@ -77,7 +84,7 @@ def improve(lab, agent, read, write, rounds=4, css="site.css"):
         before = read()
         agent(prompt(css, before, report_md(rows, page_text=False)))
         new = lab()
-        kept = progress(new) > progress(rows)
+        kept = better(new, rows)
         log.append({"round": i + 1, "before": progress(rows), "after": progress(new), "kept": kept})
         print(f"agent round {i + 1}: {progress(rows)} → {progress(new)} {'kept' if kept else 'reverted'}", flush=True)
         if kept:

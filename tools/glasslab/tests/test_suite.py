@@ -35,3 +35,11 @@ def test_baseline_and_compare_cover_states():
     assert "app~file-menu.light.45" in bl and "page" not in str(bl)
     worse = [dict(r, surface=0.5) for r in rows]
     assert any("app~file-menu.light.45 surface" in x for x in suite.compare(worse, bl))
+
+
+def test_compare_flags_rows_that_vanished():
+    """a broken explorer/probe that silently yields fewer rows must not read as 'no regressions'"""
+    rows = suite.state_rows(STATES, "app", 0.45)
+    bl = suite.baseline_numbers(rows)
+    assert any("app~file-menu.light.45 missing" in x for x in suite.compare(rows[:1], bl))
+    assert suite.compare(rows, {**bl, "other.dark.45": bl["app~file-menu.dark.45"]}) == []   # screens not run: ignored

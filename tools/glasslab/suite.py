@@ -141,12 +141,17 @@ def baseline_numbers(results):
 
 
 def compare(results, baseline):
+    """regressions vs baseline + baseline rows that vanished for screens that ran (a broken probe or explorer yields
+    fewer rows, which must not read as 'no regressions')"""
+    now_all = baseline_numbers(results)
     regs = []
-    for k, now in baseline_numbers(results).items():
+    for k, now in now_all.items():
         was = baseline.get(k)
         for m in METRICS if was else ():
             if now[m] < was[m] - REGRESSION:
                 regs.append(f"{k} {m} {was[m]:.0%} → {now[m]:.0%}")
+    ran = {r["screen"] for r in results}
+    regs += [f"{k} missing" for k in baseline if k not in now_all and k.split("~")[0].split(".")[0] in ran]
     return regs
 
 

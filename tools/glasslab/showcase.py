@@ -21,6 +21,9 @@ SHADOWS = [                          # (dy, sigma, opacity) as share of canvas h
 ]
 
 
+WIDTH_SHARE = 0.7   # window width / canvas: Nathan 10-12 'windows a bit bigger' (was 0.6), wallpaper still frames it
+
+
 def f32(img):
     return np.asarray(img.convert("RGB"), dtype=np.float32)
 
@@ -45,7 +48,8 @@ def blurred(wall, sigma=28, vibrancy=0.17, brightness=0.94):
     return u8((grey + (a - grey) * (1 + vibrancy)) * brightness)
 
 
-def window_rect(size, cap, share=0.6, max_h=0.8):
+def window_rect(size, cap, share=None, max_h=0.8):
+    share = share or WIDTH_SHARE
     """centred window [x, y, w, h]: share of canvas width, capture aspect, never taller than max_h of the canvas"""
     W, H = size
     w = round(W * share)
@@ -89,7 +93,7 @@ def shadow(size, rect, r):
     return k[..., None]
 
 
-def render(black, white, wallpaper, *, size=SIZE, width_share=0.6, max_h=0.8):
+def render(black, white, wallpaper, *, size=SIZE, width_share=None, max_h=0.8):
     """black/white capture + wallpaper → finished showcase image"""
     wall = cover(wallpaper, size)
     x, y, w, h = rect = window_rect(size, black.size, width_share, max_h)

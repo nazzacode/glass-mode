@@ -1,5 +1,5 @@
 {
- "_doc": "glasslab test screens. id = <site>-<view>; act = JS run after load (READ-ONLY: never send/archive/mark; open only already-read items); modes = restrict glass modes (forced-dark sites); settle = seconds to wait after load (default 7). private = selectors scrambled before showcase shots (probes/scramble.js; [\"body\"] = whole app). showcase = gallery screen for `glasslab shots`: true | {wallpaper: preset | {dark|light: preset}, modes: [...]} (wallpaper presets: tools/glasslab/wallgen.py; default per mode). auto = site without a style: measure auto glass (on-the-fly mode). logged_out = cookie domains deleted before shots (public pages shown logged out: no avatar, handle or recommendations).",
+ "_doc": "glasslab test screens. id = <site>-<view>; act = JS run after load (READ-ONLY: never send/archive/mark; open only already-read items); modes = restrict glass modes (forced-dark sites); settle = seconds to wait after load (default 7). private = selectors scrambled before showcase shots (probes/scramble.js; [\"body\"] = whole app). showcase = gallery screen for `glasslab shots`: true | {wallpaper: preset | {dark|light: preset}, modes: [...]} (wallpaper presets: tools/glasslab/wallgen.py; default per mode). auto = site without a style: measure auto glass (on-the-fly mode). logged_out = cookie domains deleted before shots (public pages shown logged out: no avatar, handle or recommendations). keys = real keypresses after act; after = JS once keys are done.",
  "screens": [
   {
    "id": "gcal-week",
@@ -58,7 +58,13 @@
     "wallpaper": {
      "dark": "dusk"
     }
-   }
+   },
+   "settle": 8,
+   "keys": [
+    "[",
+    "]"
+   ],
+   "after": "document.querySelector('#document-text-content p')?.scrollIntoView({block: 'start'})"
   },
   {
    "id": "claude-home",
@@ -413,6 +419,20 @@
    "id": "auto-onthemarket-search",
    "url": "https://www.onthemarket.com/for-sale/property/london/",
    "auto": true
+  },
+  {
+   "id": "spotify-panel",
+   "url": "https://open.spotify.com/artist/4gzpq5DPGxSnKTe4SA8HAU",
+   "act": "document.getElementById('onetrust-consent-sdk')?.remove();setTimeout(() => dispatchEvent(new KeyboardEvent('keydown', {key: 'G', code: 'KeyG', altKey: true, shiftKey: true, bubbles: true})), 1500)",
+   "modes": [
+    "dark"
+   ],
+   "explore": false,
+   "showcase": {
+    "modes": [
+     "dark"
+    ]
+   }
   }
  ]
 }

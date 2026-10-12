@@ -98,3 +98,8 @@ body,
 :is([class*="_backButton_"], [class*="_navigationButtons_"]) {
 	background-color: var(--g-fill) !important;
 }
+
+/* document title: Reader hard-codes its dark-theme colour on the h1 (light glass: near-invisible) */
+.header-content h1 {
+	color: var(--g-fg) !important;
+}

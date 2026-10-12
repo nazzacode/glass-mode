@@ -9,6 +9,7 @@
   ./glasslab report [RUN]                                             local HTML report (default: latest run)
   ./glasslab shots [FILTER] [--out DIR] [--modes dark,light] [--all]  showcase shots; --all: test tiles, every screen + hidden UI
   ./glasslab shots --sweep SCREEN [--modes dark]                      opacity 10→90 % animation (launch GIF)
+  ./glasslab shots --strip SCREEN [--modes dark]                      the same screen at 10 / 45 / 90 % (README)
   ./glasslab site [--run RUN]                                         public site (site/index.html) + README sites table
 """
 import argparse, subprocess, sys
@@ -43,7 +44,7 @@ def main(argv=None):
     w = sub.add_parser("wallpapers"); w.add_argument("paths", nargs="+"); w.add_argument("--blur", type=int, default=22)
     r = sub.add_parser("report"); r.add_argument("run", nargs="?")
     b = sub.add_parser("baseline"); b.add_argument("results", nargs="+")
-    s = sub.add_parser("shots"); s.add_argument("filter", nargs="?", default=""); s.add_argument("--out"); s.add_argument("--sweep", metavar="SCREEN")
+    s = sub.add_parser("shots"); s.add_argument("filter", nargs="?", default=""); s.add_argument("--out"); s.add_argument("--sweep", metavar="SCREEN"); s.add_argument("--strip", metavar="SCREEN")
     s.add_argument("--modes", default="dark,light"); s.add_argument("--build", action="store_true")
     s.add_argument("--all", action="store_true")
     p = sub.add_parser("site"); p.add_argument("--run"); p.add_argument("--out")
@@ -77,6 +78,8 @@ def main(argv=None):
         report.main(run)
     if a.cmd == "shots":
         from . import shots
+        if a.strip:
+            return shots.main_strip(xpi(a.build), a.strip, a.out, a.modes.split(",")[0])
         if a.sweep:
             return shots.main_sweep(xpi(a.build), a.sweep, a.out, a.modes.split(",")[0])
         return (shots.main_all if a.all else shots.main)(xpi(a.build), a.filter, a.out, a.modes.split(","))

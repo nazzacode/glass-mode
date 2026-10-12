@@ -1,0 +1,7 @@
+<!doctype html>
+<!-- glasslab fixture: an app that only reacts to TRUSTED keypresses (Readwise Reader's [ ] panel toggles) -->
+<html lang="en"><head><meta charset="utf-8"><title>Keys</title></head>
+<body><p id="state">panels</p>
+<script>
+  document.addEventListener('keydown', e => { if (e.isTrusted && e.key === '[') document.body.classList.add('left-hidden'); });
+</script></body></html>

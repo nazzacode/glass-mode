@@ -45,7 +45,7 @@ def test_window_centred_with_wide_margins(shot):
     x, y, w, h = shot["rect"]
     W, H = SIZE
     assert abs(x - (W - x - w)) <= 1 and abs(y - (H - y - h)) <= 1
-    assert x >= 0.18 * W and W - x - w >= 0.18 * W
+    assert x >= 0.14 * W and W - x - w >= 0.14 * W   # 70 % window: still a wide wallpaper frame
     assert abs(w / h - 400 / 250) < 0.02                         # aspect from the capture
 
 

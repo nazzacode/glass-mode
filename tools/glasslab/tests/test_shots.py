@@ -158,3 +158,7 @@ def test_logout_deletes_the_sites_cookies(fixture_url, tmp_path):
             await pg.goto(fixture_url("app.html"), settle=0.5)
             return await pg.eval("document.cookie")
     assert "secret" not in asyncio.run(go())
+
+
+def test_strip_files_name_the_opacity():
+    assert shots.strip_names("spotify-artist", "dark") == ["spotify-artist.dark.op10", "spotify-artist.dark.op45", "spotify-artist.dark.op90"]

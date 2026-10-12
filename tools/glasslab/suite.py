@@ -79,7 +79,7 @@ async def run_screens(xpi, out, screens, bounds, do_explore=True):
     async with lab.session(xpi, out / "zen.log") as pg:
         for sc in screens:
             print(f"· {sc['id']}", flush=True)
-            await pg.goto(sc["url"], sc.get("settle", 7), sc.get("act"))
+            await pg.open(sc)
             if sc.get("auto"):  # site without a style → measure auto glass (same switch as the popup toggle)
                 await pg.eval(AUTO)
                 await asyncio.sleep(1.5)

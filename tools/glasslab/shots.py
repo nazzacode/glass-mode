@@ -65,7 +65,7 @@ async def logout(pg, domains):
 async def capture(pg, sc, wanted):
     """→ [(mode, black, white)] for one screen"""
     await logout(pg, sc.get("logged_out", []))
-    await pg.goto(sc["url"], sc.get("settle", 7), sc.get("act"))
+    await pg.open(sc)
     if private(sc):
         print(f"  scrambled {await scramble(pg, sc)}", flush=True)   # raises if the scrambler didn't run
     out = []
@@ -106,20 +106,49 @@ def save_animation(frames, path, ms):
     return path
 
 
-async def sweep(xpi, sc, mode, out, log):
-    """one screen, the slider from 10 % to 90 % and back → <screen>.<mode>.sweep.webp (launch GIF)"""
+STRIP = [0.1, 0.45, 0.9]   # README: what the one setting does (slider ends + default)
+
+
+def strip_names(screen, mode):
+    return [f"{screen}.{mode}.op{int(a * 100)}" for a in STRIP]
+
+
+async def at_alphas(xpi, sc, mode, alphas, log, size=SWEEP_SIZE):
+    """one screen rendered at several slider values (same page state for every frame)"""
     async with lab.session(xpi, log, VIEWPORT) as pg:
         await pg.b.call("browsingContext.setViewport", context=pg.ctx,
                         viewport={"width": VIEWPORT[0], "height": VIEWPORT[1]}, devicePixelRatio=DPR)
-        await pg.goto(sc["url"], sc.get("settle", 7), sc.get("act"))
+        await logout(pg, sc.get("logged_out", []))
+        await pg.open(sc)
         await scramble(pg, sc)   # private scopes; raises if the scrambler didn't run
         wall, frames = wallgen.make(wallpaper(sc, mode)), []
-        for a in SWEEP:
+        for a in alphas:
             await pg.glass(mode, a)
-            frames.append(showcase.render(await pg.shot("#000"), await pg.shot("#fff"), wall, size=SWEEP_SIZE))
+            frames.append(showcase.render(await pg.shot("#000"), await pg.shot("#fff"), wall, size=size))
             await pg.clear_backdrop()
             print(f"  {mode} {int(a * 100)}%", flush=True)
-    return save_animation(frames, out / f"{sc['id']}.{mode}.sweep.webp", 220)
+    return frames
+
+
+async def sweep(xpi, sc, mode, out, log):
+    """one screen, the slider from 10 % to 90 % and back → <screen>.<mode>.sweep.webp (launch GIF)"""
+    return save_animation(await at_alphas(xpi, sc, mode, SWEEP, log), out / f"{sc['id']}.{mode}.sweep.webp", 220)
+
+
+async def strip(xpi, sc, mode, out, log):
+    """one screen at 10 / 45 / 90 % → <screen>.<mode>.op10|45|90.{jpg,webp} (README: the slider explained)"""
+    frames = await at_alphas(xpi, sc, mode, STRIP, log, showcase.SIZE)
+    return [showcase.save(f, out / n)[0] for f, n in zip(frames, strip_names(sc["id"], mode))]
+
+
+def main_strip(xpi, screen, out=None, mode="dark"):
+    sc = next((s for s in load_screens() if s["id"] == screen), None)
+    if not sc:
+        raise SystemExit(f"glasslab shots --strip: no screen {screen!r}")
+    out = Path(out or Path(__file__).resolve().parents[2] / "site/shots")
+    out.mkdir(parents=True, exist_ok=True)
+    print(asyncio.run(strip(xpi, sc, mode, out, Path.home() / ".cache/glasslab/strip.log")))
+    return 0
 
 
 def main_sweep(xpi, screen, out=None, mode="dark"):
@@ -208,7 +237,7 @@ async def snap(pg, sc, ms, st, out, walls):
 async def capture_all(pg, sc, wanted, out, walls):
     """one screen → index rows: base view per mode, then every explored state per mode"""
     await logout(pg, sc.get("logged_out", []))
-    await pg.goto(sc["url"], sc.get("settle", 7), sc.get("act"))
+    await pg.open(sc)
     if sc.get("auto"):
         await pg.eval(AUTO)
         await asyncio.sleep(1.5)

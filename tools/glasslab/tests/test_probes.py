@@ -71,3 +71,15 @@ def test_inherit_wrapper_counts_as_its_tier(edge):
 def test_iframe_only_layer_is_unmeasured_not_failed(edge):
     _, frame = edge
     assert frame["surface"] == 1 and frame.get("unmeasured", 0) > 0, frame
+
+
+def test_screen_open_runs_act_keys_after(fixture_url, tmp_path):
+    """screens.json `keys` are real (trusted) keypresses — some apps ignore synthetic events; `after` runs once they're done"""
+    sc = {"url": fixture_url("keys.html"), "settle": 0.5, "act": "document.body.dataset.act = 1", "keys": ["["],
+          "after": "document.body.dataset.after = document.body.classList.contains('left-hidden')"}
+
+    async def go():
+        async with lab.session(None, tmp_path / "browser.log") as pg:
+            await pg.open(sc)
+            return await pg.eval("JSON.stringify(document.body.dataset)")
+    assert asyncio.run(go()) == '{"act":"1","after":"true"}'

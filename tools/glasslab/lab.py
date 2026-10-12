@@ -144,6 +144,17 @@ class Page:
             await self.eval(act)
             await asyncio.sleep(4)
 
+    async def open(self, sc):
+        """a screens.json screen: navigate, `act` (JS), `keys` (real keypresses: apps that ignore synthetic events),
+        `after` (JS once the keys are done)"""
+        await self.goto(sc["url"], sc.get("settle", 7), sc.get("act"))
+        for k in sc.get("keys", []):
+            await self.keys(KEY.get(k, k))
+            await asyncio.sleep(0.6)
+        if sc.get("after"):
+            await self.eval(sc["after"])
+            await asyncio.sleep(1)
+
     async def shot(self, backdrop=None):
         """screenshot; backdrop via CSSOM (Google pages enforce Trusted Types + CSP: no injected <style>). The backdrop goes
         UNDER whatever <html> paints (auto glass tints the root): background = linear-gradient(own, own), backdrop."""

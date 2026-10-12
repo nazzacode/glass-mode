@@ -15,7 +15,8 @@
     "lint": "biome check && web-ext lint --config web-ext-config.mjs",
     "lint:fix": "biome check --write",
     "glass:test": "./glasslab test --compare",
-    "glass:report": "./glasslab report"
+    "glass:report": "./glasslab report",
+    "test:unit": "node --test src/**/*.test.ts"
   },
   "type": "module",
   "author": "FrostyBiscuit",

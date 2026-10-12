@@ -20,6 +20,7 @@ export type Message = {
 		| "addCustomBackground"
 		| "changeGlassTheme"
 		| "changeGlassOpacity"
+		| "glassCommand"
 		| "insertStyles"
 		| "removeStyles";
 	data?: unknown;

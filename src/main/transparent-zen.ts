@@ -1,4 +1,6 @@
 import { insertStyles } from "./modules/Styles";
+import { showHud } from "./modules/Hud";
+import type { GlassTheme } from "../shared/Glass";
 import type { Browser } from "webextension-polyfill-ts";
 import type { ContentScripts, SupportedWebsite } from "../types/ContentScripts";
 import type { ExtensionSettings, SiteSpecificSetting } from "../types/ExtensionSettings";
@@ -21,6 +23,7 @@ class TransparentZen {
 	constructor() {
 		this.applyGlass(); // synchronous first pass (auto → prefers-color-scheme) → no dark flash on a light desktop
 		this.initLoadingScreen();
+		this.initGlassKeys();
 		// biome-ignore format: readability
 		this.checkIfWebsiteAlreadySupported().then(contentScript => {
 			browser.storage.local.get("transparentZenSettings").then(async (settings) => {
@@ -248,6 +251,22 @@ class TransparentZen {
 				}
 			}
 		});
+	}
+
+	// Alt+Shift+↑/↓ = glass more/less opaque, Alt+Shift+G = cycle auto/dark/light. A page listener (not manifest commands):
+	// web-app windows have no browser chrome, and Zen's own shortcuts can't shadow it. Capture phase, before the site.
+	private initGlassKeys(): void {
+		const keys: Record<string, string> = { ArrowUp: "glass-more", ArrowDown: "glass-less", KeyG: "glass-mode" };
+		window.addEventListener("keydown", (e) => {
+			const command = e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey ? keys[e.code] : undefined;
+			if (!command) return;
+			e.preventDefault();
+			e.stopPropagation();
+			browser.runtime.sendMessage({ action: "glassCommand", value: command }).then((r: { theme: GlassTheme; opacity: number; text: string }) => {
+				this.applyGlass(command === "glass-mode" ? r.theme : undefined, r.opacity);
+				showHud(r.text);
+			});
+		}, true);
 	}
 
 	private initLoadingScreen(): void {

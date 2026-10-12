@@ -19,8 +19,9 @@ LAB = (SANDBOX / f"glasslab-{PORT}" if BROWSER == "zen"     # throwaway profile 
        else Path.home() / ".cache/glasslab" / f"{BROWSER}-{PORT}")
 EXT_ID = "transparent-zen@nazzacode"
 PROBES = Path(__file__).parent / "probes"
-KEY = {"Escape": "\uE00C", "Backspace": "\uE003", "Control": "\uE009", "Tab": "\uE004", "Enter": "\uE007"}  # WebDriver key values
-MODIFIERS = {KEY["Control"]}
+KEY = {"Escape": "\uE00C", "Backspace": "\uE003", "Control": "\uE009", "Tab": "\uE004", "Enter": "\uE007",  # WebDriver key values
+       "Shift": "\uE008", "Alt": "\uE00A", "ArrowUp": "\uE013", "ArrowDown": "\uE015"}
+MODIFIERS = {KEY["Control"], KEY["Shift"], KEY["Alt"]}
 PREFS = {
     "xpinstall.signatures.required": False,
     "extensions.autoDisableScopes": 0,

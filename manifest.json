@@ -39,7 +39,8 @@
   "background": {
     "scripts": [
       "dist/background.js"
-    ]
+    ],
+    "type": "module"
   },
   "content_scripts": [
     {

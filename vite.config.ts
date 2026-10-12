@@ -14,7 +14,6 @@ export default defineConfig({
 				popup: resolve(dirname("./"), "src/popup/popup.html"),
 				settings: resolve(dirname("./"), "src/settings/settings.html"),
 				background: resolve(dirname("./"), "src/worker/background.ts"),
-				"transparent-zen": resolve(dirname("./"), "src/main/transparent-zen.ts"),
 			},
 			output: {
 				entryFileNames: "[name].js",

@@ -21,11 +21,12 @@ export type Message = {
 		| "changeGlassTheme"
 		| "changeGlassOpacity"
 		| "glassCommand"
+		| "glassSet"
 		| "insertStyles"
 		| "removeStyles";
 	data?: unknown;
 	enabled?: boolean;
-	value?: string | number | boolean | Blob;
+	value?: string | number | boolean | Blob | object;
 	filePath?: string;
 	domains?: Array<string>;
 	settings?: ExtensionSettings["transparentZenSettings"];

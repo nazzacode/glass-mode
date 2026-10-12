@@ -28,3 +28,10 @@ def test_background_imports_only_as_module(manifest):
     for js in bg["scripts"]:
         if IMPORT.search((ROOT / js).read_text()):
             assert bg.get("type") == "module", f"{js} imports chunks but the background isn't a module"
+
+
+def test_content_bundle_is_fresh(manifest):
+    """the content script is a separate build; a misdirected outDir once left a stale bundle in dist/ (silently)"""
+    js = ROOT / manifest["content_scripts"][0]["js"][0]
+    newest = max(p.stat().st_mtime for p in (ROOT / "src/main").rglob("*.ts") if not p.name.endswith(".test.ts"))
+    assert js.stat().st_mtime >= newest, f"{js} older than src/main — rebuild (npm run build)"

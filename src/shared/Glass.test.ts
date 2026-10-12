@@ -39,10 +39,10 @@ test("issue links prefill the GitHub form for this site", () => {
 
 const key = (o: object) => ({ altKey: true, shiftKey: true, ctrlKey: false, metaKey: false, code: "ArrowUp", target: { tagName: "BODY", isContentEditable: false }, ...o });
 
-test("glass keys: Alt+Shift+↑/↓/G, nothing else", () => {
+test("glass keys: Alt+Shift+↑/↓ opacity, Alt+Shift+G panel, nothing else", () => {
 	assert.equal(glassKey(key({})), "glass-more");
 	assert.equal(glassKey(key({ code: "ArrowDown" })), "glass-less");
-	assert.equal(glassKey(key({ code: "KeyG" })), "glass-mode");
+	assert.equal(glassKey(key({ code: "KeyG" })), "glass-panel");
 	assert.equal(glassKey(key({ ctrlKey: true })), undefined);
 	assert.equal(glassKey(key({ shiftKey: false })), undefined);
 });

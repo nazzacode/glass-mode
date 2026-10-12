@@ -1,6 +1,9 @@
 import { insertStyles, removeStyles } from "./modules/Styles";
 import { showHud } from "./modules/Hud";
-import type { GlassTheme } from "../shared/Glass";
+import { type GlassTheme, issueUrl } from "../shared/Glass";
+import { panelMode, togglePanel } from "./modules/Panel";
+
+type GlassReply = { theme: GlassTheme; opacity: number; text: string };
 import { glassKey } from "./modules/GlassKeys";
 import { mark } from "./modules/RootMarks";
 import type { Browser } from "webextension-polyfill-ts";
@@ -225,11 +228,30 @@ class TransparentZen {
 			if (!command) return;
 			e.preventDefault();
 			e.stopPropagation();
-			browser.runtime.sendMessage({ action: "glassCommand", value: command }).then((r: { theme: GlassTheme; opacity: number; text: string }) => {
-				this.applyGlass(command === "glass-mode" ? r.theme : undefined, r.opacity);
+			if (command === "glass-panel") return this.openPanel();
+			browser.runtime.sendMessage({ action: "glassCommand", value: command }).then((r: GlassReply) => {
+				this.applyGlass(undefined, r.opacity);
 				showHud(r.text);
 			});
 		}, true);
+	}
+
+	// the glass panel: state from the background (global settings), every change goes through it so all windows follow
+	private async openPanel(): Promise<void> {
+		const set = async (change: object): Promise<GlassReply> => browser.runtime.sendMessage({ action: "glassSet", value: change });
+		const view = (r: GlassReply) => {
+			const u = new URL(location.href);
+			const kind = this.isSupportedWebsite ? "site-bug" : "site-request";
+			return { opacity: r.opacity, theme: r.theme, reportLabel: this.isSupportedWebsite ? "Report a problem" : "Request this site",
+				report: issueUrl(kind, { host: u.hostname, url: u.origin, version: browser.runtime.getManifest().version, theme: r.theme, opacity: r.opacity }) };
+		};
+		const mode = () => (document.documentElement.dataset.tzGlass === "light" ? "light" : "dark");
+		togglePanel(view(await set({})), mode(), async (change) => {
+			const r = await set(change);
+			this.applyGlass(r.theme, r.opacity);
+			panelMode(mode());
+			return view(r);
+		});
 	}
 
 	// auto glass (sites without a style): global switch + per-domain black/whitelist, as upstream's dynamic mode

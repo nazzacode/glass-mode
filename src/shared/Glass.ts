@@ -5,6 +5,7 @@ export const REPO = "nazzacode/transparent-zen"; // issues, releases, docs — t
 export const OPACITY = { min: 10, max: 90, step: 5, default: 45 } as const;
 
 const clamp = (v: number) => Math.min(OPACITY.max, Math.max(OPACITY.min, v));
+export const clampOpacity = (v: number): number => clamp(Math.round(v / OPACITY.step) * OPACITY.step);
 
 /** one keyboard step (±1) on the popup slider's grid */
 export const stepOpacity = (current: number | undefined, direction: number): number =>

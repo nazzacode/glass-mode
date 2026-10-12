@@ -155,5 +155,11 @@ private screens — `"private": [selectors]` — scrambled in-page first, iframe
   only; probes can't see inside — inspect via a BiDi child-frame context.
 - The lab's black/white backdrop sits UNDER `<html>`'s own paint (auto glass tints the root), and upstream's 250 ms root
   background transition is suspended while capturing — else probes read a mid-fade colour.
+- Lab limits (know them when reading numbers): headless Gecko doesn't render `backdrop-filter` (popover shots show the
+  page beneath unblurred; real Zen blurs it); the lab profile prefers the DARK site theme (`ui.systemUsesDarkTheme`), so
+  "light" runs are light glass over a site's dark theme — check light glass over the light theme by hand; cross-origin
+  iframes are reported `unmeasured`; WhatsApp keeps its session in IndexedDB (lab can't log in); some apps create data
+  just by being opened (NotebookLM made an empty notebook) — keep screens to pages that only display.
+- SPAs that assign `html.className` (Discord) wipe the extension's root classes: `src/main/modules/RootMarks.ts` re-adds them.
 - Content scripts are classic scripts: a shared chunk import kills them (and the background, unless it's a module) —
   `tests/test_build.py` guards it.

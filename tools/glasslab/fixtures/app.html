@@ -59,11 +59,13 @@
   const $ = id => document.getElementById(id);
   const toggle = (btn, pop) => btn.addEventListener('click', e => { e.stopPropagation(); const open = pop.hidden; closeAll(); pop.hidden = !open; btn.setAttribute('aria-expanded', open); });
   const closeAll = () => { document.querySelectorAll('.pop').forEach(p => p.hidden = true);
-    document.querySelectorAll('[aria-expanded]').forEach(b => b.setAttribute('aria-expanded', 'false')); };
+    document.querySelectorAll('.bar [aria-haspopup][aria-expanded], #search').forEach(b => b.setAttribute('aria-expanded', 'false')); };
   toggle($('menu-bad-btn'), $('menu-bad'));
   toggle($('menu-good-btn'), $('menu-good'));
   $('search').addEventListener('input', () => { closeAll(); $('suggest').hidden = !$('search').value; });
-  $('drawer-btn').addEventListener('click', e => { e.stopPropagation(); $('drawer').hidden = !$('drawer').hidden; });
+  // drawer ignores Escape (like Gmail's quick settings): only its toggle closes it
+  $('drawer-btn').addEventListener('click', e => { e.stopPropagation(); $('drawer').hidden = !$('drawer').hidden; $('drawer-btn').setAttribute('aria-expanded', !$('drawer').hidden); });
+  sessionStorage.loads = +(sessionStorage.loads || 0) + 1;   // tests: the explorer should restore without reloading
   $('dialog-btn').addEventListener('click', () => $('settings').showModal());
   $('close').addEventListener('click', () => $('settings').close());
   $('danger-btn').addEventListener('click', () => { window.__danger = true; });

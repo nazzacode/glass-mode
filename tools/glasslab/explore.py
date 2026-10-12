@@ -3,7 +3,7 @@ that appears like a screen: tier unity, text contrast — and opacity, so a popo
 
 Read-only by construction: only controls that reveal UI (aria-haspopup / aria-expanded / combobox / search fields) are
 activated; never navigation links, submit buttons, or anything whose label matches DANGER. Typing goes into search fields
-only and is never submitted. After each state the page is restored (Escape → blur → reload as a last resort)."""
+only and is never submitted. After each state the page is restored (Escape → re-click an expanded toggle → blur → reload as a last resort)."""
 import asyncio, json, re
 
 from PIL import Image
@@ -18,6 +18,10 @@ MAX_TRIGGERS = 12
 QUERY = "the"              # typed into search fields to raise suggestions; never submitted
 LOCATE = """(sel => { let e = null; try { e = document.querySelector(sel); } catch (_) {} const r = e && e.getBoundingClientRect();
   return JSON.stringify(r && r.width && r.height ? [r.left + r.width / 2, r.top + r.height / 2] : null); })(%s)"""
+
+EXPANDED = """(sel => { let e = null; try { e = document.querySelector(sel); } catch (_) {}
+  if (!e || e.getAttribute('aria-expanded') !== 'true') return 'null'; const r = e.getBoundingClientRect();
+  return JSON.stringify([r.left + r.width / 2, r.top + r.height / 2]); })(%s)"""
 
 
 def slug(s):
@@ -44,9 +48,14 @@ async def reset(pg, url, t, settle):
     if t["kind"] == "type":
         await pg.keys(KEY["Control"], "a")
         await pg.keys(KEY["Backspace"])
-    for step in ("Escape", "blur"):
+    for step in ("Escape", "toggle", "blur"):
         if step == "Escape":
             await pg.keys(KEY["Escape"])
+        elif step == "toggle":  # panels that ignore Escape (Gmail quick settings): their own toggle closes them
+            pos = json.loads(await pg.eval(EXPANDED % json.dumps(t["sel"])) or "null")
+            if not pos:
+                continue
+            await pg.click(*pos)
         else:
             await pg.eval("document.activeElement && document.activeElement.blur()")
         await asyncio.sleep(0.4)

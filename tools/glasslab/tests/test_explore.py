@@ -20,7 +20,8 @@ def explored(fixture_url, tmp_path_factory):
             states = await explore.explore(pg, BOUNDS, shots=out)
             return {"states": states, "danger": await pg.eval("!!window.__danger"), "start": start,
                     "end": await pg.eval("location.href"),
-                    "open": await pg.eval("document.querySelectorAll('.pop:not([hidden]), dialog[open]').length"),
+                    "open": await pg.eval("document.querySelectorAll('.pop:not([hidden]), dialog[open], #drawer:not([hidden])').length"),
+                    "loads": await pg.eval("sessionStorage.loads"),
                     "out": out}
     return asyncio.run(go())
 
@@ -61,6 +62,11 @@ def test_layer_is_the_new_surface(explored):
 def test_restores_page_after_each_state(explored):
     assert explored["end"] == explored["start"]
     assert explored["open"] == 0
+
+
+def test_restores_without_reloading(explored):
+    """Escape, else re-click an expanded toggle (panels that ignore Escape); reload only as a last resort"""
+    assert explored["loads"] == "1"
 
 
 def test_saves_state_shots(explored):

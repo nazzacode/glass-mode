@@ -140,6 +140,14 @@ def baseline_numbers(results):
     return {r["key"]: {"contrast": min(r["contrast"]), "surface": r["surface"], "text": r["text"], "ok": r["ok"]} for r in results}
 
 
+def merge_baseline(baseline, runs):
+    """baseline + numbers from several runs' results (parallel lab ports) → sorted dict"""
+    merged = dict(baseline)
+    for results in runs:
+        merged.update(baseline_numbers(results))
+    return dict(sorted(merged.items()))
+
+
 def compare(results, baseline):
     """regressions vs baseline + baseline rows that vanished for screens that ran (a broken probe or explorer yields
     fewer rows, which must not read as 'no regressions')"""
@@ -178,9 +186,7 @@ def main(xpi, filt="", out=None, save_baseline=False, compare_baseline=False, do
     bl = HERE / "baseline.json"
     regs = compare(results, json.loads(bl.read_text())) if compare_baseline and bl.exists() else []
     if save_baseline:
-        merged = json.loads(bl.read_text()) if bl.exists() else {}
-        merged.update(baseline_numbers(results))
-        bl.write_text(json.dumps(dict(sorted(merged.items())), indent=1) + "\n")
+        bl.write_text(json.dumps(merge_baseline(json.loads(bl.read_text()) if bl.exists() else {}, [results]), indent=1) + "\n")
     print(f"fails at default α (screens + hidden UI): {fails or 'none'}\nfails at slider extremes: {extremes or 'none'}"
           + (f"\nregressions vs baseline: {regs or 'none'}" if compare_baseline else ""))
     return 1 if fails or regs else 0

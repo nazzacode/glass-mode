@@ -5,6 +5,7 @@
   ./glasslab discover URL [--act JS]                                  what actually paints a site (causal tokens)
   ./glasslab new-site NAME URL [--content-first] [--dark-only]        scaffold style + registry + test screen
   ./glasslab wallpapers DIR|FILE…                                     backdrops + contrast bounds from your wallpapers
+  ./glasslab baseline RESULTS.json…                                  merge runs (parallel lab ports) into baseline.json
   ./glasslab report [RUN]                                             local HTML report (default: latest run)
   ./glasslab shots [FILTER] [--out DIR] [--modes dark,light] [--all]  showcase shots; --all: test tiles, every screen + hidden UI
   ./glasslab shots --sweep SCREEN [--modes dark]                      opacity 10→90 % animation (launch GIF)
@@ -41,6 +42,7 @@ def main(argv=None):
     n.add_argument("--force", action="store_true"); n.add_argument("--build", action="store_true")
     w = sub.add_parser("wallpapers"); w.add_argument("paths", nargs="+"); w.add_argument("--blur", type=int, default=22)
     r = sub.add_parser("report"); r.add_argument("run", nargs="?")
+    b = sub.add_parser("baseline"); b.add_argument("results", nargs="+")
     s = sub.add_parser("shots"); s.add_argument("filter", nargs="?", default=""); s.add_argument("--out"); s.add_argument("--sweep", metavar="SCREEN")
     s.add_argument("--modes", default="dark,light"); s.add_argument("--build", action="store_true")
     s.add_argument("--all", action="store_true")
@@ -62,6 +64,13 @@ def main(argv=None):
     if a.cmd == "wallpapers":
         from . import wallpapers
         wallpapers.main(a.paths, a.blur)
+    if a.cmd == "baseline":
+        import json
+        from . import suite
+        bl = Path(__file__).parent / "baseline.json"
+        runs = [json.loads(Path(p).read_text()) for p in a.results]
+        bl.write_text(json.dumps(suite.merge_baseline(json.loads(bl.read_text()) if bl.exists() else {}, runs), indent=1) + "\n")
+        print(f"baseline: merged {sum(map(len, runs))} rows from {len(runs)} runs")
     if a.cmd == "report":
         from . import report
         run = Path(a.run) if a.run else max(RUNS.iterdir(), key=lambda p: p.stat().st_mtime)

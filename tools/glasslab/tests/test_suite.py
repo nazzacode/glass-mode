@@ -43,3 +43,11 @@ def test_compare_flags_rows_that_vanished():
     bl = suite.baseline_numbers(rows)
     assert any("app~file-menu.light.45 missing" in x for x in suite.compare(rows[:1], bl))
     assert suite.compare(rows, {**bl, "other.dark.45": bl["app~file-menu.dark.45"]}) == []   # screens not run: ignored
+
+
+def test_merge_runs_into_baseline():
+    """parallel runs (one per lab port) merge into one baseline: numbers only, newest wins, other keys kept"""
+    rows = suite.state_rows(STATES, "app", 0.45)
+    merged = suite.merge_baseline({"old.dark.45": {"contrast": 1, "surface": 1, "text": 1, "ok": True}}, [rows[:1], rows[1:]])
+    assert set(merged) == {"old.dark.45", "app~file-menu.dark.45", "app~file-menu.light.45"}
+    assert list(merged) == sorted(merged)

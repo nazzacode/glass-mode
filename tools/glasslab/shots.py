@@ -77,6 +77,49 @@ async def run(xpi, screens, out, wanted, log):
                 print(f"  {mode:5s} on {w:7s} → {paths[0]}", flush=True)
 
 
+# ── --sweep: the one knob, animated ─────────────────────────────────────────────────────────────────────────────────
+SWEEP = [round(0.1 * i, 1) for i in range(1, 10)]   # popup slider 10 … 90 %
+SWEEP_SIZE = (1600, 1000)
+
+
+def pingpong(xs):
+    """10→90→20: a seamless loop without doubled end frames"""
+    return list(xs) + list(xs[-2:0:-1])
+
+
+def save_animation(frames, path, ms):
+    seq = pingpong(frames)
+    seq[0].save(path, save_all=True, append_images=seq[1:], duration=ms, loop=0, quality=80, method=4)
+    return path
+
+
+async def sweep(xpi, sc, mode, out, log):
+    """one screen, the slider from 10 % to 90 % and back → <screen>.<mode>.sweep.webp (launch GIF)"""
+    async with lab.session(xpi, log, VIEWPORT) as pg:
+        await pg.b.call("browsingContext.setViewport", context=pg.ctx,
+                        viewport={"width": VIEWPORT[0], "height": VIEWPORT[1]}, devicePixelRatio=DPR)
+        await pg.goto(sc["url"], sc.get("settle", 7), sc.get("act"))
+        if private(sc):
+            await pg.probe("scramble", private(sc), SEED)
+        wall, frames = wallgen.make(wallpaper(sc, mode)), []
+        for a in SWEEP:
+            await pg.glass(mode, a)
+            frames.append(showcase.render(await pg.shot("#000"), await pg.shot("#fff"), wall, size=SWEEP_SIZE))
+            await pg.clear_backdrop()
+            print(f"  {mode} {int(a * 100)}%", flush=True)
+    return save_animation(frames, out / f"{sc['id']}.{mode}.sweep.webp", 220)
+
+
+def main_sweep(xpi, screen, out=None, mode="dark"):
+    sc = next((s for s in load_screens() if s["id"] == screen), None)
+    if not sc:
+        raise SystemExit(f"glasslab shots --sweep: no screen {screen!r}")
+    out = Path(out or Path(__file__).resolve().parents[2] / "site/shots")
+    out.mkdir(parents=True, exist_ok=True)
+    print(asyncio.run(sweep(xpi, sc, mode, out, Path.home() / ".cache/glasslab/sweep.log")))
+    return 0
+
+
 # ── --all: test gallery tiles ─────────────────────────────────────────────────────────────────────────────────────────
 def select_all(screens, filt=""):
     return [s for s in screens if re.search(filt, s["id"])]

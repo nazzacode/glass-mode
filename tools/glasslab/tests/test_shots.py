@@ -114,3 +114,21 @@ def test_tile_is_compact_composite_on_blurred_wallpaper():
     assert np.abs(a[100, 240] - (200, 30, 30)).max() <= 3                                      # opaque keeps colour
     bl = np.asarray(shots.showcase.blurred(shots.showcase.cover(wall, (320, 200))), dtype=float)
     assert np.abs(a[90:110, 40:80] - bl[90:110, 40:80]).mean() < 4                              # clear shows blurred wall
+
+
+# ── --sweep: opacity animation ──
+def test_sweep_alphas_cover_the_slider():
+    assert shots.SWEEP[0] == 0.1 and shots.SWEEP[-1] == 0.9 and len(shots.SWEEP) == 9
+
+
+def test_pingpong_loops_without_repeating_ends():
+    assert shots.pingpong([1, 2, 3]) == [1, 2, 3, 2]
+    assert shots.pingpong([1]) == [1]
+
+
+def test_animation_written(tmp_path):
+    from PIL import Image
+    frames = [Image.new("RGB", (8, 5), (i * 40, 0, 0)) for i in range(3)]
+    p = shots.save_animation(frames, tmp_path / "x.webp", 120)
+    im = Image.open(p)
+    assert im.n_frames == 4 and im.size == (8, 5)

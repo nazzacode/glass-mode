@@ -7,6 +7,7 @@
   ./glasslab wallpapers DIR|FILE…                                     backdrops + contrast bounds from your wallpapers
   ./glasslab report [RUN]                                             local HTML report (default: latest run)
   ./glasslab shots [FILTER] [--out DIR] [--modes dark,light] [--all]  showcase shots; --all: test tiles, every screen + hidden UI
+  ./glasslab shots --sweep SCREEN [--modes dark]                      opacity 10→90 % animation (launch GIF)
   ./glasslab site [--run RUN]                                         public site (site/index.html) + README sites table
 """
 import argparse, subprocess, sys
@@ -40,7 +41,7 @@ def main(argv=None):
     n.add_argument("--force", action="store_true"); n.add_argument("--build", action="store_true")
     w = sub.add_parser("wallpapers"); w.add_argument("paths", nargs="+"); w.add_argument("--blur", type=int, default=22)
     r = sub.add_parser("report"); r.add_argument("run", nargs="?")
-    s = sub.add_parser("shots"); s.add_argument("filter", nargs="?", default=""); s.add_argument("--out")
+    s = sub.add_parser("shots"); s.add_argument("filter", nargs="?", default=""); s.add_argument("--out"); s.add_argument("--sweep", metavar="SCREEN")
     s.add_argument("--modes", default="dark,light"); s.add_argument("--build", action="store_true")
     s.add_argument("--all", action="store_true")
     p = sub.add_parser("site"); p.add_argument("--run"); p.add_argument("--out")
@@ -67,6 +68,8 @@ def main(argv=None):
         report.main(run)
     if a.cmd == "shots":
         from . import shots
+        if a.sweep:
+            return shots.main_sweep(xpi(a.build), a.sweep, a.out, a.modes.split(",")[0])
         return (shots.main_all if a.all else shots.main)(xpi(a.build), a.filter, a.out, a.modes.split(","))
     if a.cmd == "site":
         from . import site

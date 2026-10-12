@@ -1,0 +1,29 @@
+<!doctype html>
+<!-- glasslab fixture: a documentation page — text straight on a white body, no panes (content-first). Auto glass must give
+     the whole page the content tint (body text over the thin frame tier fails Lc 75). A late cookie banner is shown by a
+     class on <html> after 1.2 s — no mutation inside it (auto glass must still catch it). -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Docs</title>
+<style>
+  body { margin: 0 auto; max-width: 760px; padding: 32px; background: #fff; color: #222; font: 16px/1.6 sans-serif; }
+  code { background: #f2f2f2; padding: 1px 4px; border-radius: 4px; }
+  .note { color: #666; font-size: 14px; }
+  #consent { position: fixed; left: 0; right: 0; bottom: 0; padding: 20px; background: #f5f9fd; color: #0c0d0e; display: none; }
+  html.consent #consent { display: block; }
+</style>
+</head>
+<body>
+<h1>itertools — functions creating iterators</h1>
+<p>This module implements a number of iterator building blocks inspired by constructs from functional languages. Each has been
+recast in a form suitable for Python. The module standardizes a core set of fast, memory efficient tools that are useful by
+themselves or in combination. Together, they form an iterator algebra making it possible to construct specialized tools
+succinctly and efficiently in pure Python, for example <code>map()</code> and <code>zip()</code>.</p>
+<p class="note">Changed in version 3.10: several functions accept a key argument and are documented together below.</p>
+<p>The same effect can be achieved in Python by combining map() and count() to form a sequence of function calls that never
+runs out, which is handy when you need an endless supply of values for a lookup table or a generator pipeline.</p>
+<div id="consent"><b>We value your privacy.</b> This site uses cookies to remember your preferences and measure traffic.</div>
+<script>setTimeout(() => document.documentElement.classList.add('consent'), 1200);</script>
+</body>
+</html>

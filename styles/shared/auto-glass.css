@@ -2,6 +2,15 @@
    this maps the marks onto the shared tiers — same colours as every hand-made site style. */
 @import url("./glass.css");
 
+/* the tint lives on the root (= the whole canvas), not on <body>'s box: many pages have a narrow centred body, and bars
+   or banners classified "clear" (frame) must still have the frame tint under them */
+:root.tz-auto {
+	background: var(--g-body, var(--g-frame)) !important;
+}
+:root.tz-auto body {
+	background: transparent !important;
+}
+
 :root.tz-auto [data-tz-tier="clear"] {
 	background-color: transparent !important;
 }

@@ -76,8 +76,12 @@ export const statusInk = ([r, g, b]: Rgb): "red" | "orange" | "green" | "blue" |
 };
 
 /** ink for a rank where the text sits: on frame glass (no pane under it) one rank stronger; the tertiary ink only for
- *  large text — floors in glass.css are calibrated for fg-2 labels, fg-3 needs size (APCA Lc45 large-text tier) */
+ *  large text (≥ 24px) — glass.css floors are calibrated for fg-2 labels; fg-3 needs size (APCA Lc45 large-text tier) */
 export const inkFor = (rank: number, surface: Tier | "page", px: number): number => {
 	const r = surface === "page" || surface === "clear" ? Math.max(1, rank - 1) : rank;
-	return r === 3 && px < 16 ? 2 : r;
+	return r === 3 && px < 24 ? 2 : r;
 };
+
+/** text characters by what's under them: no pane (page/frame) vs a pane. Mostly paneless = a content-first page (docs,
+ *  articles, feeds) → body takes the content tint, as hand-made content-first site styles do (--g-body) */
+export const contentFirst = (chars: { page: number; pane: number }): boolean => chars.page > 0 && chars.page >= chars.pane;

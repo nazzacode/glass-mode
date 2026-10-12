@@ -67,3 +67,25 @@ def test_menus_and_dialogs_become_popovers(auto):
 
 def test_fast(auto):
     assert auto["ms"] is not None and float(auto["ms"]) < 100
+
+
+@pytest.fixture(scope="module")
+def docs(xpi, fixture_url, tmp_path_factory):  # noqa: F811
+    async def go():
+        async with lab.session(xpi, tmp_path_factory.mktemp("docs") / "browser.log") as pg:
+            await pg.goto(fixture_url("docs.html"), settle=0.5)
+            await pg.eval(START)
+            await asyncio.sleep(3)  # the consent banner appears at 1.2 s
+            await pg.glass("dark", 0.45)
+            unity = await pg.probe("unity")
+            runs = await pg.probe("text", BOUNDS, [0, 0, 0, 0])
+            return metrics.score(runs, {}, unity["fgs"], unity)
+    return asyncio.run(go())
+
+
+def test_content_first_page_is_readable(docs):
+    assert min(docs["contrast"]) >= 0.9, docs["failing"][:3]
+
+
+def test_late_ui_without_mutations_is_glass(docs):
+    assert docs["surface"] >= 0.9 and docs["text"] >= 0.85, (docs["surface_foreign"], docs["text_foreign"])

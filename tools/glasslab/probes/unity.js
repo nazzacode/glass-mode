@@ -18,7 +18,10 @@
   for (const [root, r, nx, ny] of grids) for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) {
     const x = Math.min(W - 1, Math.max(0, r.left + (i + .5) * r.width / nx)), y = Math.min(H - 1, Math.max(0, r.top + (j + .5) * r.height / ny));
     for (const e of document.elementsFromPoint(x, y)) {
-      if (e === document.documentElement) break;      // scoped: a clear layer shows what's beneath → that surface counts
+      // scoped: a clear layer shows what's beneath → that surface counts. <html> is the canvas (auto glass tints it);
+      // nothing painted at all = the desktop itself shows: clear glass, not a foreign surface
+      if (e === document.documentElement) { const c = P(getComputedStyle(e).backgroundColor);
+        if (!c || c[3] < .02) { ok++; tally.clear = (tally.clear || 0) + 1; break; } }
       const cs = getComputedStyle(e);
       if (/^(IMG|VIDEO|CANVAS|SVG|PICTURE|IFRAME)$/.test(e.tagName) || (cs.backgroundImage !== 'none' && !cs.backgroundImage.includes('gradient'))) break;
       const c = P(cs.backgroundColor); if (!c || c[3] * opacity(e) < .15) continue;  // thin overlays (state layers) aren't surfaces

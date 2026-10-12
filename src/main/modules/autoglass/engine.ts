@@ -1,6 +1,6 @@
 // auto glass engine: measures painted boxes + text in the page, applies classify.ts decisions as data attributes that
 // styles/shared/auto-glass.css maps onto glass.css tiers. One pass at start, then only mutated subtrees.
-import { type Rgb, type Rgba, type Tier, classify, inkFor, inkRanks, neutral, parseColor, statusInk } from "./classify";
+import { type Rgb, type Rgba, type Tier, classify, contentFirst, inkFor, inkRanks, neutral, parseColor, statusInk } from "./classify";
 
 const SKIP = new Set(["SCRIPT", "STYLE", "LINK", "META", "NOSCRIPT", "TEMPLATE", "IMG", "VIDEO", "CANVAS", "IFRAME", "SVG", "PICTURE", "svg"]);
 const POPUP = "dialog, [popover], [role=dialog], [role=alertdialog], [role=menu], [role=listbox], [role=tooltip]";
@@ -22,6 +22,7 @@ export class AutoGlass {
 	private base: Rgb = [255, 255, 255];
 	private inks = new Map<string, string>(); // site text colour → ink
 	private queue = new Set<Element>();
+	private chars = { page: 0, pane: 0 }; // text characters without / with a pane under them (first pass)
 	private observer?: MutationObserver;
 
 	start(): number {
@@ -29,7 +30,11 @@ export class AutoGlass {
 		const root = document.documentElement;
 		root.classList.add("tz-initialized", "tz-auto");
 		this.base = rgb(getComputedStyle(document.body).backgroundColor) ?? rgb(getComputedStyle(root).backgroundColor) ?? [255, 255, 255];
+		this.chars = { page: 0, pane: 0 };
 		this.process(document.body);
+		if (contentFirst(this.chars)) root.style.setProperty("--g-body", "var(--g-content-abs)");
+		// UI shown by stylesheet/animation changes produces no mutation (cookie banners, lazy panels) → two cheap re-scans
+		for (const ms of [1500, 4000]) setTimeout(() => this.observer && this.process(document.body), ms);
 		this.observer = new MutationObserver((ms) => {
 			// observer callbacks are already batched per microtask; rAF would stall in background/headless tabs
 			for (const m of ms) this.queue.add(m.target as Element);
@@ -43,7 +48,9 @@ export class AutoGlass {
 
 	stop(): void {
 		this.observer?.disconnect();
+		this.observer = undefined;
 		document.documentElement.classList.remove("tz-auto");
+		document.documentElement.style.removeProperty("--g-body");
 		for (const el of document.querySelectorAll<HTMLElement>("[data-tz-tier], [data-tz-ink], [data-tz-bg]")) {
 			delete el.dataset.tzTier;
 			delete el.dataset.tzInk;
@@ -110,7 +117,9 @@ export class AutoGlass {
 
 	/** text colour → shared ink (neutral, ranked) or status ink (chromatic); text on kept surfaces stays the site's */
 	private ink(el: HTMLElement, cs: CSSStyleDeclaration, keep: boolean, surface: Tier | "page"): void {
-		if (keep || ![...el.childNodes].some((n) => n.nodeType === 3 && n.textContent?.trim())) return;
+		const text = [...el.childNodes].reduce((n, c) => n + (c.nodeType === 3 ? (c.textContent?.trim().length ?? 0) : 0), 0);
+		if (keep || !text) return;
+		this.chars[surface === "page" || surface === "clear" ? "page" : "pane"] += text;
 		const key = el.dataset.tzFg ?? cs.color;
 		el.dataset.tzFg = key;
 		const ink = this.inks.get(key) ?? this.rank(key);

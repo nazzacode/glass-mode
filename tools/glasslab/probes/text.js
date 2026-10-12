@@ -39,7 +39,8 @@
     const stack = document.elementsFromPoint(x, y); const i = stack.findIndex(s => s === el || el.contains(s));
     if (i < 0) continue;
     let img = false, chip = false; const layers = [];
-    for (let k = stack.length - 1; k >= i; k--) { if (stack[k] === document.documentElement) continue; const s = getComputedStyle(stack[k]);
+    // <html> counts too: its background becomes the canvas (auto glass tints there; some sites paint html, not body)
+    for (let k = stack.length - 1; k >= i; k--) { const s = getComputedStyle(stack[k]);
       // image/gradient counts only if nothing opaque paints above it (bottom→top walk: an opaque layer resets it)
       if (s.backgroundImage !== 'none') img = true;
       else if (P(s.backgroundColor)[3] * opacity(stack[k]) >= .8) img = false;  // glass popover over a photo: text is on the popover

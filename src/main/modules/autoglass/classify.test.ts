@@ -1,7 +1,7 @@
 // auto glass classifier: pure decisions from measured features (node --test)
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { type Box, classify, inkFor, inkRanks, neutral, parseColor, statusInk } from "./classify.ts";
+import { type Box, classify, contentFirst, inkFor, inkRanks, neutral, parseColor, statusInk } from "./classify.ts";
 
 const VW = 1400, VH = 1000;
 const box = (o: Partial<Box>): Box => ({ bg: [255, 255, 255, 1], w: 300, h: 200, floating: false, page: false, parentTier: "page", parentBg: [240, 242, 245, 1], ...o });
@@ -72,6 +72,13 @@ test("ink on thin glass: frame text moves up one rank; small text never gets the
 	assert.equal(inkFor(2, "page", 15), 1);
 	assert.equal(inkFor(3, "clear", 20), 2);
 	assert.equal(inkFor(3, "content", 13), 2);
-	assert.equal(inkFor(3, "content", 18), 3);
+	assert.equal(inkFor(3, "content", 18), 2);
+	assert.equal(inkFor(3, "content", 24), 3); // APCA Lc45 tier = large text
 	assert.equal(inkFor(2, "popover", 13), 2);
+});
+
+test("content-first: most text without a pane under it → the whole page takes the content tint", () => {
+	assert.ok(contentFirst({ page: 900, pane: 100 }));
+	assert.ok(!contentFirst({ page: 300, pane: 700 }));
+	assert.ok(!contentFirst({ page: 0, pane: 0 }));
 });

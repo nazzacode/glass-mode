@@ -143,15 +143,20 @@ class Page:
             await asyncio.sleep(4)
 
     async def shot(self, backdrop=None):
-        """screenshot; backdrop via CSSOM (Google pages enforce Trusted Types + CSP: no injected <style>)"""
+        """screenshot; backdrop via CSSOM (Google pages enforce Trusted Types + CSP: no injected <style>). The backdrop goes
+        UNDER whatever <html> paints (auto glass tints the root): background = linear-gradient(own, own), backdrop."""
         if backdrop:
-            await self.eval(f"document.documentElement.style.setProperty('background','{backdrop}','important')")
+            await self.eval("(h => { const c = h.dataset.glOwn ??= getComputedStyle(h).backgroundColor;"   # own paint, read once
+                            " h.style.setProperty('transition', 'none', 'important');"
+                            f"h.style.setProperty('background', `linear-gradient(${{c}}, ${{c}}), {backdrop}`, 'important'); }})(document.documentElement)")
             await asyncio.sleep(0.35)
         s = await self.b.call("browsingContext.captureScreenshot", context=self.ctx)
         return Image.open(io.BytesIO(base64.b64decode(s["data"])))
 
     async def clear_backdrop(self):
-        await self.eval("document.documentElement.style.removeProperty('background')")
+        # drop the backdrop while transitions are still off (flush), then restore them — no 250 ms fade back mid-probe
+        await self.eval("(h => { h.style.removeProperty('background'); getComputedStyle(h).backgroundColor;"
+                        " h.style.removeProperty('transition'); delete h.dataset.glOwn; })(document.documentElement)")
 
     async def glass(self, mode, alpha):
         await self.eval(f"document.documentElement.dataset.tzGlass='{mode}';"

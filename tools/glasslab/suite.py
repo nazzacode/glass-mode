@@ -146,7 +146,8 @@ def compare(results, baseline):
     return regs
 
 
-def main(xpi, filt="", out=None, save_baseline=False, compare_baseline=False, do_explore=True):
+def run(xpi, filt="", out=None, do_explore=True):
+    """measure every matching screen (+ hidden UI) → result rows; writes raw captures, sheets, results.json, summary.md"""
     screens = load_screens(filt)
     if not screens:
         raise SystemExit(f"glasslab: no screens match {filt!r}")
@@ -158,6 +159,12 @@ def main(xpi, filt="", out=None, save_baseline=False, compare_baseline=False, do
     sheets(results, out, walls)
     (out / "results.json").write_text(json.dumps(results, indent=1))
     (out / "summary.md").write_text(summary_md(results))
+    print(f"\nrun: {out}")
+    return results
+
+
+def main(xpi, filt="", out=None, save_baseline=False, compare_baseline=False, do_explore=True):
+    results = run(xpi, filt, out, do_explore)
     fails, extremes = failures(results), failures(results, default_only=False)
     bl = HERE / "baseline.json"
     regs = compare(results, json.loads(bl.read_text())) if compare_baseline and bl.exists() else []
@@ -165,6 +172,6 @@ def main(xpi, filt="", out=None, save_baseline=False, compare_baseline=False, do
         merged = json.loads(bl.read_text()) if bl.exists() else {}
         merged.update(baseline_numbers(results))
         bl.write_text(json.dumps(dict(sorted(merged.items())), indent=1) + "\n")
-    print(f"\nrun: {out}\nfails at default α (screens + hidden UI): {fails or 'none'}\nfails at slider extremes: {extremes or 'none'}"
+    print(f"fails at default α (screens + hidden UI): {fails or 'none'}\nfails at slider extremes: {extremes or 'none'}"
           + (f"\nregressions vs baseline: {regs or 'none'}" if compare_baseline else ""))
     return 1 if fails or regs else 0

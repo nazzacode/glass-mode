@@ -1,0 +1,37 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install
+        run: |
+          npm ci
+          pip install websockets pillow numpy pytest
+
+      - name: Build extension
+        run: npm run build
+
+      - name: Unit tests (scoring, explorer bookkeeping, web-app installer)
+        run: python -m pytest -m "not e2e"
+
+      # same Gecko engine as Zen; fixture pages are local, so no network or logins needed
+      - name: Browser tests (headless Firefox)
+        env:
+          GLASSLAB_BROWSER: firefox
+        run: python -m pytest -m e2e

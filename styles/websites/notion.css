@@ -1,87 +1,379 @@
-@import url("../shared/base.css");
+@import url("../shared/glass.css");
 
-#notion-app {
-  .notion-app-inner {
-    background: none !important;
+/* Notion (app + public *.notion.site pages). Styles by nazzacode. Notion's design tokens (--c-*; glasslab discovery),
+   declared on :root/.notion-light-theme and .notion-dark-theme → shared glass tiers.
+   sidebar/top bar = frame (body) · page = content · menus/peek/popups = popover · controls = fills. */
 
-    .notion-cursor-listener {
-      background: none !important;
+:root,
+:root :is(body, .notion-dark-theme, .notion-light-theme) {
+	/* surfaces */
+	--c-bacPri: transparent !important; /* page/app background → body frame; the page pane is painted below */
+	--c-timBac: transparent !important;
+	--c-sitBuiBac: transparent !important; /* public-site top bar */
+	--c-sitPagPreWinChrBar: transparent !important;
+	--c-bacSec: var(--g-fill) !important;
+	--c-bacInt: var(--g-fill) !important;
+	--c-bacTer: var(--g-fill-hover) !important;
+	--c-codStiBloBac: var(--g-fill) !important;
+	--c-whiButBac: var(--g-fill) !important;
+	--c-butGroBac: var(--g-fill) !important;
+	--c-calIteBac: var(--g-fill) !important;
+	--c-homScrButBacBas: var(--g-fill) !important;
+	--c-whiButHovBac: var(--g-fill-hover) !important;
+	--c-hovMarDisBac: var(--g-fill-hover) !important;
+	--c-whiButPreBac: var(--g-fill-selected) !important;
+	--c-selMarDisBac: var(--g-fill-selected) !important;
+	--c-bacEle: var(--g-popover) !important; /* elevated: cards, popups */
+	--c-popBac: var(--g-popover) !important;
+	--c-peeTimBac: var(--g-popover) !important; /* side peek */
+	--c-bacAccPri: var(--g-popover) !important; /* neutral "accent" chips: cookie banner, tooltips (dark in both themes) */
 
-      .notion-sidebar-container {
-        background: var(--transparent-background) !important;
-
-        ~ [role="region"] {
-          background-color: var(--transparent-background-dark) !important;
-          backdrop-filter: var(--backdrop-blur);
-        }
-      }
-
-      header:has(> .notion-topbar) {
-        background: var(--transparent-background-dark) !important;
-        backdrop-filter: var(--backdrop-blur);
-      }
-
-      .notion-frame {
-        .notion-scroller {
-          background: none !important;
-        }
-
-        .notion-table-view-header-row,
-        .notion-table-view-add-row {
-          background-color: var(--transparent-background) !important;
-        }
-      }
-
-      .layout {
-        .notion-selectable,
-        .notion-sub_sub_header-block {
-          > div[style*="background"] {
-            background-color: var(--transparent-background) !important;
-          }
-        }
-
-        &.layout-chat {
-          .notion-scroller {
-            [role="button"] {
-              background: var(--transparent-background) !important;
-
-              &:hover {
-                background: var(--transparent-background-dark) !important;
-              }
-            }
-          }
-        }
-
-        &.layout-home {
-          .layout-content {
-            [role="button"],
-            [role="link"] {
-              background: var(--transparent-background) !important;
-
-              &:hover {
-                background: var(--transparent-background-dark) !important;
-              }
-            }
-          }
-        }
-
-        &.layout-marketplace {
-          > .layout-full[style*="position: sticky"] {
-            background: var(--transparent-background-dark) !important;
-            backdrop-filter: var(--backdrop-blur);
-          }
-
-          section {
-            [role="navigation"] {
-              + div {
-                div[style*="linear-gradient("]:has(+ form[role="search"]) {
-                  background-image: none !important;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+	/* text, icons, lines */
+	--c-texPri: var(--g-fg) !important;
+	--c-texSec: var(--g-fg-2) !important;
+	--c-texTer: var(--g-fg-3) !important;
+	--c-texDis: var(--g-fg-3) !important;
+	--c-texAccPri: var(--g-fg-2) !important;
+	--c-texInvPri: var(--g-fg) !important; /* label on --c-bacAccPri (now popover) */
+	--c-texInvSec: var(--g-fg-2) !important;
+	--c-icoPri: var(--g-fg) !important;
+	--c-icoSec: var(--g-fg-2) !important;
+	--c-icoTer: var(--g-fg-3) !important;
+	--c-icoDis: var(--g-fg-3) !important;
+	--c-icoAccPri: var(--g-fg-2) !important;
+	--c-icoInvPri: var(--g-fg) !important;
+	--c-icoInvSec: var(--g-fg-2) !important;
+	--c-sidSecCol: var(--g-fg-3) !important;
+	--c-borPri: var(--g-line) !important;
+	--c-borSec: var(--g-line) !important;
+	--c-borStr: var(--g-line-strong) !important;
 }
+
+/* regions */
+.notion-frame,
+.notion-peek-renderer {
+	background-color: var(--g-content) !important;
+}
+.notion-sidebar-container,
+.notion-sidebar,
+.notion-topbar,
+header:has(> .notion-topbar) {
+	background: transparent !important;
+}
+
+/* popups (menus, cookie panel, search) paint --c-popBac on the role element itself → add the popover blur */
+:is([role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"]) {
+	backdrop-filter: var(--g-blur);
+}
+
+/* data colours (callouts, tags, coloured text, select options): Notion's own palette for the GLASS mode, not the
+   system theme Notion picked (light glass over a dark-theme page would put dark tints under dark text). Values are
+   Notion's .notion-light-theme / .notion-dark-theme declarations verbatim. */
+:root[data-tz-glass="light"],
+:root[data-tz-glass="light"] :is(body, .notion-dark-theme, .notion-light-theme) {
+	--c-bluBacEle: #fff !important;
+	--c-bluBacInt: #ecf5fd !important;
+	--c-bluBacPri: #f3f9fd !important;
+	--c-bluBacSec: #e5f2fc !important;
+	--c-bluBacTer: #cee3f7 !important;
+	--c-bluBorPri: #cee3f7 !important;
+	--c-bluBorSec: #e5f2fc !important;
+	--c-bluBorStr: #b6d4f3 !important;
+	--c-bluIcoDis: #9dc0ea !important;
+	--c-bluIcoPri: #264a72 !important;
+	--c-bluIcoSec: #387dc9 !important;
+	--c-bluIcoTer: #83abe1 !important;
+	--c-bluTexDis: #9dc0ea !important;
+	--c-bluTexPri: #264a72 !important;
+	--c-bluTexTer: #83abe1 !important;
+	--c-broBacEle: #fff !important;
+	--c-broBacInt: #f7f2f0 !important;
+	--c-broBacPri: #faf8f6 !important;
+	--c-broBacSec: #f5ede9 !important;
+	--c-broBacTer: #ebdfd7 !important;
+	--c-broBorPri: #ebdfd7 !important;
+	--c-broBorSec: #f5ede9 !important;
+	--c-broBorStr: #e0cdc0 !important;
+	--c-broIcoDis: #cfb8a8 !important;
+	--c-broIcoPri: #584437 !important;
+	--c-broIcoSec: #9f765a !important;
+	--c-broIcoTer: #bca290 !important;
+	--c-broTexDis: #cfb8a8 !important;
+	--c-broTexPri: #584437 !important;
+	--c-broTexTer: #bca290 !important;
+	--c-graBacEle: #fff !important;
+	--c-graBacInt: #f4f3f3 !important;
+	--c-graBacPri: #f9f8f7 !important;
+	--c-graBacSec: #f0efed !important;
+	--c-graBacTer: #e6e5e3 !important;
+	--c-graBorPri: #e6e5e3 !important;
+	--c-graBorSec: #f0efed !important;
+	--c-graBorStr: #d4d3cf !important;
+	--c-graIcoDis: #bcbab6 !important;
+	--c-graIcoPri: #494846 !important;
+	--c-graIcoTer: #ada9a3 !important;
+	--c-graTexDis: #bcbab6 !important;
+	--c-graTexPri: #494846 !important;
+	--c-graTexTer: #ada9a3 !important;
+	--c-greBacEle: #fff !important;
+	--c-greBacInt: #eff5f1 !important;
+	--c-greBacPri: #f6f9f7 !important;
+	--c-greBacSec: #e8f1ec !important;
+	--c-greBacTer: #d7e6dd !important;
+	--c-greBorPri: #d7e6dd !important;
+	--c-greBorSec: #e8f1ec !important;
+	--c-greBorStr: #bed9c9 !important;
+	--c-greIcoDis: #a6c7b4 !important;
+	--c-greIcoPri: #2a533c !important;
+	--c-greIcoSec: #50946e !important;
+	--c-greIcoTer: #8bb79d !important;
+	--c-greTexDis: #a6c7b4 !important;
+	--c-greTexPri: #2a533c !important;
+	--c-greTexTer: #8bb79d !important;
+	--c-oraBacEle: #fff !important;
+	--c-oraBacInt: #fdf1e8 !important;
+	--c-oraBacPri: #fcf7f4 !important;
+	--c-oraBacSec: #fbebde !important;
+	--c-oraBacTer: #f3ddcb !important;
+	--c-oraBorPri: #f3ddcb !important;
+	--c-oraBorSec: #fbebde !important;
+	--c-oraBorStr: #eaccb2 !important;
+	--c-oraIcoDis: #dab798 !important;
+	--c-oraIcoPri: #6a4222 !important;
+	--c-oraIcoSec: #d27b2d !important;
+	--c-oraIcoTer: #cba27d !important;
+	--c-oraTexDis: #dab798 !important;
+	--c-oraTexPri: #6a4222 !important;
+	--c-oraTexTer: #cba27d !important;
+	--c-pinBacEle: #fff !important;
+	--c-pinBacInt: #fbeff5 !important;
+	--c-pinBacPri: #fcf7f9 !important;
+	--c-pinBacSec: #fae9f1 !important;
+	--c-pinBacTer: #f4d8e4 !important;
+	--c-pinBorPri: #f4d8e4 !important;
+	--c-pinBorSec: #fae9f1 !important;
+	--c-pinBorStr: #eac4d5 !important;
+	--c-pinIcoDis: #d8afc1 !important;
+	--c-pinIcoPri: #68354e !important;
+	--c-pinIcoSec: #c14c8a !important;
+	--c-pinIcoTer: #c897ad !important;
+	--c-pinTexDis: #d8afc1 !important;
+	--c-pinTexPri: #68354e !important;
+	--c-pinTexTer: #c897ad !important;
+	--c-purBacEle: #fff !important;
+	--c-purBacInt: #f6f0fb !important;
+	--c-purBacPri: #faf7fc !important;
+	--c-purBacSec: #f3ebf9 !important;
+	--c-purBacTer: #e8dbf2 !important;
+	--c-purBorPri: #e8dbf2 !important;
+	--c-purBorSec: #f3ebf9 !important;
+	--c-purBorStr: #dbc8e8 !important;
+	--c-purIcoDis: #c7b3d5 !important;
+	--c-purIcoPri: #553b69 !important;
+	--c-purIcoTer: #b49cc6 !important;
+	--c-purTexDis: #c7b3d5 !important;
+	--c-purTexPri: #553b69 !important;
+	--c-purTexTer: #b49cc6 !important;
+	--c-redBacAccSec: #e97366 !important;
+	--c-redBacEle: #fff !important;
+	--c-redBacInt: #fdf0ef !important;
+	--c-redBacPri: #fdf6f6 !important;
+	--c-redBacSec: #fce9e7 !important;
+	--c-redBacTer: #f7d9d5 !important;
+	--c-redBorPri: #f7d9d5 !important;
+	--c-redBorSec: #fce9e7 !important;
+	--c-redBorStr: #f0c5be !important;
+	--c-redIcoDis: #e0aea6 !important;
+	--c-redIcoPri: #6d3531 !important;
+	--c-redIcoSec: #cf5148 !important;
+	--c-redIcoTer: #d0988d !important;
+	--c-redTexDis: #e0aea6 !important;
+	--c-redTexPri: #6d3531 !important;
+	--c-redTexTer: #d0988d !important;
+	--c-teaBacEle: #fff !important;
+	--c-teaBacInt: #e8f6f9 !important;
+	--c-teaBacPri: #f3fafb !important;
+	--c-teaBacSec: #e0f3f7 !important;
+	--c-teaBacTer: #cae9f0 !important;
+	--c-teaBorPri: #cae9f0 !important;
+	--c-teaBorSec: #e0f3f7 !important;
+	--c-teaBorStr: #b0dbe4 !important;
+	--c-teaIcoDis: #99c8d3 !important;
+	--c-teaIcoPri: #18505b !important;
+	--c-teaIcoSec: #2c8b9e !important;
+	--c-teaIcoTer: #7eb6c2 !important;
+	--c-teaTexDis: #99c8d3 !important;
+	--c-teaTexPri: #18505b !important;
+	--c-teaTexTer: #7eb6c2 !important;
+	--c-yelBacEle: #fff !important;
+	--c-yelBacInt: #fdf6e6 !important;
+	--c-yelBacPri: #fcfaef !important;
+	--c-yelBacSec: #f9f3dc !important;
+	--c-yelBacTer: #f2e3b7 !important;
+	--c-yelBorPri: #f2e3b7 !important;
+	--c-yelBorSec: #f9f3dc !important;
+	--c-yelBorStr: #e8d497 !important;
+	--c-yelIcoDis: #e8d497 !important;
+	--c-yelIcoInvSec: #e8d497 !important;
+	--c-yelIcoPri: #655121 !important;
+	--c-yelIcoSec: #cb9434 !important;
+	--c-yelIcoTer: #d8c283 !important;
+	--c-yelTexDis: #e2ca88 !important;
+	--c-yelTexPri: #655121 !important;
+	--c-yelTexTer: #d8c283 !important;
+}
+
+:root:not([data-tz-glass="light"]),
+:root:not([data-tz-glass="light"]) :is(body, .notion-dark-theme, .notion-light-theme) {
+	--c-bluBacEle: #213041 !important;
+	--c-bluBacInt: #1e2834 !important;
+	--c-bluBacPri: #1a2027 !important;
+	--c-bluBacSec: #233850 !important;
+	--c-bluBacTer: #355f8b !important;
+	--c-bluBorPri: #233850 !important;
+	--c-bluBorSec: #213041 !important;
+	--c-bluBorStr: #355f8b !important;
+	--c-bluIcoDis: #264a72 !important;
+	--c-bluIcoPri: #e5f2fc !important;
+	--c-bluIcoSec: #83abe1 !important;
+	--c-bluIcoTer: #387dc9 !important;
+	--c-bluTexDis: #264a72 !important;
+	--c-bluTexPri: #e5f2fc !important;
+	--c-bluTexTer: #355f8b !important;
+	--c-broBacEle: #382d26 !important;
+	--c-broBacInt: #2f2722 !important;
+	--c-broBacPri: #25201d !important;
+	--c-broBacSec: #45362d !important;
+	--c-broBacTer: #6d5340 !important;
+	--c-broBorPri: #45362d !important;
+	--c-broBorSec: #382d26 !important;
+	--c-broBorStr: #6d5340 !important;
+	--c-broIcoDis: #584437 !important;
+	--c-broIcoPri: #f5ede9 !important;
+	--c-broIcoSec: #bca290 !important;
+	--c-broIcoTer: #9f765a !important;
+	--c-broTexDis: #584437 !important;
+	--c-broTexPri: #f5ede9 !important;
+	--c-broTexTer: #6d5340 !important;
+	--c-graBacEle: #2c2c2b !important;
+	--c-graBacInt: #262626 !important;
+	--c-graBacPri: #202020 !important;
+	--c-graBacSec: #383836 !important;
+	--c-graBacTer: #5f5e59 !important;
+	--c-graBorPri: #383836 !important;
+	--c-graBorSec: #2c2c2b !important;
+	--c-graBorStr: #5f5e59 !important;
+	--c-graIcoDis: #494846 !important;
+	--c-graIcoPri: #f0efed !important;
+	--c-graIcoTer: #5f5e59 !important;
+	--c-graTexDis: #494846 !important;
+	--c-graTexPri: #f0efed !important;
+	--c-graTexTer: #5f5e59 !important;
+	--c-greBacEle: #24342b !important;
+	--c-greBacInt: #202b24 !important;
+	--c-greBacPri: #1b211d !important;
+	--c-greBacSec: #263d30 !important;
+	--c-greBacTer: #37674c !important;
+	--c-greBorPri: #263d30 !important;
+	--c-greBorSec: #24342b !important;
+	--c-greBorStr: #37674c !important;
+	--c-greIcoDis: #2a533c !important;
+	--c-greIcoPri: #e8f1ec !important;
+	--c-greIcoSec: #8bb79d !important;
+	--c-greIcoTer: #50946e !important;
+	--c-greTexDis: #2a533c !important;
+	--c-greTexPri: #e8f1ec !important;
+	--c-greTexTer: #37674c !important;
+	--c-oraBacEle: #3d2a1d !important;
+	--c-oraBacInt: #30241c !important;
+	--c-oraBacPri: #231e1b !important;
+	--c-oraBacSec: #53361f !important;
+	--c-oraBacTer: #88522f !important;
+	--c-oraBorPri: #53361f !important;
+	--c-oraBorSec: #3d2a1d !important;
+	--c-oraBorStr: #88522f !important;
+	--c-oraIcoDis: #6a4222 !important;
+	--c-oraIcoPri: #fbebde !important;
+	--c-oraIcoSec: #cba27d !important;
+	--c-oraIcoTer: #d27b2d !important;
+	--c-oraTexDis: #6a4222 !important;
+	--c-oraTexPri: #fbebde !important;
+	--c-oraTexTer: #88522f !important;
+	--c-pinBacEle: #3f2631 !important;
+	--c-pinBacInt: #332129 !important;
+	--c-pinBacPri: #261c20 !important;
+	--c-pinBacSec: #4e2b3c !important;
+	--c-pinBacTer: #7b4760 !important;
+	--c-pinBorPri: #4e2b3c !important;
+	--c-pinBorSec: #3f2631 !important;
+	--c-pinBorStr: #7b4760 !important;
+	--c-pinIcoDis: #68354e !important;
+	--c-pinIcoPri: #fae9f1 !important;
+	--c-pinIcoSec: #c897ad !important;
+	--c-pinIcoTer: #c14c8a !important;
+	--c-pinTexDis: #68354e !important;
+	--c-pinTexPri: #fae9f1 !important;
+	--c-pinTexTer: #7b4760 !important;
+	--c-purBacEle: #36293f !important;
+	--c-purBacInt: #2c2332 !important;
+	--c-purBacPri: #221d25 !important;
+	--c-purBacSec: #3c2d47 !important;
+	--c-purBacTer: #674d7b !important;
+	--c-purBorPri: #3c2d47 !important;
+	--c-purBorSec: #36293f !important;
+	--c-purBorStr: #674d7b !important;
+	--c-purIcoDis: #553b69 !important;
+	--c-purIcoPri: #f3ebf9 !important;
+	--c-purIcoTer: #9a6bb4 !important;
+	--c-purTexDis: #553b69 !important;
+	--c-purTexPri: #f3ebf9 !important;
+	--c-purTexTer: #674d7b !important;
+	--c-redBacAccSec: #e56458 !important;
+	--c-redBacEle: #412725 !important;
+	--c-redBacInt: #332221 !important;
+	--c-redBacPri: #241d1d !important;
+	--c-redBacSec: #502c29 !important;
+	--c-redBacTer: #924943 !important;
+	--c-redBorPri: #502c29 !important;
+	--c-redBorSec: #412725 !important;
+	--c-redBorStr: #924943 !important;
+	--c-redIcoDis: #6d3531 !important;
+	--c-redIcoPri: #fce9e7 !important;
+	--c-redIcoSec: #d0988d !important;
+	--c-redIcoTer: #cf5148 !important;
+	--c-redTexDis: #6d3531 !important;
+	--c-redTexPri: #fce9e7 !important;
+	--c-redTexTer: #924943 !important;
+	--c-teaBacEle: #193439 !important;
+	--c-teaBacInt: #182b2f !important;
+	--c-teaBacPri: #172124 !important;
+	--c-teaBacSec: #143d45 !important;
+	--c-teaBacTer: #226471 !important;
+	--c-teaBorPri: #143d45 !important;
+	--c-teaBorSec: #193439 !important;
+	--c-teaBorStr: #226471 !important;
+	--c-teaIcoDis: #18505b !important;
+	--c-teaIcoPri: #e0f3f7 !important;
+	--c-teaIcoSec: #7eb6c2 !important;
+	--c-teaIcoTer: #2c8b9e !important;
+	--c-teaTexDis: #18505b !important;
+	--c-teaTexPri: #e0f3f7 !important;
+	--c-teaTexTer: #226471 !important;
+	--c-yelBacEle: #373325 !important;
+	--c-yelBacInt: #2d2b20 !important;
+	--c-yelBacPri: #23221a !important;
+	--c-yelBacSec: #504425 !important;
+	--c-yelBacTer: #836426 !important;
+	--c-yelBorPri: #504425 !important;
+	--c-yelBorSec: #373325 !important;
+	--c-yelBorStr: #836426 !important;
+	--c-yelIcoDis: #655121 !important;
+	--c-yelIcoInvSec: #d8c283 !important;
+	--c-yelIcoPri: #f9f3dc !important;
+	--c-yelIcoSec: #d8c283 !important;
+	--c-yelIcoTer: #cb9434 !important;
+	--c-yelTexDis: #655121 !important;
+	--c-yelTexPri: #f9f3dc !important;
+	--c-yelTexTer: #836426 !important;
+}
+

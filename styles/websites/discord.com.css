@@ -1,0 +1,137 @@
+@import url("../shared/glass.css");
+
+/* Discord (web app). Styles by nazzacode (replaces upstream). Visual-refresh semantic tokens → shared glass tiers:
+   app frame + server rail + channel list = frame glass (body tint) · chat / home / forum = content pane ·
+   cards = card/fills · menus, popouts, modals, the auth card = popover. Discord re-declares its palette on every themed
+   subtree (.theme-dark / .theme-light / layers), so the map sits on those classes. Both Discord themes map onto the one
+   glass palette; glass mode decides light/dark. Registry: app routes only (marketing pages keep their artwork). */
+
+:root,
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-light, .visual-refresh) {
+	/* frame: clear on the body tint */
+	--background-base-lowest: transparent !important;
+	--background-base-lower: transparent !important;
+	--background-base-low: transparent !important;
+	--background-tertiary: transparent !important;
+	--background-secondary: transparent !important;
+	--background-secondary-alt: transparent !important;
+	--app-frame-background: transparent !important;
+	--panel-bg: transparent !important;
+	--modal-footer-background: transparent !important;
+	--bg-base-tertiary: transparent !important;
+	--bg-base-secondary: transparent !important;
+	/* content pane */
+	--background-primary: var(--g-content) !important;
+	--bg-base-primary: var(--g-content) !important;
+	--chat-background: var(--g-content) !important;
+	--chat-background-default: var(--g-content) !important;
+	--home-background: var(--g-content) !important;
+	/* cards + raised blocks on content */
+	--background-surface-high: var(--g-card) !important;
+	--bg-surface-raised: var(--g-card) !important;
+	--card-background-default: var(--g-card) !important;
+	--card-secondary-bg: var(--g-fill) !important;
+	--card-secondary-pressed-bg: var(--g-fill-selected) !important;
+	--card-primary-pressed-bg: var(--g-fill-selected) !important;
+	/* popovers: menus, popouts, modals, auth card */
+	--background-surface-higher: var(--g-popover) !important;
+	--background-surface-highest: var(--g-popover) !important;
+	--background-floating: var(--g-popover) !important;
+	--bg-surface-overlay: var(--g-popover) !important;
+	--modal-background: var(--g-popover) !important;
+	--background-scrim: var(--g-scrim) !important;
+	/* rows + controls */
+	--channeltextarea-background: var(--g-fill) !important;
+	--background-accent: var(--g-fill) !important;
+	--input-background-default: var(--g-fill) !important;
+	--background-modifier-hover: var(--g-fill-hover) !important;
+	--background-modifier-active: var(--g-fill-selected) !important;
+	--background-modifier-selected: var(--g-fill-selected) !important;
+	--interactive-background-default: transparent !important;
+	--interactive-background-hover: var(--g-fill-hover) !important;
+	--interactive-background-active: var(--g-fill-selected) !important;
+	--interactive-background-selected: var(--g-fill-selected) !important;
+	--message-background-hover: var(--g-fill-hover) !important;
+	--control-secondary-background-default: var(--g-fill) !important;
+	--control-secondary-background-hover: var(--g-fill-hover) !important;
+	--control-secondary-background-active: var(--g-fill-selected) !important;
+	--control-secondary-text-default: var(--g-fg) !important;
+	--control-secondary-text-hover: var(--g-fg) !important;
+	--control-secondary-text-active: var(--g-fg) !important;
+	--control-secondary-icon-default: var(--g-fg) !important;
+	--control-icon-only-icon-default: var(--g-fg-2) !important;
+	--control-icon-only-icon-hover: var(--g-fg) !important;
+	--control-icon-only-background-hover: var(--g-fill-hover) !important;
+
+	/* text */
+	--text-strong: var(--g-fg) !important;
+	--header-primary: var(--g-fg) !important;
+	--text-default: var(--g-fg) !important;
+	--text-normal: var(--g-fg) !important;
+	--text-muted: var(--g-fg-2) !important;
+	--text-subtle: var(--g-fg-2) !important;
+	--header-secondary: var(--g-fg-2) !important;
+	--chat-text-muted: var(--g-fg-2) !important;
+	--channels-default: var(--g-fg-2) !important;
+	--interactive-normal: var(--g-fg-2) !important;
+	--interactive-text-default: var(--g-fg-2) !important;
+	--interactive-icon-default: var(--g-fg-2) !important;
+	--interactive-hover: var(--g-fg) !important;
+	--interactive-active: var(--g-fg) !important;
+	--interactive-text-hover: var(--g-fg) !important;
+	--interactive-text-active: var(--g-fg) !important;
+	--interactive-icon-hover: var(--g-fg) !important;
+	--interactive-icon-active: var(--g-fg) !important;
+	--interactive-muted: var(--g-fg-3) !important;
+	--text-brand: var(--g-blue) !important;
+	--text-link: var(--g-blue) !important;
+
+	/* lines */
+	--app-frame-border: var(--g-line) !important;
+	--border-subtle: var(--g-line) !important;
+	--border-normal: var(--g-line) !important;
+	--border-strong: var(--g-line-strong) !important;
+	--chat-border: var(--g-line) !important;
+	--card-border-default: var(--g-line) !important;
+	--input-border-default: var(--g-line) !important;
+	--scrollbar-auto-thumb: var(--g-line-strong) !important;
+	--scrollbar-thin-thumb: var(--g-line-strong) !important;
+	--scrollbar-auto-track: transparent !important;
+}
+
+/* Discord rewrites <html class> (theme classes) and drops .tz-initialized → glass.css's shared body/html rules never
+   match here; restate them (same values) */
+html,
+body {
+	background: transparent !important;
+	scrollbar-color: var(--g-scrollbar);
+}
+body {
+	background: var(--g-body, var(--g-frame)) !important;
+}
+#app-mount {
+	background: transparent !important;
+}
+
+/* menus, popouts, modals, tooltips over glass */
+:is([role="menu"], [role="dialog"], [role="listbox"], [role="tooltip"]):not([class*="layer_"]) {
+	backdrop-filter: var(--g-blur);
+}
+
+/* auth pages (login / register): the illustrated backdrop gives way to the desktop; the card is a popover */
+[class*="characterBackground_"] > img[class*="artwork_"],
+[class*="notAppAsidePanel_"] > canvas /* illustrated / animated space backdrop */ {
+	display: none !important;
+}
+[class*="characterBackground_"] {
+	background: transparent !important;
+}
+form[class*="authBox_"] {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow) !important;
+}
+/* auth page wordmark is a white <img> → dark on light glass */
+:root[data-tz-glass="light"] img[class*="logoWithText_"] {
+	filter: invert(1);
+}

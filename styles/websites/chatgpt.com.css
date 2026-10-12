@@ -1,0 +1,65 @@
+@import url("../shared/glass.css");
+
+/* ChatGPT. Styles by nazzacode. ChatGPT's web shell is StyleX: its theme is `defineVars` custom properties with hashed
+   names (deterministic per variable, declared once on `:root, .xsajpkq`), so the token map below uses those names —
+   values noted as light/dark originals. Regions use ChatGPT's own data-attributes.
+   sidebar + header = frame · conversation column = content · composer/chips = fills · menus/dialogs = popover. */
+
+/* ChatGPT's light/dark switch (lightningcss light-dark() polyfill, also forced per subtree) follows the glass mode */
+:root,
+:root * {
+	--lightningcss-light: !important;
+	--lightningcss-dark: initial !important;
+}
+:root[data-tz-glass="light"],
+:root[data-tz-glass="light"] * {
+	--lightningcss-light: initial !important;
+	--lightningcss-dark: !important;
+}
+
+/* theme vars are re-declared on inner elements (`:root, .xsajpkq` class) → override everywhere */
+:root,
+:root * {
+	/* surfaces */
+	--xxsqvjy: transparent !important; /* page (#fcfcfc/#000): main + sidebar → body frame */
+	--x17e9krr: var(--g-fill) !important; /* raised (#fff/#212121): secondary buttons, banners */
+	--x7fwydj: var(--g-fill) !important; /* secondary (#f3f3f3/#303030) */
+	--x1mzx15b: var(--g-fill) !important; /* elevated (#fff/#303030): composer */
+	--x1w9ml1o: var(--g-fill-hover) !important; /* tertiary (#e8e8e8/#414141) */
+	--x1h28xhg: var(--g-fill) !important; /* ghost fill (#f3f3f3/#41414180) */
+	--x8cb1zg: var(--g-fill-hover) !important; /* hover (#e8e8e8/#414141a6) */
+	--x1em6fjx: var(--g-fill-selected) !important; /* pressed (#cdcdcd/#414141cc) */
+	/* lines */
+	--x1vdwxib: var(--g-line) !important;
+	--x1gatu3h: var(--g-line) !important;
+	--x17gks54: var(--g-line-strong) !important;
+	--xiq9l3n: var(--g-line-strong) !important;
+	/* text (primary #0d0d0d/#fff also fills the primary button, whose label --xj7rxqu stays the inverse;
+	   --x1fwcpeh/--x1hqqq8t are button hover shades that accent themes redefine → untouched) */
+	--x69dsh5: var(--g-fg) !important;
+	--xlyber6: var(--g-fg) !important;
+	--xrh3fnw: var(--g-fg-2) !important;
+	--x9rvtud: var(--g-fg-2) !important;
+	--x17pqyd6: var(--g-fg-3) !important;
+	--x701wd9: var(--g-red) !important;
+	--x1ub3vle: var(--g-red) !important;
+}
+
+/* conversation column (right of the sidebar, under header + composer dock) = one content pane */
+[data-swipable-detail-body] {
+	background-color: var(--g-content) !important;
+}
+
+/* floating: cookie banner, popovers, dialogs */
+:is(dialog, [role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"], [popover]):not([data-octane-settings-layer]) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+}
+dialog[data-cookie-consent] > div {
+	background-color: transparent !important;
+}
+/* composer menu: the web-search toggle paints its off state in plain black/white (no theme var) */
+[data-octane-web-search-toggle][aria-pressed="false"],
+[data-octane-web-search-toggle][aria-pressed="false"] span {
+	color: var(--g-fg) !important;
+}

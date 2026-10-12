@@ -1,0 +1,122 @@
+@import url("../shared/glass.css");
+
+/* WhatsApp Web. Styles by nazzacode. WDS design tokens (glasslab token inventory) → shared glass tiers, so WhatsApp
+   carries exactly the same tints and text colours as every other glass site (Calendar, Claude …).
+   nav rail + headers + chat list = frame · conversation + side panels = content · bubbles = card / accent tint ·
+   menus + dialogs = popover.
+   Verified headless: login (QR + phone number). The signed-in app keeps its session in IndexedDB, which the lab profile
+   can't carry → the app mapping below is from WhatsApp's own token inventory, untested in the lab. */
+
+/* WhatsApp redefines WDS tokens on StyleX theme classes (hashed, per chat theme) → override on every element */
+:root,
+:root * {
+	/* surfaces: page + shell → body frame */
+	--WDS-app-wash: transparent !important;
+	--WDS-background-wash-plain: transparent !important;
+	--WDS-background-wash-inset: transparent !important;
+	--WDS-surface-emphasized: transparent !important;
+	--WDS-surface-default: transparent !important;
+	--WDS-components-surface-nav-bar: transparent !important;
+	--app-background: transparent !important;
+	--app-background-deeper: transparent !important;
+	--app-background-stripe: transparent !important;
+	--panel-background: transparent !important;
+	--panel-background-deep: transparent !important;
+	/* floating */
+	--WDS-background-elevated-wash-plain: var(--g-popover) !important;
+	--WDS-background-elevated-wash-inset: var(--g-popover) !important;
+	--WDS-surface-elevated-default: var(--g-popover) !important;
+	--WDS-surface-elevated-emphasized: var(--g-popover) !important;
+	--WDS-background-dimmer: var(--g-scrim) !important;
+	--modal-backdrop-solid: var(--g-scrim) !important;
+	/* rows + controls */
+	--WDS-surface-highlight: var(--g-fill-hover) !important;
+	--WDS-surface-pressed: var(--g-fill-selected) !important;
+	--WDS-components-active-list-row: var(--g-fill-selected) !important;
+	--WDS-components-filter-surface-selected: var(--g-fill-selected) !important;
+	--WAWeb-msg-hover-tint: var(--g-fill-hover) !important;
+	--panel-input-background: var(--g-fill) !important;
+	--search-input-background: var(--g-fill) !important;
+	--compose-panel-background-hover: var(--g-fill-hover) !important;
+	/* conversation: wallpaper → content pane (doodles off), composer = control, bubbles on content */
+	--WDS-systems-chat-background-wallpaper: var(--g-content) !important;
+	--WDS-systems-chat-foreground-wallpaper: transparent !important;
+	--WDS-systems-chat-surface-tray: transparent !important;
+	--WDS-systems-chat-surface-composer: var(--g-fill) !important;
+	--WDS-systems-bubble-surface-incoming: var(--g-card) !important;
+	--WDS-systems-bubble-surface-outgoing: var(--g-fill-selected) !important;
+	--WDS-systems-bubble-surface-system: var(--g-card) !important;
+	--WDS-systems-bubble-surface-business: var(--g-card) !important;
+	--WDS-systems-bubble-surface-e2e: var(--g-card) !important;
+	--WDS-systems-bubble-surface-overlay: var(--g-fill) !important;
+
+	/* text, icons, lines */
+	--WDS-content-default: var(--g-fg) !important;
+	--WDS-content-action-default: var(--g-fg) !important;
+	--WDS-content-deemphasized: var(--g-fg-2) !important;
+	--WDS-content-disabled: var(--g-fg-3) !important;
+	--WDS-systems-bubble-content-deemphasized: var(--g-fg-2) !important;
+	--WDS-systems-bubble-content-business: var(--g-fg-2) !important;
+	--WDS-systems-bubble-content-e2e: var(--g-fg-2) !important;
+	--WDS-content-action-emphasized: var(--g-green) !important;
+	--WDS-content-external-link: var(--g-blue) !important;
+	--WDS-content-read: var(--g-blue) !important;
+	--primary-muted: var(--g-fg-2) !important;
+	--intro-secondary: var(--g-fg-2) !important;
+	--icon-disabled: var(--g-fg-3) !important;
+	--modal-title: var(--g-fg) !important;
+	--WDS-lines-divider: var(--g-line) !important;
+	--WDS-lines-outline-deemphasized: var(--g-line) !important;
+	--WDS-lines-outline-default: var(--g-line-strong) !important;
+}
+
+/* conversation + right-hand panels (contact info, search in chat) = content tier */
+#main,
+[data-testid="drawer-right"] {
+	background-color: var(--g-content) !important;
+}
+/* slide-over panels in the left column (settings, archived, new chat) cover the chat list → must hide it */
+[data-testid="drawer-left"] > div > span:not(:empty),
+[data-testid="drawer-left"] > span:not(:empty) {
+	background-color: var(--g-content-abs) !important;
+	backdrop-filter: var(--g-blur);
+}
+/* menus paint their first child with surface-default (cleared above) */
+:root [role="menu"] > *,
+:root [role="application"] > ul {
+	--WDS-surface-default: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+}
+
+/* ---- login (QR / phone number): hard-coded cream page + white card, hashed text tokens ---- */
+#app:has([data-testid="link_device_landing_get_started_link"]) {
+	& div {
+		background-color: transparent !important;
+	}
+	& :where(div, span, strong, input):not(button *) {
+		color: var(--g-fg) !important;
+	}
+	& [data-testid="phone-number-country-selector"] * {
+		color: var(--g-fg) !important; /* unfilled control: its label is ours */
+	}
+	/* the card (rounded, 1px border): child of the outermost login-form wrapper below the page */
+	& div:has([data-testid="link_device_qr_phone_number_link"], [data-testid="link-device-phone-number-entry-screen"]):not(:has([data-testid="link_device_landing_get_started_link"])):not(div:has([data-testid="link_device_qr_phone_number_link"], [data-testid="link-device-phone-number-entry-screen"]):not(:has([data-testid="link_device_landing_get_started_link"])) *) > div {
+		background-color: var(--g-content) !important;
+		border-color: var(--g-line-strong) !important;
+	}
+	/* step numbers + phone inputs */
+	& #link-device-instructions-list div {
+		border-color: var(--g-fg-3) !important;
+	}
+	& [data-testid="phone-number-country-selector"],
+	& [data-testid="link_device_phone_number_input_wrapper"] > div {
+		background-color: var(--g-fill) !important;
+		border-color: var(--g-line-strong) !important;
+	}
+	/* QR = user content with its own colours → paper, else it doesn't scan on dark glass */
+	& [data-testid="link-device-qr-code"] {
+		background-color: var(--g-paper) !important;
+		box-shadow: 0 0 0 10px var(--g-paper);
+		border-radius: 2px;
+	}
+}

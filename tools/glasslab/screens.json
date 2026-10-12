@@ -1,56 +1,116 @@
 {
- "_doc": "glasslab test screens. id = <site>-<view>; act = JS run after load (READ-ONLY: never send/archive/mark; open only already-read items); modes = restrict glass modes (forced-dark sites); settle = seconds to wait after load (default 7).",
+ "_doc": "glasslab test screens. id = <site>-<view>; act = JS run after load (READ-ONLY: never send/archive/mark; open only already-read items); modes = restrict glass modes (forced-dark sites); settle = seconds to wait after load (default 7). private = selectors scrambled before showcase shots (probes/scramble.js; [\"body\"] = whole app). showcase = gallery screen for `glasslab shots`: true | {wallpaper: preset | {dark|light: preset}, modes: [...]} (wallpaper presets: tools/glasslab/wallgen.py; default per mode). auto = site without a style: measure auto glass (on-the-fly mode).",
  "screens": [
   {
    "id": "gcal-week",
-   "url": "https://calendar.google.com/calendar/r/week"
+   "url": "https://calendar.google.com/calendar/r/week",
+   "private": [
+    "body"
+   ],
+   "showcase": true
   },
   {
    "id": "gcal-month",
-   "url": "https://calendar.google.com/calendar/r/month"
+   "url": "https://calendar.google.com/calendar/r/month",
+   "private": [
+    "body"
+   ]
   },
   {
    "id": "gcal-event",
    "url": "https://calendar.google.com/calendar/r/week",
-   "act": "document.querySelector('[data-eventid][role=button]')?.click()"
+   "act": "document.querySelector('[data-eventid][role=button]')?.click()",
+   "private": [
+    "body"
+   ]
   },
   {
    "id": "gmail-inbox",
-   "url": "https://mail.google.com/mail/u/0/#inbox"
+   "url": "https://mail.google.com/mail/u/0/#inbox",
+   "private": [
+    "body"
+   ],
+   "showcase": true
   },
   {
    "id": "gmail-thread",
    "url": "https://mail.google.com/mail/u/0/#inbox",
-   "act": "[...document.querySelectorAll('tr.zA')].find(r=>r.classList.contains('yO'))?.click()"
+   "act": "[...document.querySelectorAll('tr.zA')].find(r=>r.classList.contains('yO'))?.click()",
+   "private": [
+    "body"
+   ]
   },
   {
    "id": "reader-library",
-   "url": "https://read.readwise.io/later"
+   "url": "https://read.readwise.io/later",
+   "private": [
+    "body"
+   ]
   },
   {
    "id": "reader-doc",
    "url": "https://read.readwise.io/archive",
-   "act": "document.querySelector('a[href*=\"/read/\"]')?.click()"
+   "act": "document.querySelector('a[href*=\"/read/\"]')?.click()",
+   "private": [
+    "body"
+   ],
+   "showcase": {
+    "wallpaper": {
+     "dark": "dusk"
+    }
+   }
   },
   {
    "id": "claude-home",
-   "url": "https://claude.ai/new"
+   "url": "https://claude.ai/new",
+   "private": [
+    "body"
+   ],
+   "showcase": true
   },
   {
    "id": "claude-recents",
-   "url": "https://claude.ai/recents"
+   "url": "https://claude.ai/recents",
+   "private": [
+    "body"
+   ]
   },
   {
    "id": "substack-home",
-   "url": "https://substack.com/home"
+   "url": "https://substack.com/home",
+   "showcase": {
+    "wallpaper": {
+     "dark": "tide"
+    }
+   },
+   "private": [
+    "[class*='ubscriptions']",
+    "[class*='recommend']",
+    "img[src*='avatar'], img[alt*='avatar' i]"
+   ]
   },
   {
    "id": "youtube-home",
-   "url": "https://www.youtube.com/"
+   "url": "https://www.youtube.com/",
+   "showcase": true,
+   "private": [
+    "#avatar-btn",
+    "ytd-topbar-menu-button-renderer",
+    "#guide-inner-content #sections > :nth-child(2)"
+   ]
   },
   {
    "id": "google-search",
-   "url": "https://www.google.com/search?q=liquid+glass+design"
+   "url": "https://www.google.com/search?q=liquid+glass+design",
+   "showcase": {
+    "wallpaper": {
+     "dark": "tide"
+    }
+   },
+   "private": [
+    "[aria-label^='Google Account']",
+    "a[href*='SignOutOptions']"
+   ]
   },
   {
    "id": "spotify-home",
@@ -66,7 +126,274 @@
    "act": "document.getElementById('onetrust-consent-sdk')?.remove()",
    "modes": [
     "dark"
+   ],
+   "showcase": {
+    "wallpaper": "dusk"
+   }
+  },
+  {
+   "id": "ddg-search",
+   "url": "https://duckduckgo.com/?q=liquid+glass+design",
+   "showcase": true
+  },
+  {
+   "id": "ddg-home",
+   "url": "https://duckduckgo.com/"
+  },
+  {
+   "id": "ddg-assist",
+   "url": "https://duckduckgo.com/?q=how+is+glass+made&ia=web&assist=true"
+  },
+  {
+   "id": "duckai-chat",
+   "url": "https://duck.ai/"
+  },
+  {
+   "id": "wiki-article",
+   "url": "https://en.wikipedia.org/wiki/Glass",
+   "showcase": true
+  },
+  {
+   "id": "wiki-main",
+   "url": "https://en.wikipedia.org/wiki/Main_Page"
+  },
+  {
+   "id": "wiki-menu",
+   "url": "https://en.wikipedia.org/wiki/Glass",
+   "act": "document.getElementById('vector-page-tools-dropdown-checkbox')?.click()"
+  },
+  {
+   "id": "hn-front",
+   "url": "https://news.ycombinator.com/",
+   "showcase": true
+  },
+  {
+   "id": "hn-item",
+   "url": "https://news.ycombinator.com/item?id=1"
+  },
+  {
+   "id": "github-repo",
+   "url": "https://github.com/frostybiscuit/transparent-zen",
+   "showcase": true
+  },
+  {
+   "id": "github-file",
+   "url": "https://github.com/frostybiscuit/transparent-zen/blob/master/manifest.json",
+   "settle": 12
+  },
+  {
+   "id": "github-issues",
+   "url": "https://github.com/frostybiscuit/transparent-zen/issues"
+  },
+  {
+   "id": "github-issue",
+   "url": "https://github.com/frostybiscuit/transparent-zen/issues/104"
+  },
+  {
+   "id": "gdrive-mydrive",
+   "url": "https://drive.google.com/drive/my-drive",
+   "private": [
+    "body"
+   ],
+   "showcase": true
+  },
+  {
+   "id": "gdrive-recent",
+   "url": "https://drive.google.com/drive/recent",
+   "private": [
+    "body"
    ]
+  },
+  {
+   "id": "reddit-home",
+   "url": "https://www.reddit.com/",
+   "private": [
+    "body"
+   ],
+   "settle": 9
+  },
+  {
+   "id": "reddit-sub",
+   "url": "https://www.reddit.com/r/unixporn/",
+   "settle": 9,
+   "showcase": true,
+   "private": [
+    "reddit-sidebar-nav",
+    "#left-sidebar-container"
+   ]
+  },
+  {
+   "id": "reddit-post",
+   "url": "https://www.reddit.com/r/unixporn/",
+   "settle": 9,
+   "act": "document.querySelector('shreddit-post a[slot=full-post-link]')?.click()",
+   "private": [
+    "reddit-sidebar-nav",
+    "#left-sidebar-container"
+   ]
+  },
+  {
+   "id": "youtube-music-home",
+   "url": "https://music.youtube.com/",
+   "modes": [
+    "dark"
+   ],
+   "private": [
+    "body"
+   ],
+   "settle": 9,
+   "showcase": true
+  },
+  {
+   "id": "youtube-music-explore",
+   "url": "https://music.youtube.com/explore",
+   "modes": [
+    "dark"
+   ],
+   "settle": 9
+  },
+  {
+   "id": "x-home",
+   "url": "https://x.com/home",
+   "private": [
+    "body"
+   ],
+   "settle": 9
+  },
+  {
+   "id": "x-profile",
+   "url": "https://x.com/zen_browser",
+   "settle": 9,
+   "showcase": true
+  },
+  {
+   "id": "discord-login",
+   "url": "https://discord.com/login",
+   "settle": 9,
+   "showcase": true
+  },
+  {
+   "id": "whatsapp-home",
+   "url": "https://web.whatsapp.com/",
+   "settle": 15,
+   "private": [
+    "body"
+   ]
+  },
+  {
+   "id": "whatsapp-phone",
+   "url": "https://web.whatsapp.com/",
+   "settle": 15,
+   "private": [
+    "body"
+   ],
+   "act": "document.querySelector('[data-testid=link_device_qr_phone_number_link]')?.click()"
+  },
+  {
+   "id": "auto-mdn",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter",
+   "auto": true
+  },
+  {
+   "id": "auto-python-docs",
+   "url": "https://docs.python.org/3/library/itertools.html",
+   "auto": true
+  },
+  {
+   "id": "auto-lobsters",
+   "url": "https://lobste.rs/",
+   "auto": true
+  },
+  {
+   "id": "auto-stackoverflow",
+   "url": "https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array",
+   "auto": true
+  },
+  {
+   "id": "auto-arstechnica",
+   "url": "https://arstechnica.com/",
+   "auto": true
+  },
+  {
+   "id": "auto-bbc-news",
+   "url": "https://www.bbc.co.uk/news",
+   "auto": true
+  },
+  {
+   "id": "chatgpt-home",
+   "url": "https://chatgpt.com/",
+   "settle": 10,
+   "private": [
+    "body"
+   ],
+   "showcase": true
+  },
+  {
+   "id": "gdrive-new",
+   "url": "https://drive.google.com/drive/my-drive",
+   "act": "(b => [\"mousedown\",\"mouseup\",\"click\"].forEach(t => b && b.dispatchEvent(new MouseEvent(t, {bubbles: true}))))(document.querySelector(\"button[guidedhelpid=new_menu_button]\"))",
+   "private": [
+    "body"
+   ]
+  },
+  {
+   "id": "gemini-home",
+   "url": "https://gemini.google.com/app",
+   "settle": 12,
+   "private": [
+    "body"
+   ],
+   "showcase": true
+  },
+  {
+   "id": "perplexity-home",
+   "url": "https://www.perplexity.ai/",
+   "settle": 10,
+   "showcase": true
+  },
+  {
+   "id": "notion-home",
+   "url": "https://notion.notion.site/",
+   "showcase": true
+  },
+  {
+   "id": "notion-careers",
+   "url": "https://notion.notion.site/Careers-at-Notion-ed4565006f194a2fbe7d3a4965d7b15a"
+  },
+  {
+   "id": "notion-whatsnew",
+   "url": "https://notion.notion.site/What-s-New-157765353f2c4705bd45474e5ba8b46c"
+  },
+  {
+   "id": "linear-home",
+   "url": "https://linear.app/",
+   "modes": [
+    "dark"
+   ],
+   "showcase": true
+  },
+  {
+   "id": "linear-pricing",
+   "url": "https://linear.app/pricing",
+   "modes": [
+    "dark"
+   ]
+  },
+  {
+   "id": "linear-changelog",
+   "url": "https://linear.app/changelog",
+   "modes": [
+    "dark"
+   ]
+  },
+  {
+   "id": "translate-text",
+   "url": "https://translate.google.com/?sl=en&tl=de&text=The%20quick%20brown%20fox%20jumps%20over%20the%20lazy%20dog.&op=translate",
+   "showcase": true
+  },
+  {
+   "id": "translate-home",
+   "url": "https://translate.google.com/"
   }
  ]
 }

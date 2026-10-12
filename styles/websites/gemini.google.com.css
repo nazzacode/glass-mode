@@ -1,0 +1,82 @@
+@import url("../shared/glass.css");
+
+/* Gemini. Styles by nazzacode. Gemini doesn't use the GM3 web tokens (--gm3-sys-*, shared/gm3.css: 0 of them in its
+   sheets, glasslab inventory) but its own GM3-shaped --gem-sys-color--* plus Lumi (--lumi-sys-color--*), declared on
+   every .theme-host (body + overlay panes) → shared glass tiers.
+   sidebar = frame · chat column = content · input = fill · menus/dialogs = popover. */
+
+:root,
+.theme-host {
+	/* surfaces */
+	--gem-sys-color--surface: transparent !important;
+	--gem-sys-color--surface-dim: transparent !important;
+	--gem-sys-color--surface-container-lowest: transparent !important;
+	--gem-sys-color--surface-container-low: transparent !important;
+	--gem-sys-color--surface-bright: var(--g-fill) !important; /* input area */
+	--gem-sys-color--surface-variant: var(--g-fill) !important;
+	--gem-sys-color--surface-container: var(--g-popover) !important; /* menus, cards over content */
+	--gem-sys-color--surface-container-high: var(--g-popover) !important;
+	--gem-sys-color--surface-container-highest: var(--g-fill-selected) !important;
+	--lumi-sys-color--surface-background: transparent !important;
+	--lumi-sys-color--surface: transparent !important;
+	--lumi-sys-color--surface-dim: transparent !important;
+	--lumi-sys-color--surface-bright: var(--g-popover) !important; /* Lumi menus + dialogs (side nav: region rule below) */
+	--lumi-sys-color--surface-accent: var(--g-fill-selected) !important;
+	--lumi-sys-color-states--hover-on-surface: var(--g-fill-hover) !important;
+	--lumi-sys-color-states--focus-on-surface: var(--g-fill-hover) !important;
+	--lumi-sys-color-states--pressed-on-surface: var(--g-fill-selected) !important;
+	--gem-sys-color--scrim: var(--g-scrim) !important;
+	--bard-color-surface-dim-tmp: transparent !important; /* zero-state chat window */
+
+	/* text + lines */
+	--gem-sys-color--on-surface: var(--g-fg) !important;
+	--gem-sys-color--on-surface-variant: var(--g-fg-2) !important;
+	--gem-sys-color--on-surface-low: var(--g-fg-3) !important;
+	--gem-sys-color--outline: var(--g-fg-3) !important;
+	--gem-sys-color--outline-variant: var(--g-line) !important;
+	--gem-sys-color--outline-low: var(--g-line) !important;
+	--lumi-sys-color--on-surface: var(--g-fg) !important;
+	--lumi-sys-color--on-surface-variant: var(--g-fg-2) !important;
+	--lumi-sys-color--on-surface-low: var(--g-line) !important;
+	--lumi-sys-color-states--disabled-label-on-surface: var(--g-fg-3) !important;
+	--bard-color-form-field-placeholder: var(--g-fg-3) !important; /* "Ask Gemini" */
+}
+
+/* light glass: Gemini stays in its dark theme (body.dark-theme from the OS) → its accents get Google's light values */
+:root[data-tz-glass="light"],
+:root[data-tz-glass="light"] .theme-host {
+	--gem-sys-color--primary: #0b57d0 !important;
+	--gem-sys-color--on-primary: #fff !important;
+	--gem-sys-color--primary-container: #d3e3fd !important;
+	--gem-sys-color--on-primary-container: #0842a0 !important;
+	--gem-sys-color--secondary-container: #c2e7ff !important;
+	--gem-sys-color--on-secondary-container: #004a77 !important;
+	--gem-sys-color--error: #b3261e !important;
+	--gem-sys-color--inverse-surface: #303030 !important;
+	--gem-sys-color--inverse-on-surface: #f2f2f2 !important;
+	--gem-sys-color--inverse-primary: #a8c7fa !important;
+	--lumi-sys-color--error: #de2d29 !important;
+	--lumi-sys-color--error-container: #ffdeec !important;
+	--lumi-sys-color--on-error-container: #de2d29 !important;
+	--lumi-sys-color--positive: #008052 !important;
+	--lumi-sys-color--positive-container: #daf9d4 !important;
+	--lumi-sys-color--on-positive-container: #009954 !important;
+	--lumi-sys-color-acc-color--accent: #9dd2ff !important;
+	--lumi-sys-color-acc-color--accent-container: #dcf1ff !important;
+	/* zero-state glow: dark theme blooms black → a grey smudge on light glass */
+	--bard-color-lm-glow-chat: #9dd2ff !important;
+	--bard-color-lm-glow-bloom: #fff !important;
+	--bard-color-lm-glow-task-base: #3186ff !important;
+	--bard-color-lm-accent-task: #969dff !important;
+}
+
+/* regions */
+bard-sidenav[role="navigation"] {
+	background-color: transparent !important;
+}
+bard-sidenav-content {
+	background-color: var(--g-content) !important;
+}
+.cdk-overlay-pane :is(.mat-mdc-menu-panel, .mat-mdc-select-panel, .mat-mdc-autocomplete-panel, .mat-mdc-dialog-surface) {
+	backdrop-filter: var(--g-blur);
+}

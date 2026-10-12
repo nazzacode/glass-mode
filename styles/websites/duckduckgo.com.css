@@ -1,0 +1,315 @@
+@import url("../shared/glass.css");
+
+/* DuckDuckGo: search, Search Assist, homepage, Duck.ai (duck.ai + duckduckgo.com/?ia=chat). Styles by nazzacode.
+   glasslab: theme tokens (--theme-col-*) drive part of the SERP; the rest is hard-coded behind hashed classes, and DDG's
+   dark/light theme paints different hard-coded colours → token map + token-less layer (neutralise → re-tier → text),
+   anchored on data-testid / role / CSS-module names (never hashed classes).
+   Content-first: the whole page sits on the content tier; search box = fill; every dropdown, menu, dialog = popover. */
+
+:root {
+	--g-body: var(--g-content-abs);
+}
+/* Duck.ai is an app, not a feed: sidebar on the frame, conversation pane on the content tier (as claude.ai) */
+:root:has([data-testid="duckai-sidebar"]) {
+	--g-body: var(--g-frame);
+}
+
+/* ---------- tokens (declared on :root and html.dark-bg / html.set-theme--*) ---------- */
+:root,
+html[class] {
+	/* surfaces */
+	--theme-col-bg-page: transparent !important;
+	--theme-col-bg-page-alt-3: transparent !important;
+	--theme-col-bg-header: transparent !important;
+	--theme-col-metabar-bg: transparent !important;
+	--theme-col-bg-result-item-divider: transparent !important;
+	--theme-col-menu-promo-border: transparent !important;
+	--theme-col-bg-page-alt-1: var(--g-fill) !important;
+	--theme-col-bg-page-alt-2: var(--g-fill) !important;
+	--result-item-bg: var(--g-fill) !important;
+	--theme-col-bg-ui: var(--g-fill) !important;
+	--theme-col-bg-card: var(--g-fill) !important;
+	--theme-col-bg-card-header: var(--g-fill) !important;
+	--theme-col-bg-textarea: var(--g-fill) !important;
+	--theme-col-bg-search: var(--g-fill) !important;
+	--theme-col-bg-pill: var(--g-fill) !important;
+	--theme-col-bg-bar: var(--g-fill) !important;
+	--theme-col-bg-expandcollapse: var(--g-fill) !important;
+	--theme-col-bg-expandcollapse-hover: var(--g-fill-hover) !important;
+	--theme-col-bg-button-expandcollapse: var(--g-fill) !important;
+	--theme-col-bg-button-expandcollapse-hover: var(--g-fill-hover) !important;
+	--theme-col-bg-button-expandcollapse-active: var(--g-fill-selected) !important;
+	--theme-col-bg-button-qna: var(--g-fill) !important;
+	--theme-col-bg-button-qna-hover: var(--g-fill-hover) !important;
+	--theme-col-bg-button-tab: var(--g-fill) !important;
+	--theme-col-bg-button-tab-hover: var(--g-fill-hover) !important;
+	--theme-col-bg-button-tab-active: var(--g-fill-selected) !important;
+	--theme-col-bg-button-secondary: var(--g-fill) !important;
+	--theme-col-bg-button-secondary-hover: var(--g-fill-hover) !important;
+	--theme-col-bg-button-secondary-active: var(--g-fill-selected) !important;
+	--theme-col-bg-button-secondary-disabled: var(--g-fill) !important;
+	--theme-col-bg-button-ghost-hover: var(--g-fill-hover) !important;
+	--theme-col-bg-button-ghost-active: var(--g-fill-selected) !important;
+	--theme-col-bg-button-ghostsecondary-hover: var(--g-fill-hover) !important;
+	--theme-col-bg-button-ghostsecondary-active: var(--g-fill-selected) !important;
+	--theme-col-bg-button-tertiary-hover: var(--g-fill-hover) !important;
+	--theme-col-bg-button-tertiary-active: var(--g-fill-selected) !important;
+	--theme-col-bg-ui-active: var(--g-fill-selected) !important;
+	--theme-col-bg-button-primary-disabled: var(--g-fill) !important;
+	--theme-col-txt-button-primary-disabled: var(--g-fg-3) !important;
+	--theme-col-sitefilter-enabled-card-bg: var(--g-fill) !important;
+	--theme-pmenu-bg: var(--g-fill) !important;
+	--theme-pmenu-table-odd-row-bg: var(--g-fill) !important;
+	--theme-pmenu-expandcollapse-bg: var(--g-fill) !important;
+	--theme-pmenu-expandcollapse-bg-hover: var(--g-fill-hover) !important;
+	--theme-col-bg-header-modal: transparent !important;
+	--theme-col-bg-modal: var(--g-popover) !important;
+	--theme-col-bg-ext-dropdown: var(--g-popover) !important;
+	--theme-bg-dropdown: var(--g-popover) !important;
+	--theme-col-bg-dialog-overlay: var(--g-scrim) !important;
+	--theme-col-bg-dialog-install-overlay: var(--g-scrim) !important;
+
+	/* text */
+	--theme-col-txt-snippet: var(--g-fg) !important;
+	--theme-col-txt-card: var(--g-fg) !important;
+	--theme-col-txt-card-title: var(--g-fg) !important;
+	--theme-col-txt-card-subtitle: var(--g-fg) !important;
+	--theme-col-txt-card-body: var(--g-fg-2) !important;
+	--theme-col-txt-card-body-light: var(--g-fg-2) !important;
+	--theme-col-txt-card-aside: var(--g-fg-2) !important;
+	--theme-col-txt-msg: var(--g-fg) !important;
+	--theme-col-txt-qna-answer: var(--g-fg) !important;
+	--theme-col-txt-qna-details: var(--g-fg-2) !important;
+	--theme-col-txt-large-tab: var(--g-fg-2) !important;
+	--theme-col-txt-expandcollapse: var(--g-fg-2) !important;
+	--theme-col-txt-url: var(--g-fg-2) !important;
+	--theme-col-txt-url-domain: var(--g-fg) !important;
+	--theme-col-txt-url-path: var(--g-fg-2) !important;
+	--theme-col-txt-tertiary: var(--g-fg-2) !important;
+	--theme-col-txt-bar: var(--g-fg) !important;
+	--theme-col-txt-search-input: var(--g-fg) !important;
+	--theme-col-txt-search-button: var(--g-fg-2) !important;
+	--theme-col-txt-textarea: var(--g-fg) !important;
+	--theme-col-txt-textarea-placeholder: var(--g-fg-3) !important;
+	--theme-col-txt-header-link: var(--g-fg-2) !important;
+	--theme-col-txt-header-link-hover: var(--g-fg) !important;
+	--theme-col-txt-button-secondary: var(--g-fg) !important;
+	--theme-col-txt-button-tertiary: var(--g-fg-2) !important;
+	--theme-col-txt-button-ghostsecondary: var(--g-fg-2) !important;
+	--theme-col-txt-button-tab: var(--g-fg) !important;
+	--theme-col-txt-button-tab-active: var(--g-fg) !important;
+	--theme-col-txt-button-ghost: var(--g-blue) !important;
+	--theme-col-txt-button-ghost-hover: var(--g-blue) !important;
+	--theme-col-txt-button-ghost-active: var(--g-blue) !important;
+	--theme-col-txt-title: var(--g-blue) !important;
+	--theme-col-txt-title-visited: var(--g-purple) !important;
+	--theme-col-module-link-new-ux: var(--g-blue) !important;
+	--theme-col-about-link: var(--g-blue) !important;
+	--theme-col-sports-team-link: var(--g-blue) !important;
+	--theme-col-icon: var(--g-fg-2) !important;
+	--theme-col-error: var(--g-red) !important;
+	--theme-col-success: var(--g-green) !important;
+
+	/* lines */
+	--theme-col-separator: var(--g-line) !important;
+	--theme-col-separator-active: var(--g-line-strong) !important;
+	--theme-col-header-divider: var(--g-line) !important;
+	--theme-col-border-ui: var(--g-line) !important;
+	--theme-col-border-dashed: var(--g-line) !important;
+	--theme-col-border-expandcollapse: var(--g-line) !important;
+	--theme-col-border-input-alternate: var(--g-line) !important;
+	--theme-col-border-large-tab-selected: var(--g-line-strong) !important;
+	--theme-col-border-qna-list-sep: var(--g-line) !important;
+	--theme-col-border-card-nested: var(--g-line) !important;
+	--theme-col-card-inner-border: var(--g-line) !important;
+	--theme-col-modal-border: var(--g-line) !important;
+	--theme-col-modal-header-border: var(--g-line) !important;
+	--theme-searchbox-border: var(--g-line) !important;
+	--toggletip-border-color: var(--g-line) !important;
+	--sds-color-border-utility: var(--g-line) !important;
+	--sds-color-border-utility-state-01: var(--g-line) !important;
+	--sds-color-border-utility-state-02: var(--g-line-strong) !important;
+}
+
+/* DuckDuckGo design systems (--ds-* new, --sds-* search; set by script on :root and themed sub-roots) */
+:root,
+:root * {
+	--ds-surface-canvas: transparent !important;
+	--ds-surface-primary: transparent !important;
+	--ds-surface-backdrop: transparent !important;
+	--ds-surface-secondary: var(--g-popover) !important; /* menus, dropdowns (cards re-tiered below) */
+	--ds-surface-tertiary: var(--g-fill) !important;
+	--ds-control-primary-background-color: var(--g-fill) !important;
+	--ds-control-secondary-background-color: var(--g-fill-hover) !important;
+	--ds-control-tertiary-background-color: var(--g-fill) !important;
+	--ds-control-raised-primary-background-color: var(--g-fill) !important;
+	--ds-container-primary-background-color: var(--g-fill) !important;
+	--ds-container-secondary-background-color: var(--g-fill) !important;
+	--ds-container-tertiary-background-color: var(--g-fill) !important;
+	--ds-input-primary-background-color: var(--g-fill) !important;
+	--ds-color-overlay-backdrop: var(--g-scrim) !important;
+	--sds-color-background-01: transparent !important;
+	--sds-color-background-02: var(--g-fill) !important;
+	--sds-color-background-03: var(--g-fill) !important;
+	--sds-color-background-container-01: var(--g-fill) !important;
+	--sds-color-background-container-02: var(--g-fill) !important;
+	--sds-color-background-utility: var(--g-fill) !important;
+	--sds-color-background-utility-state-01: var(--g-fill-hover) !important;
+	--sds-color-background-utility-alt: var(--g-fill) !important;
+	--sds-color-background-utility-alt-state-01: var(--g-fill-hover) !important;
+	--sds-color-background-backdrop: var(--g-scrim) !important;
+
+	--ds-text-primary: var(--g-fg) !important;
+	--ds-text-secondary: var(--g-fg-2) !important;
+	--ds-text-tertiary: var(--g-fg-3) !important;
+	--ds-icons-primary: var(--g-fg) !important;
+	--ds-icons-secondary: var(--g-fg-2) !important;
+	--ds-link-primary: var(--g-blue) !important;
+	--ds-link-primary-visited: var(--g-purple) !important;
+	--ds-link-secondary: var(--g-fg-2) !important;
+	--ds-link-secondary-hover: var(--g-fg) !important;
+	--ds-link-header: var(--g-fg-2) !important;
+	--ds-accent-primary-text-color: var(--g-blue) !important;
+	--ds-destructive-primary-text-color: var(--g-red) !important;
+	--ds-status-green-text: var(--g-green) !important;
+	--duckai-anchor-heading-text-color: var(--g-fg) !important;
+	--sds-color-text-01: var(--g-fg) !important;
+	--sds-color-text-02: var(--g-fg-2) !important;
+	--sds-color-text-03: var(--g-fg-2) !important;
+	--sds-color-text-04: var(--g-fg-3) !important;
+	--sds-color-text-utility: var(--g-fg-2) !important;
+	--sds-color-text-disabled: var(--g-fg-3) !important;
+	--sds-color-text-link-01: var(--g-blue) !important;
+	--sds-color-text-link-01-visited: var(--g-purple) !important;
+	--sds-color-text-link-02: var(--g-fg-2) !important;
+	--sds-color-text-link-02-hover: var(--g-fg) !important;
+	--sds-color-text-accent-01: var(--g-blue) !important;
+	--sds-color-text-destructive: var(--g-red) !important;
+	--sds-color-text-success: var(--g-green) !important;
+
+	--ds-container-primary-border-color: var(--g-line) !important;
+	--ds-container-secondary-border-color: var(--g-line) !important;
+	--ds-container-tertiary-border-color: var(--g-line) !important;
+	--ds-control-subtle-primary-border-color: var(--g-line) !important;
+	--ds-control-subtle-secondary-border-color: var(--g-line) !important;
+	--ds-control-subtle-tertiary-border-color: var(--g-line-strong) !important;
+	--sds-color-border-01: var(--g-line) !important;
+	--sds-color-border-inner-divider: var(--g-line) !important;
+	--duckai-color-border-05: var(--g-line) !important;
+}
+
+/* ---------- neutralise full-page shells (hard-coded) → body tint ---------- */
+:is(.site-wrapper, #header_wrapper, .footer, main[data-testid="home-desktop"], #home-below-the-fold,
+	[class*="pull-tab-scroll-button-module"], main:has(> [data-testid="duckai-sidebar"]), [data-testid="duckai-sidebar"]) {
+	background: transparent !important;
+}
+main:has(> [data-testid="duckai-sidebar"]) > section:not([data-testid="duckai-sidebar"]) {
+	background: var(--g-content) !important;
+	border-radius: var(--g-radius-pane) 0 0 var(--g-radius-pane);
+}
+
+/* ---------- popovers: every floating layer ---------- */
+:is([role="dialog"], [role="menu"], [role="tooltip"], .nav-menu--slideout, nav[data-testid="sidemenu"],
+	[class*="__suggestionsWrap"]) {
+	background: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow), var(--g-highlight) !important;
+	color: var(--g-fg) !important;
+}
+[role="presentation"]:has(> [role="dialog"]),
+[role="presentation"]:has(> * > [role="dialog"]) {
+	background: var(--g-scrim) !important;
+}
+
+/* SERP search box: the suggestion list (incl. "Ask Duck.ai") opens INSIDE the input wrapper → when open the whole
+   wrapper becomes one popover (was: thin fill → suggestions floated over the results unreadably) */
+[data-testid="search-form-input-wrapper"] {
+	background: var(--g-fill) !important;
+}
+[data-testid="search-form-input-wrapper"]:has(#search-autocomplete-menu) {
+	background: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow), var(--g-highlight) !important;
+}
+#search-autocomplete-menu .shadow-wrapper {
+	background: var(--g-popover) !important; /* the list hangs below the wrapper (absolute) */
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow) !important;
+}
+#search-autocomplete-menu .shadow-wrapper * {
+	background-color: transparent;
+}
+#search-autocomplete-menu [role="option"]:is(:hover, [aria-selected="true"], [data-focused="true"]) {
+	background-color: var(--g-fill-hover) !important;
+}
+
+/* cards on the content tier (their token, --ds-surface-secondary, is the menu surface) */
+.related-searches__item {
+	background: var(--g-fill) !important;
+}
+
+/* Search Assist (AI answer) = AI panel → popover tier; its controls → fills */
+div:has(> div > div > [data-testid="duckassist-answer-content"]) {
+	background: transparent !important;
+}
+div:has(> div > div > [data-testid="duckassist-answer-content"]) > div::after {
+	background: var(--g-popover) !important; /* inner fill inside DDG's AI gradient ring (::before, kept as accent) */
+}
+div:has(> div > div > [data-testid="duckassist-answer-content"]) div:has(> button ~ button ~ button ~ button),
+:is([data-testid="duckassist-stream-more-pill"], [data-testid="ask"]),
+[data-testid="duckbar"] a[href*="assist=false"], /* Search Assist toggle, on */
+[data-testid="mainline"] a[href*="ia="]:not([data-testid]) {
+	background: var(--g-fill) !important;
+}
+/* floating controls over results → popover */
+:is([data-testid="floating-feedback-prompt"] button, [data-testid^="react-carousel-"]) {
+	background: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow), var(--g-highlight) !important;
+}
+
+/* homepage search box + cards (CSS-module names are stable) */
+[class*="__queryWrap"] {
+	background: var(--g-fill) !important;
+}
+form:has([class*="__suggestionsWrap"]) [class*="__queryWrap"] {
+	background: var(--g-popover) !important; /* open: input + list read as one popover */
+}
+li[class*="card-module"][class*="__card"],
+[class*="card-button-module"][class*="__root"] {
+	background: var(--g-fill) !important;
+}
+[class*="__chipSelected"] {
+	background: var(--g-fill-selected) !important; /* Search | Ask AI mode toggle */
+}
+[class*="__peekButtonKey"] {
+	visibility: hidden; /* pull-tab bump painted in the old page colour; the arrow button stays */
+}
+
+/* ---------- text: DDG hard-codes white/greys per theme → shared foregrounds; secondary/links by role ---------- */
+body,
+body :where(:not([style*="color"], svg *, pre *, code, code *, mark, [class*="primary-solid"], [class*="primary-solid"] *, [class*="motif-"],
+	[class*="motif-"] *, [data-testid="duckassist-action-button"], [data-testid="duckassist-action-button"] *)) {
+	color: var(--g-fg) !important;
+}
+:is([data-testid="result-extras-url-link"], [data-testid="result-extras-url-link"] *, [data-testid="feedback-prompt"],
+	[data-testid="feedback-prompt"] *) {
+	color: var(--g-fg-2) !important;
+}
+[data-testid="result-title-a"],
+[data-testid="result-title-a"] *,
+:is([data-testid="about"], [data-testid="duckassist-answer-content"], [data-testid="result-snippet"]) a[href^="http"] {
+	color: var(--g-blue) !important;
+}
+[data-testid="result-title-a"]:visited,
+[data-testid="result-title-a"]:visited * {
+	color: var(--g-purple) !important;
+}
+/* homepage buttons colour their labels with higher-specificity rules */
+body [class*="button-module"][class*="__button"]:not([class*="primary-solid"]),
+body [class*="button-module"][class*="__button"]:not([class*="primary-solid"]) * {
+	color: var(--g-fg) !important;
+}
+::placeholder {
+	color: var(--g-fg-3) !important;
+}

@@ -1,0 +1,96 @@
+@import url("../shared/gm3.css");
+
+/* Google Drive. Styles by nazzacode. GM3 tokens: shared/gm3.css. Drive paints its own surfaces/text with Drive-theme
+   tokens (--dt-*; glasslab discovery) → same tiers as every Google app: frame = body, file area = content pane,
+   tiles/inputs = fills, menus/dialogs = popover. Accents in dark glass: Google's GM3 dark baseline (as gm3.css). */
+
+:root,
+:root * {
+	/* surfaces */
+	--dt-background: transparent !important;
+	--dt-surface-container-low: transparent !important; /* app shell → body frame tint */
+	--dt-surface: var(--g-content) !important; /* file list/grid pane */
+	--dt-surface-bright: var(--g-content) !important;
+	--dt-surface-container-lowest: var(--g-fill) !important; /* "New" button, raised controls */
+	--dt-surface-container: var(--g-fill) !important; /* file tiles, folder chips */
+	--dt-surface-container-high: var(--g-fill) !important; /* search field */
+	--dt-surface-container-highest: var(--g-fill-hover) !important;
+	--dt-surface-dim: var(--g-fill) !important;
+	--dt-secondary-container: var(--g-fill-selected) !important; /* current nav item, selected rows */
+
+	/* text + lines */
+	--dt-on-surface: var(--g-fg) !important;
+	--dt-on-surface-variant: var(--g-fg-2) !important;
+	--dt-on-disabled: var(--g-fg-3) !important;
+	--dt-outline: var(--g-fg-3) !important;
+	--dt-outline-variant: var(--g-line) !important;
+	--dt-gray-outline: var(--g-line) !important;
+	--dt-neutral-outline: var(--g-line-strong) !important;
+	--dt-on-secondary-container: var(--g-fg) !important; /* label on the selected (accent-tint) fill */
+	--dt-error: var(--g-red) !important;
+	--dt-warning: var(--g-orange) !important;
+}
+
+/* dark glass: Drive accents → GM3 dark baseline (light glass keeps Google's light values) */
+:root:not([data-tz-glass="light"]),
+:root:not([data-tz-glass="light"]) * {
+	--dt-primary: #a8c7fa !important;
+	--dt-primary-action: #a8c7fa !important;
+	--dt-primary-outline: #a8c7fa !important;
+	--dt-on-primary: #062e6f !important;
+	--dt-primary-container: #0842a0 !important;
+	--dt-on-primary-container: #d3e3fd !important;
+	--dt-primary-container-link: #d3e3fd !important;
+	--dt-primary-container-icon: #d3e3fd !important;
+	--gm3-chip-assist-flat-label-text-color: #d3e3fd !important;
+	--gm3-button-filled-tonal-container-color: #0842a0 !important;
+	--gm3-button-filled-tonal-label-text-color: #d3e3fd !important;
+}
+
+/* search field: hard-coded Google-bar fill */
+form#aso_search_form_anchor[role="search"] {
+	background-color: var(--g-fill) !important;
+}
+form#aso_search_form_anchor[role="search"]:focus-within {
+	background-color: var(--g-popover) !important;
+}
+
+/* menus, dialogs, suggestion lists, tooltips → popover glass */
+:is([role="menu"], [role="listbox"], [role="dialog"], [role="alertdialog"]) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow), var(--g-highlight) !important;
+}
+
+/* dialog scrim (GM3 dialog backdrop, hard-coded black .32) → shared dimming layer */
+.uW2Fw-IE5DDf {
+	background-color: var(--g-scrim) !important;
+}
+
+/* hard-coded leftovers: page headings ("Recent", "Computers": rgb(31,31,31) in any mode). Nav rail sits on the thin
+   frame tier → storage meter label + outlined "Get more storage" label in primary text (link blue / fg-2 < Lc 75/60) */
+h1 {
+	color: var(--g-fg) !important;
+}
+[role="navigation"] :is(a:not([href]), a:not([href]) *, button span) {
+	color: var(--g-fg) !important;
+}
+
+/* tooltips: GM3 plain tooltip paints with the inverse tokens (light chip in dark glass) → popover tier like every menu.
+   Selector matches gm3.css's dark-mode specificity so it wins in both modes. */
+:root:is(:not([data-tz-glass="light"]), [data-tz-glass="light"]),
+:root:is(:not([data-tz-glass="light"]), [data-tz-glass="light"]) * {
+	--gm3-sys-color-inverse-surface: var(--g-popover) !important;
+	--gm3-sys-color-inverse-surface-rgb: var(--g-rgb-raised) !important;
+	--gm3-sys-color-inverse-on-surface: var(--g-fg) !important;
+}
+
+/* companion side panel's "About" menu (Closure menu, hard-coded grey panel + grey labels) → popover + shared text */
+.Kk7lMc-Ca {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	color: var(--g-fg) !important;
+}
+[class*="Kk7lMc-pHHuId-Ec-w"] {
+	color: var(--g-fg) !important;
+}

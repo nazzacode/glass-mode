@@ -1,0 +1,66 @@
+@import url("../shared/glass.css");
+
+/* Hacker News. Styles by nazzacode. Token-less table layout → neutralise → re-tier → text (glasslab scaffold).
+   Content-first (lists + long comment threads) → the whole page sits on the content tier.
+   The orange top bar: glass forbids brand fills as surfaces, so the bar becomes a fill strip (navigation row) and HN's
+   own orange (#ff6600, its td[bgcolor]) survives only as a 2px accent rule under it + the Y logo → still unmistakably HN. */
+
+:root {
+	--g-body: var(--g-content-abs);
+}
+body {
+	margin: 0 !important; /* the 8px UA margin left a bare-wallpaper frame around the tint */
+	padding: 8px;
+	min-height: 100vh;
+	box-sizing: border-box;
+}
+
+/* neutralise the table soup (#hnmain paints #f6f6ef) */
+body :where(div, center, table, tbody, tr, td, span, form):where(:not([style*="background"])) {
+	background-color: transparent !important;
+}
+
+/* top bar */
+td[bgcolor="#ff6600"] {
+	background: var(--g-fill) !important;
+	border-bottom: 2px solid #ff6600;
+	border-radius: var(--g-radius-card) var(--g-radius-card) 0 0;
+}
+
+/* text: titles/comments primary, meta secondary, visited + faded comments tertiary */
+body,
+body :where(:not([style*="color"], img)) {
+	color: var(--g-fg) !important;
+}
+:is(.subtext, .subtext *, .subline, .subline *, .sitebit, .sitebit *, .comhead, .comhead *, .rank, .yclinks, .yclinks *,
+	.navs, .navs *, .reply, .reply *) {
+	color: var(--g-fg-2) !important;
+}
+.titleline > a:visited,
+:is(.c5a, .c73, .c82, .c88, .c9c, .cae, .cbe, .cce, .cdd),
+:is(.c5a, .c73, .c82, .c88, .c9c, .cae, .cbe, .cce, .cdd) * {
+	color: var(--g-fg-3) !important; /* HN greys out visited stories and down-voted comments */
+}
+.commtext a,
+.toptext a {
+	color: var(--g-blue) !important;
+}
+.commtext pre,
+.commtext code {
+	background: var(--g-fill) !important;
+	border-radius: 6px;
+}
+
+/* inputs (search, reply box, login) */
+:is(input:not([type="submit"], [type="hidden"]), textarea, select) {
+	background: var(--g-fill) !important;
+	color: var(--g-fg) !important;
+	border: 1px solid var(--g-line-strong) !important;
+	border-radius: 6px;
+}
+input[type="submit"] {
+	background: var(--g-fill) !important;
+	color: var(--g-fg) !important;
+	border: 1px solid var(--g-line-strong) !important;
+	border-radius: 6px;
+}

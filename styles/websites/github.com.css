@@ -1,0 +1,192 @@
+@import url("../shared/glass.css");
+
+/* GitHub. Styles by nazzacode. Primer functional tokens (--bgColor-*, --fgColor-*, --borderColor-*, component tokens;
+   glasslab discovery) → shared glass tiers. App shell (header, repo nav) = frame; page body (file list, README, code,
+   issues) = content; boxes/inputs/buttons = fills; menus, autocomplete, dialogs, tooltips = popover.
+   Primer declares tokens on [data-color-mode] (html + themed islands such as the marketing header) → same scope. */
+
+:root,
+[data-color-mode] {
+	/* surfaces */
+	--bgColor-default: transparent !important;
+	--bgColor-muted: var(--g-fill) !important;
+	--bgColor-inset: var(--g-fill) !important;
+	--bgColor-transparent: transparent !important;
+	--bgColor-disabled: var(--g-fill) !important;
+	--bgColor-neutral-muted: var(--g-fill) !important;
+	--bgColor-accent-muted: var(--g-fill-selected) !important;
+	--card-bgColor: var(--g-fill) !important;
+	--overlay-bgColor: var(--g-popover) !important;
+	--overlay-backdrop-bgColor: var(--g-scrim) !important;
+	--tooltip-bgColor: var(--g-popover) !important;
+	--header-bgColor: transparent !important;
+	--headerSearch-bgColor: var(--g-fill) !important;
+	--page-header-bgColor: transparent !important;
+	--control-bgColor-rest: var(--g-fill) !important;
+	--control-bgColor-hover: var(--g-fill-hover) !important;
+	--control-bgColor-active: var(--g-fill-selected) !important;
+	--control-bgColor-selected: var(--g-fill-selected) !important;
+	--control-bgColor-disabled: var(--g-fill) !important;
+	--control-transparent-bgColor-hover: var(--g-fill-hover) !important;
+	--control-transparent-bgColor-active: var(--g-fill-selected) !important;
+	--control-transparent-bgColor-selected: var(--g-fill-selected) !important;
+	--button-default-bgColor-rest: var(--g-fill) !important;
+	--button-default-bgColor-hover: var(--g-fill-hover) !important;
+	--button-default-bgColor-active: var(--g-fill-selected) !important;
+	--button-default-bgColor-selected: var(--g-fill-selected) !important;
+	--button-default-bgColor-disabled: var(--g-fill) !important;
+	--button-invisible-bgColor-hover: var(--g-fill-hover) !important;
+	--button-invisible-bgColor-active: var(--g-fill-selected) !important;
+	--controlTrack-bgColor-rest: var(--g-fill) !important;
+	--controlTrack-bgColor-hover: var(--g-fill-hover) !important;
+	--controlTrack-bgColor-active: var(--g-fill-selected) !important;
+	--counter-bgColor-muted: var(--g-fill) !important;
+	--codeMirror-bgColor: transparent !important;
+	--codeMirror-gutters-bgColor: transparent !important;
+	--codeMirror-lines-bgColor: transparent !important;
+	--selectMenu-bgColor-active: var(--g-fill-selected) !important;
+	--sideNav-bgColor-selected: var(--g-fill-selected) !important;
+	--underlineNav-bgColor-hover: var(--g-fill-hover) !important;
+	--treeViewItem-bgColor-hover: var(--g-fill-hover) !important;
+	--treeViewItem-bgColor-selected: var(--g-fill-selected) !important;
+	--timelineBadge-bgColor: var(--g-fill) !important;
+	/* marketing chrome (logged-out header, Primer Brand) */
+	--brand-color-canvas-default: transparent !important;
+	--MarketingHeader-canvas-default: transparent !important;
+
+	/* text */
+	--fgColor-default: var(--g-fg) !important;
+	--fgColor-muted: var(--g-fg-2) !important;
+	--fgColor-neutral: var(--g-fg-2) !important;
+	--fgColor-disabled: var(--g-fg-3) !important;
+	--fgColor-accent: var(--g-blue) !important;
+	--fgColor-link: var(--g-blue) !important;
+	--fgColor-success: var(--g-green) !important;
+	--fgColor-open: var(--g-green) !important;
+	--fgColor-danger: var(--g-red) !important;
+	--fgColor-closed: var(--g-red) !important;
+	--fgColor-attention: var(--g-orange) !important;
+	--fgColor-severe: var(--g-orange) !important;
+	--fgColor-done: var(--g-purple) !important;
+	--header-fgColor-default: var(--g-fg-2) !important;
+	--header-fgColor-logo: var(--g-fg) !important;
+	--control-fgColor-rest: var(--g-fg) !important;
+	--control-fgColor-placeholder: var(--g-fg-3) !important;
+	--control-fgColor-disabled: var(--g-fg-3) !important;
+	--control-iconColor-rest: var(--g-fg-2) !important;
+	--button-default-fgColor-rest: var(--g-fg) !important;
+	--button-invisible-fgColor-rest: var(--g-fg) !important;
+	--button-invisible-fgColor-hover: var(--g-fg) !important;
+	--button-invisible-iconColor-rest: var(--g-fg-2) !important;
+	--button-invisible-iconColor-hover: var(--g-fg) !important;
+	--tooltip-fgColor: var(--g-fg) !important;
+	--codeMirror-fgColor: var(--g-fg) !important;
+	--codeMirror-lineNumber-fgColor: var(--g-fg-3) !important;
+	--brand-color-text-default: var(--g-fg) !important;
+	--brand-color-text-muted: var(--g-fg-2) !important;
+	--brand-Link-color-default: var(--g-fg) !important;
+	--controlKnob-bgColor-rest: var(--g-fill-selected) !important; /* segmented control: selected item */
+	/* code: syntax colours → the shared accessible accent set (readable in both glass modes) */
+	--prettylights-syntax-comment: var(--g-fg-3) !important;
+	--color-prettylights-syntax-comment: var(--g-fg-3) !important;
+	--prettylights-syntax-constant: var(--g-blue) !important;
+	--color-prettylights-syntax-constant: var(--g-blue) !important;
+	--prettylights-syntax-constant-other-reference-link: var(--g-blue) !important;
+	--color-prettylights-syntax-constant-other-reference-link: var(--g-blue) !important;
+	--prettylights-syntax-entity: var(--g-purple) !important;
+	--color-prettylights-syntax-entity: var(--g-purple) !important;
+	--prettylights-syntax-entity-tag: var(--g-green) !important;
+	--color-prettylights-syntax-entity-tag: var(--g-green) !important;
+	--prettylights-syntax-keyword: var(--g-red) !important;
+	--color-prettylights-syntax-keyword: var(--g-red) !important;
+	--prettylights-syntax-storage-modifier-import: var(--g-fg) !important;
+	--color-prettylights-syntax-storage-modifier-import: var(--g-fg) !important;
+	--prettylights-syntax-string: var(--g-blue) !important;
+	--color-prettylights-syntax-string: var(--g-blue) !important;
+	--prettylights-syntax-string-regexp: var(--g-green) !important;
+	--color-prettylights-syntax-string-regexp: var(--g-green) !important;
+	--prettylights-syntax-variable: var(--g-orange) !important;
+	--color-prettylights-syntax-variable: var(--g-orange) !important;
+	--prettylights-syntax-markup-heading: var(--g-blue) !important;
+	--color-prettylights-syntax-markup-heading: var(--g-blue) !important;
+	--prettylights-syntax-markup-list: var(--g-orange) !important;
+	--color-prettylights-syntax-markup-list: var(--g-orange) !important;
+	--prettylights-syntax-markup-bold: var(--g-fg) !important;
+	--color-prettylights-syntax-markup-bold: var(--g-fg) !important;
+	--prettylights-syntax-markup-italic: var(--g-fg) !important;
+	--color-prettylights-syntax-markup-italic: var(--g-fg) !important;
+	--prettylights-syntax-markup-inserted-text: var(--g-green) !important;
+	--color-prettylights-syntax-markup-inserted-text: var(--g-green) !important;
+	--prettylights-syntax-markup-deleted-text: var(--g-red) !important;
+	--color-prettylights-syntax-markup-deleted-text: var(--g-red) !important;
+	--prettylights-syntax-markup-changed-text: var(--g-orange) !important;
+	--color-prettylights-syntax-markup-changed-text: var(--g-orange) !important;
+	--prettylights-syntax-markup-ignored-text: var(--g-fg-2) !important;
+	--color-prettylights-syntax-markup-ignored-text: var(--g-fg-2) !important;
+	--prettylights-syntax-meta-diff-range: var(--g-purple) !important;
+	--color-prettylights-syntax-meta-diff-range: var(--g-purple) !important;
+	--prettylights-syntax-invalid-illegal-text: var(--g-red) !important;
+	--color-prettylights-syntax-invalid-illegal-text: var(--g-red) !important;
+	--prettylights-syntax-brackethighlighter-unmatched: var(--g-red) !important;
+	--color-prettylights-syntax-brackethighlighter-unmatched: var(--g-red) !important;
+	--prettylights-syntax-brackethighlighter-angle: var(--g-fg-2) !important;
+	--color-prettylights-syntax-brackethighlighter-angle: var(--g-fg-2) !important;
+	--prettylights-syntax-sublimelinter-gutter-mark: var(--g-fg-3) !important;
+	--color-prettylights-syntax-sublimelinter-gutter-mark: var(--g-fg-3) !important;
+	--prettylights-syntax-carriage-return-text: var(--g-fg) !important;
+	--color-prettylights-syntax-carriage-return-text: var(--g-fg) !important;
+
+	/* lines */
+	--controlKnob-borderColor-rest: var(--g-line) !important;
+	--borderColor-default: var(--g-line-strong) !important;
+	--borderColor-muted: var(--g-line) !important;
+	--borderColor-translucent: var(--g-line) !important;
+	--borderColor-neutral-muted: var(--g-line) !important;
+	--borderColor-disabled: var(--g-line) !important;
+	--header-borderColor-divider: var(--g-line) !important;
+	--headerSearch-borderColor: var(--g-line-strong) !important;
+	--overlay-borderColor: var(--g-line) !important;
+	--control-borderColor-rest: var(--g-line-strong) !important;
+	--control-borderColor-disabled: var(--g-line) !important;
+	--button-default-borderColor-rest: var(--g-line-strong) !important;
+	--button-default-borderColor-hover: var(--g-line-strong) !important;
+	--button-default-borderColor-active: var(--g-line-strong) !important;
+	--button-default-borderColor-disabled: var(--g-line) !important;
+	--counter-borderColor: transparent !important;
+}
+
+/* app shell: header + repo/page header on the frame, the page itself on the content tier */
+body {
+	--g-body: var(--g-frame);
+}
+:is(.application-main, main, [data-turbo-body] > .logged-out > main) {
+	background: var(--g-content) !important;
+}
+:is(.AppHeader, .HeaderMktg, header[role="banner"], .js-header-wrapper) {
+	background: transparent !important;
+}
+.application-main :is(main) {
+	background: transparent !important; /* nested <main> inside .application-main: no glass on glass */
+}
+
+/* floating layers → popover */
+:is(.Overlay, [class*="prc-Overlay-Overlay"], .SelectMenu-modal, .dropdown-menu, details-menu, .Popover-message,
+	[role="dialog"], [role="menu"], [role="listbox"]:not([role="combobox"] ~ * *), [role="tooltip"],
+	[class*="NavDropdown-module__dropdown"], .autocomplete-results) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow), var(--g-highlight) !important;
+}
+:is(.Overlay, [class*="prc-Overlay-Overlay"], [role="dialog"], [role="menu"]) :is([role="listbox"], [role="menu"]) {
+	background-color: transparent !important; /* list inside an overlay: one layer */
+	backdrop-filter: none;
+	box-shadow: none !important;
+}
+[class*="NavDropdown-module__trailingLinkContainer"] {
+	background-color: var(--g-fill) !important; /* "View all …" footer of the marketing nav menus */
+}
+/* issue search: invalid filter values are flagged with an amber block → status colour as text + underline instead */
+.invalid-filter-value {
+	background-color: transparent !important;
+	text-decoration: wavy underline var(--g-orange);
+}

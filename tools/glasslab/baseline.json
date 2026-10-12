@@ -1,4 +1,436 @@
 {
+ "chatgpt-home.dark.10": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "chatgpt-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "chatgpt-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "chatgpt-home.light.10": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "chatgpt-home.light.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "chatgpt-home.light.90": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist.dark.10": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist.light.10": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist.light.45": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist.light.90": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist~more-3975.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist~more-3975.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist~negative-feedback-2e13.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist~negative-feedback-2e13.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist~positive-feedback-5c51.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.979,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist~positive-feedback-5c51.light.45": {
+  "contrast": 1.0,
+  "surface": 0.979,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist~private-a79a.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist~private-a79a.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist~search-privately-e69a.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist~search-privately-e69a.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist~united-kingdom-2687.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-assist~united-kingdom-2687.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-home.dark.10": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-home.light.10": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-home.light.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-home.light.90": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-home~search-with-duckduckgo-c294.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.979,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-home~search-with-duckduckgo-c294.light.45": {
+  "contrast": 1.0,
+  "surface": 0.979,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~menu-c8eb.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~menu-c8eb.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~more-37a5.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~more-37a5.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~negative-feedback-02d9.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~negative-feedback-02d9.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~positive-feedback-b9d4.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~positive-feedback-b9d4.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~private-24c2.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~private-24c2.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~search-privately-e69a.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~search-privately-e69a.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~united-kingdom-e729.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "ddg-search~united-kingdom-e729.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "discord-login.dark.10": {
+  "contrast": 1.0,
+  "surface": 0.978,
+  "text": 1.0,
+  "ok": true
+ },
+ "discord-login.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.978,
+  "text": 1.0,
+  "ok": true
+ },
+ "discord-login.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.978,
+  "text": 1.0,
+  "ok": true
+ },
+ "discord-login.light.10": {
+  "contrast": 1.0,
+  "surface": 0.978,
+  "text": 1.0,
+  "ok": true
+ },
+ "discord-login.light.45": {
+  "contrast": 1.0,
+  "surface": 0.978,
+  "text": 1.0,
+  "ok": true
+ },
+ "discord-login.light.90": {
+  "contrast": 1.0,
+  "surface": 0.978,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat~6-luna-1775.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat~6-luna-1775.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat~reasoning-mode-6687.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat~reasoning-mode-6687.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat~settings-more-0506.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat~settings-more-0506.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat~tools-f872.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "duckai-chat~tools-f872.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
  "gcal-event.dark.10": {
   "contrast": 1.0,
   "surface": 0.988,
@@ -104,6 +536,1002 @@
  "gcal-week.light.90": {
   "contrast": 1.0,
   "surface": 0.987,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive.dark.10": {
+  "contrast": 0.961,
+  "surface": 0.995,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive.dark.45": {
+  "contrast": 0.961,
+  "surface": 0.995,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.995,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive.light.10": {
+  "contrast": 0.96,
+  "surface": 0.995,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive.light.45": {
+  "contrast": 0.96,
+  "surface": 0.995,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive.light.90": {
+  "contrast": 1.0,
+  "surface": 0.995,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~315eb2c4df6e.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~315eb2c4df6e.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~56ecb3b3101d.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~56ecb3b3101d.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~6d792749bfe4.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~6d792749bfe4.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~7745ca102711.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~7745ca102711.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~7df0b2e855a0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~7df0b2e855a0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~867cc79ceadf.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~867cc79ceadf.light.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~99cb7b2a4f55.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~99cb7b2a4f55.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~9f0fe94683f8.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~9f0fe94683f8.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~a2a5c2394fdf.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~a2a5c2394fdf.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-mydrive~a54c7d2c02a7.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "gdrive-mydrive~a54c7d2c02a7.light.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "gdrive-mydrive~bb4d3a670077.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "gdrive-mydrive~bb4d3a670077.light.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "gdrive-new.dark.10": {
+  "contrast": 0.961,
+  "surface": 0.995,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new.dark.45": {
+  "contrast": 0.961,
+  "surface": 0.995,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.995,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new.light.10": {
+  "contrast": 0.96,
+  "surface": 0.995,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new.light.45": {
+  "contrast": 0.96,
+  "surface": 0.995,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new.light.90": {
+  "contrast": 1.0,
+  "surface": 0.995,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~56ecb3b3101d.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~56ecb3b3101d.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~6d792749bfe4.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~6d792749bfe4.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~7745ca102711.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~7745ca102711.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~7df0b2e855a0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~7df0b2e855a0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~867cc79ceadf.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~867cc79ceadf.light.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~99cb7b2a4f55.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~99cb7b2a4f55.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~9f0fe94683f8.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~9f0fe94683f8.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~a2a5c2394fdf.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~a2a5c2394fdf.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~bb4d3a670077.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "gdrive-new~bb4d3a670077.light.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "gdrive-new~e8ddf660b310.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-new~e8ddf660b310.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent.dark.10": {
+  "contrast": 0.941,
+  "surface": 0.958,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent.dark.45": {
+  "contrast": 0.941,
+  "surface": 0.958,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.958,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent.light.10": {
+  "contrast": 0.939,
+  "surface": 0.958,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent.light.45": {
+  "contrast": 0.939,
+  "surface": 0.958,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent.light.90": {
+  "contrast": 1.0,
+  "surface": 0.958,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~2a3757643bc0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~2a3757643bc0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~4bac33663d12.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~4bac33663d12.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~509dbfbc46a0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~509dbfbc46a0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~5c35a294b2b1.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~5c35a294b2b1.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~6d792749bfe4.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~6d792749bfe4.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~867cc79ceadf.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~867cc79ceadf.light.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~a2a5c2394fdf.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~a2a5c2394fdf.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~a54c7d2c02a7.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "gdrive-recent~a54c7d2c02a7.light.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "gdrive-recent~bb4d3a670077.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "gdrive-recent~bb4d3a670077.light.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "gdrive-recent~d3c031c498a7.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gdrive-recent~d3c031c498a7.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gemini-home.dark.10": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "gemini-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "gemini-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "gemini-home.light.10": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "gemini-home.light.45": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "gemini-home.light.90": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file.dark.10": {
+  "contrast": 0.987,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~enterprise-2672.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~enterprise-2672.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~go-to-file-f316.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~go-to-file-f316.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~master-branch-5202.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~master-branch-5202.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~open-source-bef0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~open-source-bef0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~platform-6c82.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~platform-6c82.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~resources-37a0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~resources-37a0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~search-or-jump-to-type-to-search-08b6.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~search-or-jump-to-type-to-search-08b6.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~solutions-dbeb.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-file~solutions-dbeb.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue.dark.10": {
+  "contrast": 0.994,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues.dark.10": {
+  "contrast": 0.995,
+  "surface": 0.989,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.989,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.989,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues.light.10": {
+  "contrast": 0.92,
+  "surface": 0.989,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues.light.45": {
+  "contrast": 0.92,
+  "surface": 0.989,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues.light.90": {
+  "contrast": 0.92,
+  "surface": 0.989,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~enterprise-2672.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~enterprise-2672.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~filter-by-author-ef27.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~filter-by-author-ef27.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~filter-by-labels-4e99.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~filter-by-labels-4e99.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~filter-by-milestones-454c.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~filter-by-milestones-454c.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~filter-by-projects-5a1a.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~filter-by-projects-5a1a.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~open-source-bef0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~open-source-bef0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~platform-6c82.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~platform-6c82.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~resources-37a0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~resources-37a0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~search-issues-278f.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~search-issues-278f.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~search-or-jump-to-type-to-search-08b6.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~search-or-jump-to-type-to-search-08b6.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~solutions-dbeb.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issues~solutions-dbeb.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~actions-for-dremorsans-s-comment-56a5.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~actions-for-dremorsans-s-comment-56a5.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~actions-for-dremorsans-s-comment-df58.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~actions-for-dremorsans-s-comment-df58.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~actions-for-frostybiscuit-s-comm-b69d.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~actions-for-frostybiscuit-s-comm-b69d.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~enterprise-2672.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~enterprise-2672.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~open-source-bef0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~open-source-bef0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~platform-6c82.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~platform-6c82.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~resources-37a0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~resources-37a0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~search-or-jump-to-type-to-search-08b6.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~search-or-jump-to-type-to-search-08b6.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~solutions-dbeb.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-issue~solutions-dbeb.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
   "text": 1.0,
   "ok": true
  },
@@ -215,6 +1643,378 @@
   "text": 0.988,
   "ok": true
  },
+ "hn-front.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "hn-front.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "hn-front.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "hn-front.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "hn-front.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "hn-front.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "hn-item.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "hn-item.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "hn-item.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "hn-item.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "hn-item.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "hn-item.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "linear-changelog.dark.10": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.204,
+  "ok": false
+ },
+ "linear-changelog.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.204,
+  "ok": false
+ },
+ "linear-changelog.dark.90": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.204,
+  "ok": false
+ },
+ "linear-changelog~product-d613.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.0,
+  "ok": false
+ },
+ "linear-changelog~resources-83ae.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.0,
+  "ok": false
+ },
+ "linear-home.dark.10": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.078,
+  "ok": false
+ },
+ "linear-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.078,
+  "ok": false
+ },
+ "linear-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.078,
+  "ok": false
+ },
+ "linear-home~linear-b286.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "linear-home~product-d613.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.0,
+  "ok": false
+ },
+ "linear-home~resources-83ae.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.0,
+  "ok": false
+ },
+ "linear-pricing.dark.10": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.133,
+  "ok": false
+ },
+ "linear-pricing.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.133,
+  "ok": false
+ },
+ "linear-pricing.dark.90": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.133,
+  "ok": false
+ },
+ "linear-pricing~product-d613.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.0,
+  "ok": false
+ },
+ "linear-pricing~resources-83ae.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 0.0,
+  "ok": false
+ },
+ "notion-careers.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-careers.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-careers.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-careers.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-careers.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-careers.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-careers~more-actions.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-careers~more-actions.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-home.dark.10": {
+  "contrast": 0.914,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-home.dark.45": {
+  "contrast": 0.914,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-home.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-home.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-home.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-home~control.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "notion-home~control.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-home~more-actions.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "notion-home~more-actions.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-whatsnew.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-whatsnew.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-whatsnew.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-whatsnew.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-whatsnew.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-whatsnew.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "notion-whatsnew~more-actions.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "notion-whatsnew~more-actions.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "perplexity-home.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "perplexity-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "perplexity-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "perplexity-home.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "perplexity-home.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "perplexity-home.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "perplexity-home~filter-projects.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "perplexity-home~filter-projects.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
  "reader-doc.dark.10": {
   "contrast": 1.0,
   "surface": 1,
@@ -284,6 +2084,162 @@
  "reader-library.light.90": {
   "contrast": 1.0,
   "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-home.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-home.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-home.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-home.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-home~6c8492487f5d.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-home~6c8492487f5d.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-home~9771da7a2a0a.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-home~9771da7a2a0a.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-post.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-post.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-post.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-post.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-post.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-post.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-post~6c8492487f5d.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-post~6c8492487f5d.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-sub.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "reddit-sub.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "reddit-sub.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "reddit-sub.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "reddit-sub.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "reddit-sub.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "reddit-sub~6c8492487f5d.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-sub~6c8492487f5d.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
   "text": 1.0,
   "ok": true
  },
@@ -359,6 +2315,570 @@
   "text": 0.947,
   "ok": true
  },
+ "translate-home.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home~google-apps-bb4d.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "translate-home~google-apps-bb4d.light.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "translate-home~main-menu-7324.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home~main-menu-7324.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home~settings-9fb2.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home~settings-9fb2.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home~show-the-input-tools-menu-f436.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home~show-the-input-tools-menu-f436.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home~source-text-a14d.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home~source-text-a14d.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home~text-translation-model-17fd.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-home~text-translation-model-17fd.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text~google-apps-bb4d.dark.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "translate-text~google-apps-bb4d.light.45": {
+  "contrast": 1.0,
+  "surface": 0,
+  "text": 1.0,
+  "ok": false
+ },
+ "translate-text~main-menu-7324.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text~main-menu-7324.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text~settings-9fb2.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text~settings-9fb2.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text~show-the-input-tools-menu-f436.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text~show-the-input-tools-menu-f436.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text~text-translation-model-c59d.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "translate-text~text-translation-model-c59d.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "whatsapp-home.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "whatsapp-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "whatsapp-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "whatsapp-home.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "whatsapp-home.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "whatsapp-home.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "whatsapp-phone.dark.10": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "whatsapp-phone.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "whatsapp-phone.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "whatsapp-phone.light.10": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "whatsapp-phone.light.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "whatsapp-phone.light.90": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-article.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-article.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-article.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-article.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-article.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-article.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-main.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-main.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-main.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-main.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-main.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-main.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-menu.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-menu.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-menu.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-menu.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-menu.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "wiki-menu.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~101715097e27.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~101715097e27.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~1b638e41bbc7.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~1b638e41bbc7.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~556f5f479578.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~556f5f479578.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~814b6b61ffab.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~814b6b61ffab.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~9beab98a6b79.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~9beab98a6b79.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~cf4e6d4aeffc.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~cf4e6d4aeffc.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~ef0a0e895f43.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~ef0a0e895f43.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-profile.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-profile.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-profile.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-profile.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-profile.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-profile.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-profile~more-ef25.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-profile~more-ef25.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-profile~more-menu-items-ef0a.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-profile~more-menu-items-ef0a.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
  "youtube-home.dark.10": {
   "contrast": 0.965,
   "surface": 0.995,
@@ -393,6 +2913,66 @@
   "contrast": 0.97,
   "surface": 0.995,
   "text": 0.935,
+  "ok": true
+ },
+ "youtube-music-explore.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "youtube-music-explore.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "youtube-music-explore.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "youtube-music-explore~control-0923.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "youtube-music-explore~search-songs-albums-artists-podc-87e0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "youtube-music-home.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "youtube-music-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "youtube-music-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "youtube-music-home~0923de595703.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "youtube-music-home~87e0b334c07c.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
   "ok": true
  }
 }

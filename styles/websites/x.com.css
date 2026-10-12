@@ -1,0 +1,64 @@
+@import url("../shared/glass.css");
+
+/* X (Twitter). Styles by nazzacode. Content-first (timeline, threads, profiles): body = content tier, columns clear on it.
+   react-native-web: no tokens, hashed atomic classes → neutralise containers (incl. X's inline black/dim/white panel
+   fills), re-tier by ARIA role / data-testid, map X's inline palette onto the shared text roles. X keeps its own theme
+   (usually dark) in light glass, so every X colour is remapped, never trusted.
+   "Filled" = an inline background X paints on purpose (pills, buttons, promo cards): those keep their fill + label. */
+
+:root {
+	--g-body: var(--g-content-abs); /* content-first */
+}
+
+/* containers clear: plain ones + X's inline panel fills (lights-out black, dim, light white) */
+body :where(div, section, header, nav, aside, main, footer, ul, li, table, tbody, tr, td, form):where(:not([role="button"], [role="progressbar"], [role="switch"], [style*="background"])),
+body :is(div, section, header, nav, aside, main):is([style*="background-color: rgb(0, 0, 0)"], [style*="background-color: black"],
+	[style*="background-color: rgb(21, 32, 43)"], [style*="background-color: rgb(255, 255, 255)"], [style*="background-color: rgba(0, 0, 0, 0.65)"]):not([role="button"]) {
+	background-color: transparent !important;
+}
+
+/* menus, dropdowns, dialogs, hovercards, search typeahead */
+:is([role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"], [data-testid="HoverCard"], [data-testid="typeaheadDropdown"]) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+}
+/* floating Grok / chat drawer buttons */
+:is([data-testid="GrokDrawerHeader"], [data-testid="chat-drawer-main"]) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+}
+
+/* text: everything not coloured inline → primary. Excluded: buttons and descendants of filled elements. */
+body,
+body :where(:not([style*="color"], button, button *, [role="button"], [role="button"] *,
+		[style*="background-color: rgb"]:not(body, [style*="background-color: rgb(0, 0, 0)"], [style*="background-color: rgba(0, 0, 0, 0)"],
+			[style*="background-color: rgb(21, 32, 43)"], [style*="background-color: rgb(255, 255, 255)"]) *)) {
+	color: var(--g-fg) !important;
+}
+/* X's palette written inline → shared roles (dark "lights out"/"dim" + light theme values), outside filled elements */
+:where(:not([style*="background-color: rgb"]:not(body, [style*="background-color: rgb(0, 0, 0)"], [style*="background-color: rgba(0, 0, 0, 0)"],
+		[style*="background-color: rgb(21, 32, 43)"], [style*="background-color: rgb(255, 255, 255)"]) *)):is(
+	[style*="color: rgb(231, 233, 234)"], [style*="color: rgb(239, 243, 244)"], [style*="color: rgb(247, 249, 249)"],
+	[style*="color: rgb(15, 20, 25)"], [style*="color: rgb(255, 255, 255)"]):not([style*="background-color: rgb"]) {
+	color: var(--g-fg) !important;
+}
+:where(:not([style*="background-color: rgb"]:not(body, [style*="background-color: rgb(0, 0, 0)"], [style*="background-color: rgba(0, 0, 0, 0)"],
+		[style*="background-color: rgb(21, 32, 43)"], [style*="background-color: rgb(255, 255, 255)"]) *)):is(
+	[style*="color: rgb(113, 118, 123)"], [style*="color: rgb(139, 152, 165)"], [style*="color: rgb(83, 100, 113)"]) {
+	color: var(--g-fg-2) !important;
+}
+:where(:not([style*="background-color: rgb"]:not(body, [style*="background-color: rgb(0, 0, 0)"], [style*="background-color: rgba(0, 0, 0, 0)"],
+		[style*="background-color: rgb(21, 32, 43)"], [style*="background-color: rgb(255, 255, 255)"]) *)):is(
+	[style*="color: rgb(29, 155, 240)"]):not([style*="background-color: rgb"]) {
+	color: var(--g-blue) !important;
+}
+/* outline buttons (icon circles, "Following") draw X's grey border */
+[style*="border-color: rgb(83, 100, 113)"],
+[style*="border-color: rgb(207, 217, 222)"] {
+	border-color: var(--g-line-strong) !important;
+}
+/* clear icon buttons X tints with its theme white (invisible on light glass) */
+:is([data-testid="AppTabBar_More_Menu"], [data-testid="SideNav_AccountSwitcher_Button"], [data-testid="GrokDrawerHeader"], [data-testid="chat-drawer-main"])
+	:is(svg, div[dir], span) {
+	color: var(--g-fg) !important;
+}

@@ -1,136 +1,146 @@
-/* Styles by u/sameera_s_w */
+@import url("../shared/glass.css");
 
-:root.theme-dark,
-.theme-rpl {
-  --color-neutral-background: #00000000;
+/* Reddit. Styles by nazzacode (replaces u/sameera_s_w's upstream style). Content-first (feeds, threads): body = content
+   tier, shell + feed + sidebars clear on it. shreddit/faceplate web components paint from RPL --color-* tokens (inherited
+   into their shadow roots) → map the tokens; Reddit's own theme (dark/light) is ignored — glass mode decides.
+   Shadow DOM: only tokens and ::part reach inside; light-DOM selectors are a last resort. */
+
+:root {
+	--g-body: var(--g-content-abs); /* content-first */
 }
 
-.bg-neutral-background,
-#left-sidebar-container {
-  background-color: #00000000;
-  border: none;
+:root,
+:root:is(.theme-dark, .theme-light, .theme-beta),
+.theme-rpl,
+.theme-dark,
+.theme-light,
+reddit-header-large /* redeclares the palette for the top bar */ {
+	/* surfaces: page + feed clear on the body tint */
+	--color-neutral-background: transparent !important;
+	--color-neutral-background-weak: transparent !important;
+	--color-neutral-background-pinned: transparent !important;
+	--color-neutral-background-medium: transparent !important;
+	--color-neutral-background-canvas: transparent !important;
+	--color-ui-canvas: transparent !important;
+	--shreddit-content-background: transparent !important;
+	--color-neutral-background-weak-hover: var(--g-fill-hover) !important;
+	--color-neutral-background-hover: var(--g-fill-hover) !important;
+	--color-neutral-background-strong: var(--g-fill) !important;
+	--color-neutral-background-strong-hover: var(--g-fill-hover) !important;
+	--color-neutral-background-container: var(--g-fill) !important;
+	--color-neutral-background-container-hover: var(--g-fill-hover) !important;
+	--color-neutral-background-container-strong: var(--g-fill) !important;
+	--color-neutral-background-container-strong-hover: var(--g-fill-hover) !important;
+	--color-neutral-background-highlighted: var(--g-fill) !important;
+	--color-neutral-background-highlighted-strong: var(--g-fill-hover) !important;
+	--color-neutral-background-gilded: var(--g-fill) !important;
+	--color-neutral-background-gilded-hover: var(--g-fill-hover) !important;
+	--color-neutral-background-selected: var(--g-fill-selected) !important;
+	--color-transparent-background-hover: var(--g-fill-hover) !important;
+	--color-shimmer-background: var(--g-fill) !important;
+	/* popovers (menus, dialogs, hovercards) */
+	--color-ui-modalbackground: var(--g-popover) !important;
+	--color-scrim-background: var(--g-scrim) !important;
+	--color-scrim-background-strong: var(--g-scrim) !important;
+
+	/* controls: secondary/plain buttons, search, switches */
+	--color-secondary-background: var(--g-fill) !important;
+	--color-secondary-background-hover: var(--g-fill-hover) !important;
+	--color-secondary-background-selected: var(--g-fill-selected) !important;
+	--color-secondary-plain: var(--g-fg) !important;
+	--color-secondary-plain-hover: var(--g-fg) !important;
+	--color-secondary-plain-weak: var(--g-fg-3) !important; /* vote/comment counts */
+	--color-secondary-onBackground: var(--g-fg) !important;
+	--color-button-secondary-background: var(--g-fill) !important;
+	--color-button-secondary-background-hover: var(--g-fill-hover) !important;
+	--color-button-secondary-background-focus: var(--g-fill-hover) !important;
+	--color-button-secondary-background-activated: var(--g-fill-selected) !important;
+	--color-button-secondary-text: var(--g-fg) !important;
+	--color-button-plain-background-hover: var(--g-fill-hover) !important;
+	--color-button-plain-background-activated: var(--g-fill-selected) !important;
+	--color-button-plain-text: var(--g-fg) !important;
+	--color-button-tertiary-background-hover: var(--g-fill-hover) !important;
+	--color-button-plain-border-hover: var(--g-line) !important;
+	--color-button-plain-border-active: var(--g-line-strong) !important;
+	--color-button-secondary-border-hover: var(--g-line) !important;
+	--color-button-secondary-border-active: var(--g-line-strong) !important;
+	--color-button-tertiary-border-hover: var(--g-line) !important;
+	--color-button-tertiary-border-active: var(--g-line-strong) !important;
+	--button-color-background-default: var(--g-fill) !important;
+	--button-color-background-hover: var(--g-fill-hover) !important;
+	--button-color-background-focus: var(--g-fill-hover) !important;
+	--button-color-background-active: var(--g-fill-selected) !important;
+	--button-color-background-activated: var(--g-fill-selected) !important;
+	--color-input-bordered-hover: var(--g-fill-hover) !important;
+	--color-input-bordered-text: var(--g-fg) !important;
+	--color-switch-input-background-default: var(--g-line-strong) !important;
+	--color-switch-input-background-default-hover: var(--g-line-strong) !important;
+
+	/* text */
+	--color-neutral-content-strong: var(--g-fg) !important;
+	--shreddit-color-wordmark: var(--g-fg) !important; /* "reddit" logo */
+	--color-neutral-content: var(--g-fg-2) !important;
+	--color-neutral-content-weak: var(--g-fg-3) !important;
+	--color-secondary-weak: var(--g-fg-3) !important; /* sidebar section captions */
+	--color-input-text: var(--g-fg) !important;
+	--color-a-default: var(--g-blue) !important;
+	--color-danger-content: var(--g-red) !important;
+	--color-success-content: var(--g-green) !important;
+	--color-warning-content: var(--g-orange) !important;
+
+	/* lines */
+	--color-neutral-border: var(--g-line-strong) !important;
+	--color-neutral-border-weak: var(--g-line) !important;
+	--color-neutral-border-divider: var(--g-line) !important;
+	--color-divider-default: var(--g-line) !important;
 }
 
-div aside recent-posts {
-  display: none;
+/* menus, dropdowns, search suggestions, dialogs, hovercards (faceplate components; shadow roots inherit the colours) */
+:is([role="menu"], [role="listbox"], [role="dialog"], [role="tooltip"]) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+}
+.text-global-admin /* "BETA" annotations: Reddit's admin orange as text → status orange */ {
+	color: var(--g-orange) !important;
 }
 
-.overflow-visible > div:nth-child(32),
-faceplate-dropdown-menu {
-  border-radius: 1em 1em 0 0;
+rpl-dropdown > div /* user menu */ {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow) !important;
 }
 
-nav.z-\[2\] > nav:nth-child(18),
-div.visible {
-  display: none;
+/* bars that content scrolls under (fixed top bar, sticky post credit bar): clear, blur what passes beneath
+   (Apple scroll-edge effect) → no second tint band on the content-first body. The blur sits on a ::before layer:
+   backdrop-filter on the bar itself would make it a backdrop root and kill the blur of menus opened inside it. */
+reddit-header-large header,
+#pdp-credit-bar {
+	background-color: transparent !important;
+	isolation: isolate;
+}
+reddit-header-large header::before,
+#pdp-credit-bar::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	backdrop-filter: var(--g-blur);
 }
 
-hr.w-100.my-sm.border-neutral-border-weak {
-  display: none;
+/* post page credit bar: theme-dark hard-codes greys (#c2c2c2 / #919191) → shared text roles */
+#pdp-credit-bar a.subreddit-name {
+	color: var(--g-fg) !important;
+}
+#pdp-credit-bar :is(a.author-name, a.author-name *) {
+	color: var(--g-fg-2) !important;
+}
+#pdp-credit-bar :is(.text-neutral-content-weak, .text-neutral-content-weak *) {
+	color: var(--g-fg-3) !important;
 }
 
-shreddit-app,
-body,
-html {
-  background-color: #00000000 !important;
-}
-
-/* Styles by FrostyBiscuit */
-#flex-left-nav-container {
-  background: none !important;
-  border: 0 !important;
-}
-
-.left-sidebar {
-  background-color: var(--transparent-background) !important;
-  border: 0 !important;
-
-  .text-secondary-weak {
-    color: var(--color-text-alt) !important;
-  }
-}
-
-#right-sidebar-container {
-  border-radius: var(--border-radius);
-
-  .bg-neutral-background-weak {
-    background-color: var(--transparent-background) !important;
-  }
-}
-
-header {
-  background: var(--transparent-background-darker) !important;
-  backdrop-filter: var(--backdrop-blur);
-}
-
-shreddit-app {
-  background: none !important;
-
-  .grid-container {
-    background: none !important;
-
-    [bundlename="shreddit_sort_dropdown"] {
-      background: var(--transparent-background) !important;
-      border-radius: var(--border-radius-lg) !important;
-    }
-
-    community-highlight-carousel {
-      background: var(--transparent-background) !important;
-      border-radius: var(--border-radius-lg);
-      padding-bottom: 8px;
-    }
-  }
-}
-
-shreddit-post {
-  background: var(--transparent-background) !important;
-
-  [slot="post-media-container"] {
-    background: var(--transparent-background) !important;
-
-    .text-neutral-content-weak {
-      color: var(--color-text-alt) !important;
-    }
-  }
-}
-
-comment-composer-host {
-  --color-input-bordered: var(--transparent-background);
-}
-
-comment-body-header {
-  background: var(--transparent-background) !important;
-  border-radius: var(--border-radius-lg) !important;
-  margin-bottom: 20px;
-  overflow: hidden;
-
-  > hr {
-    display: none !important;
-  }
-
-  .bg-neutral-background {
-    background: none !important;
-  }
-
-  shreddit-comments-sort-dropdown {
-    --color-neutral-background: transparent;
-    padding: 10px;
-    margin-top: 0 !important;
-  }
-
-  shreddit-composer {
-    --color-neutral-border: transparent;
-    --color-neutral-border-medium: transparent;
-  }
-}
-
-shreddit-comment-tree {
-  --shreddit-content-background: var(--transparent-background);
-  --color-neutral-background: transparent;
-  border-radius: var(--border-radius-lg);
-  padding: 0.5rem;
-
-  &[totalcomments="0"] {
-    display: none !important;
-  }
+/* image letterboxing: glass instead of black bars (videos keep their own black, inside shreddit-player's shadow root) */
+:is(shreddit-post, shreddit-ad-post, shreddit-gallery-carousel, gallery-carousel) .bg-black,
+.media-lightbox-img {
+	background-color: transparent !important;
 }

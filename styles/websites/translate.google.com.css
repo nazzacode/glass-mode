@@ -1,0 +1,99 @@
+@import url("../shared/gm3.css");
+
+/* Google Translate. Styles by nazzacode. Mostly hard-coded Material (MDC) styles; GM3 tokens via shared/gm3.css and
+   Translate's own dark-mode palette (--gm-*-dm-compat) mapped onto the tiers. Token-less rest as Gmail:
+   neutralise containers → source/target panes = content → popups by role → text in the shared palette. */
+
+:root,
+body {
+	--gm-grey-900-dm-compat: var(--g-fg) !important;
+	--gm-grey-700-dm-compat: var(--g-fg-2) !important;
+	--gm-grey-700-dm-compat-on-surface-variant: var(--g-fg-2) !important;
+	--gm-grey-600-dm-compat: var(--g-fg-3) !important;
+	--gm-grey-500-dm-compat: var(--g-fg-3) !important;
+	--gm-grey-400-dm-compat: var(--g-line-strong) !important;
+	--gm-grey-300-dm-compat: var(--g-line-strong) !important;
+	--gm-grey-200-dm-compat: var(--g-line) !important;
+	--gm-blue-50-dm-compat-surface-container-high: var(--g-fill-selected) !important;
+	--gm-blue-50-dm-compat-on-secondary: var(--g-fill-selected) !important;
+}
+/* dark glass: Translate's own dark-mode blues (blue-300) for links/active tabs */
+:root:not([data-tz-glass="light"]),
+:root:not([data-tz-glass="light"]) body {
+	--gm-blue-800-dm-compat: rgb(138, 180, 248) !important;
+	--gm-blue-600-dm-compat: rgb(138, 180, 248) !important;
+	--gm-blue-500-dm-compat: rgb(138, 180, 248) !important;
+}
+
+/* 1. neutralise hard-coded fills (keep buttons, switches, inline-coloured bits) */
+body :where(div, section, header, nav, aside, main, footer, ul, li, form, c-wiz):where(:not([role="button"], [role="progressbar"], [role="switch"], [style*="background"])) {
+	background-color: transparent !important;
+}
+/* scroll-edge fades of the tab and language bars are white gradients */
+.U0xwnf::after,
+.X4DQ0::after {
+	background: none !important;
+}
+
+/* 2. regions: source pane (bordered) + target pane = content cards; main itself stays frame */
+[role="main"] :is(.rm1UF, .QcsUad) {
+	background-color: var(--g-content) !important;
+	border-color: var(--g-line) !important;
+}
+:is([role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"], [role="alertdialog"], .VfPpkd-xl07Ob-XxIAqe) { /* + MDC menu surface (Settings) */
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow), var(--g-highlight) !important;
+}
+:is([role="menu"], [role="listbox"]) :is(li, [role="option"], [role="menuitem"], .ita-kd-menuitem):hover,
+.ita-kd-menuitem-hover {
+	background-color: var(--g-fill-hover) !important;
+}
+
+/* 3. text: shared palette; filled buttons keep their label colour */
+body,
+body :where(:not([style*="color"], button, button *, [role="button"], [role="button"] *, a, a *)) {
+	color: var(--g-fg) !important;
+}
+/* icon buttons (no fill): Google's grey icon → secondary */
+:is(button, [role="button"]):not([aria-current]:not([aria-current="false"])) :is(.material-icons-extended, i, svg) {
+	color: var(--g-fg-2) !important;
+}
+/* mode tabs (Text / Images / Documents / Websites): selected = accent tint (re-filled → own label), others outlined */
+nav button[aria-current]:not([aria-current="false"]) {
+	background-color: var(--g-fill-selected) !important;
+}
+nav button[aria-current]:not([aria-current="false"]),
+nav button[aria-current]:not([aria-current="false"]) * {
+	color: var(--g-fg) !important;
+}
+nav button[aria-current="false"] {
+	border-color: var(--g-line-strong) !important;
+}
+nav button[aria-current="false"] :is(span, i) {
+	color: var(--g-fg) !important; /* Google blue on the thin frame tier < Lc 60 in both modes */
+}
+/* unfilled MDC text buttons inside popovers ("Test" in Settings) → shared link colour */
+.VfPpkd-xl07Ob-XxIAqe .VfPpkd-LgbsSe:not([style*="background"]) .VfPpkd-vQzf8d {
+	color: var(--g-blue) !important;
+}
+/* translation-model pill ("Advanced"): white chip → fill (re-filled → own label) */
+.wkLVUc-LgbsSe {
+	background-color: var(--g-fill) !important;
+}
+.wkLVUc-LgbsSe,
+.wkLVUc-LgbsSe * {
+	color: var(--g-fg) !important;
+}
+.UTNHae::after {
+	background: none !important;
+}
+/* History / Saved shortcuts: dimmed with opacity .62 on glass (< Lc 60) → solid text (glass rule: no
+   low-alpha text) → primary */
+:has(> .TcXXXb),
+.TcXXXb {
+	opacity: 1 !important;
+}
+.TcXXXb {
+	color: var(--g-fg) !important; /* fg-2 on the frame tier: Lc 58–59 */
+}

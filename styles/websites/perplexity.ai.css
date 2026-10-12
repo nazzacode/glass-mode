@@ -1,0 +1,81 @@
+@import url("../shared/glass.css");
+
+/* Perplexity. Styles by nazzacode. Semantic tokens (--bg-*, --surface-*, --fg-*, --border-*; glasslab inventory) →
+   shared glass tiers. sidebar = frame · framed main pane = content · composer/pills = fills · menus/dialogs = popover. */
+
+:root,
+[data-color-scheme],
+.dark,
+.light {
+	/* surfaces */
+	--surface-underlay: transparent !important; /* app backdrop + sidebar → body frame */
+	--bg-base: var(--g-content) !important; /* rgb feeds the bg-base/NN fades; the opaque .bg-base utility: below */
+	--surface-base: var(--g-content) !important;
+	--bg-raised: var(--g-fill) !important; /* composer, cards */
+	--surface-raised: var(--g-fill) !important;
+	--bg-subtle: var(--g-fill) !important;
+	--bg-soft: var(--g-fill-hover) !important;
+	--accent-bg-selection: var(--g-fill-selected) !important;
+	--bg-backdrop: var(--g-scrim) !important;
+
+	/* text + lines */
+	--fg-primary: var(--g-fg) !important;
+	--fg-secondary: var(--g-fg-2) !important;
+	--fg-tertiary: var(--g-fg-3) !important;
+	--border-base: var(--g-line-strong) !important;
+	--border-medium: var(--g-line-strong) !important;
+	--border-soft: var(--g-line) !important;
+}
+
+/* light glass on Perplexity's dark scheme (it follows the OS, not us) → its own light-scheme accents + status */
+:root[data-tz-glass="light"],
+:root[data-tz-glass="light"] :is([data-color-scheme], .dark) {
+	--accent-bg-strong: var(--shiva-light-600) !important;
+	--accent-bg-soft: rgb(from var(--shiva-light-600) r g b / 0.09) !important;
+	--accent-bg-subtle: rgb(from var(--shiva-light-600) r g b / 0.055) !important;
+	--accent-fg-primary: var(--shiva-light-600) !important;
+	--accent-fg-secondary: rgb(from var(--shiva-light-600) r g b / 0.65) !important;
+	--accent-border-strong: var(--shiva-light-600) !important;
+	--accent-border-focus: var(--shiva-light-600) !important;
+	--positive-bg-strong: var(--garuda-light-600) !important;
+	--positive-fg-primary: var(--garuda-light-600) !important;
+	--negative-bg-strong: var(--ifrit-light-600) !important;
+	--negative-fg-primary: var(--ifrit-light-600) !important;
+	--warning-bg-strong: var(--phoenix-light-600) !important;
+	--warning-fg-primary: var(--phoenix-light-600) !important;
+	--fg-inverse: var(--odin-light-100) !important;
+	--bg-inverse: var(--odin-light-2000) !important;
+	--surface-inverse: var(--odin-light-2000) !important;
+}
+
+/* `.bg-base` = rgb(from var(--bg-base) r g b / 1): drops the token's alpha → opaque. Shell, avatars and composer use
+   it → clear; the framed main pane (Tailwind container `main`) carries the content tier instead */
+.bg-base {
+	background-color: transparent !important;
+}
+div[class*="@container/main"] {
+	background-color: var(--g-content) !important;
+}
+
+/* home promo cards paint brand gradients behind white text → glass cards with our text */
+button[style*="--education-card"] {
+	background: var(--g-card) !important;
+	& * {
+		color: var(--g-fg) !important;
+	}
+	& > :not(:first-child) {
+		color: var(--g-fg-2) !important;
+	}
+}
+
+/* floating layers (Radix popovers, menus, dialogs) */
+:is([role="menu"], [role="listbox"], [role="dialog"], [role="tooltip"], [data-radix-popper-content-wrapper] > *) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+}
+
+/* Perplexity paints html with a more specific !important (html[data-color-scheme="dark"]:not(.todesktop)) than
+   glass.css's transparent root → match it */
+html[data-color-scheme]:not(.todesktop).tz-initialized {
+	background: transparent !important;
+}

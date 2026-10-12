@@ -1,0 +1,103 @@
+@import url("../shared/glass.css");
+
+/* Linear (dark-only). Styles by nazzacode. Design tokens (--color-*; glasslab discovery) → shared glass tiers.
+   content-first (long marketing/changelog reading): body = content tier · product mock-up windows / feature panels =
+   cards · rows, inputs, nested panels = fills ·
+   header = frame glass · nav popups, menus, overlays = popover. Hard-coded leftovers use CSS-module class suffixes
+   (`[class*="_frame"]`), never the hashed prefix. */
+
+:root,
+body {
+	--g-body: var(--g-content-abs); /* content-first */
+
+	/* surfaces */
+	--color-bg-primary: transparent !important;
+	--color-bg-marketing: transparent !important;
+	--color-bg-level-0: transparent !important;
+	--color-bg-level-1: var(--g-card) !important;
+	--color-bg-panel: var(--g-card) !important;
+	--color-bg-level-2: var(--g-fill) !important;
+	--color-bg-level-3: var(--g-fill) !important;
+	--color-bg-tint: var(--g-fill) !important;
+	--color-bg-secondary: var(--g-fill) !important;
+	--color-bg-translucent: var(--g-fill) !important;
+	--color-bg-tertiary: var(--g-fill-hover) !important;
+	--color-bg-quaternary: var(--g-fill-hover) !important;
+	--color-bg-quinary: var(--g-fill-hover) !important;
+	--editor-surface-background: var(--g-fill) !important;
+	--color-overlay-primary: var(--g-popover) !important;
+	--header-bg: var(--g-frame) !important;
+
+	/* text + lines */
+	--color-text-primary: var(--g-fg) !important;
+	--color-fg-primary: var(--g-fg) !important;
+	--editor-text-color: var(--g-fg) !important;
+	--color-text-secondary: var(--g-fg-2) !important;
+	--color-fg-secondary: var(--g-fg-2) !important;
+	--color-text-tertiary: var(--g-fg-3) !important;
+	--color-fg-tertiary: var(--g-fg-3) !important;
+	--color-text-quaternary: var(--g-fg-3) !important;
+	--color-fg-quaternary: var(--g-fg-3) !important;
+	--color-border-primary: var(--g-line) !important;
+	--color-border-secondary: var(--g-line) !important;
+	--color-border-translucent: var(--g-line) !important;
+	--color-line-primary: var(--g-line) !important;
+	--header-border: var(--g-line) !important;
+	--color-border-tertiary: var(--g-line-strong) !important;
+	--color-border-translucent-strong: var(--g-line-strong) !important;
+	--color-link-primary: var(--g-blue) !important;
+	--color-selection-bg: var(--g-fill-selected) !important;
+	--selection-bg: var(--g-fill-selected) !important;
+	--selection-bg-active: var(--g-fill-selected) !important;
+}
+
+/* app root: `style="background:inherit"` would repeat the body's frame tint (frame on frame) → clear */
+body > div[style*="background:inherit"] {
+	background: transparent !important;
+}
+/* invert buttons (light fill): Linear draws the label in --color-bg-primary (now transparent) → its own value */
+[class*="_variant-invert"] {
+	color: #08090a !important;
+}
+
+/* mock-up windows: outer chrome clear, the window itself one card; anything nested is a fill (no stacking) */
+[class*="_frame"]:not([class*="_frameBackground"]),
+footer {
+	background-color: transparent !important;
+}
+[class*="_frameBackground"] {
+	background-color: var(--g-card) !important;
+}
+:is([class*="_frameBackground"], [class*="_frame"], [class*="_panel"]) [class*="_panel"],
+[class*="_frame"] [class*="_card"] {
+	--color-bg-panel: var(--g-fill);
+	--color-bg-level-1: var(--g-fill);
+	background-color: var(--g-fill) !important;
+}
+/* floating agent chat box over the mock-up's issue sidebar: it overlaps text → popover, not a fill */
+[class*="_chatBox"] > [class*="_panel"],
+[class*="_chatBox"] [class*="_panel"]:first-child {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+}
+[class*="_previewButton"] {
+	background-color: var(--g-fill) !important;
+}
+[class*="_previewLabel"] {
+	color: var(--g-fg-2) !important;
+}
+/* agent chat bubbles in the hero mock-up: long secondary text on a fill → primary (Lc 71 < 72 over bright wallpaper) */
+[class*="_responseText"] {
+	color: var(--g-fg) !important;
+}
+
+/* header nav popups (Product, Resources …), menus → popover glass */
+nav[class*="_popup"],
+:is([role="menu"], [role="listbox"], [role="dialog"]) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow), var(--g-highlight) !important;
+}
+header {
+	backdrop-filter: var(--g-blur);
+}

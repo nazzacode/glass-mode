@@ -1,0 +1,148 @@
+@import url("../shared/glass.css");
+
+/* Wikipedia (Vector 2022, every language). Styles by nazzacode. Codex design tokens (glasslab discovery) → shared tiers.
+   Content-first: the article is long reading → the whole page sits on the content tier; tables/infoboxes = fills;
+   menus, search suggestions, page previews, reference tooltips, dialogs = popover. Images keep their colours.
+   Tokens are declared on :root, html.skin-theme-clientpref-* (night/os) and .skin-invert → same scope here. */
+
+:root {
+	--g-body: var(--g-content-abs);
+}
+
+:root,
+:root[class],
+.skin-invert {
+	/* surfaces */
+	--background-color-base: transparent !important;
+	--background-color-neutral: var(--g-fill) !important;
+	--background-color-neutral-subtle: var(--g-fill) !important;
+	--background-color-interactive: var(--g-fill) !important;
+	--background-color-interactive--hover: var(--g-fill-hover) !important;
+	--background-color-interactive--active: var(--g-fill-selected) !important;
+	--background-color-interactive-subtle: var(--g-fill) !important;
+	--background-color-interactive-subtle--hover: var(--g-fill-hover) !important;
+	--background-color-interactive-subtle--active: var(--g-fill-selected) !important;
+	--background-color-disabled: var(--g-fill) !important;
+	--background-color-disabled-subtle: var(--g-fill) !important;
+	--background-color-progressive-subtle: var(--g-fill-selected) !important;
+	--background-color-progressive-subtle--hover: var(--g-fill-selected) !important;
+	--background-color-progressive-subtle--active: var(--g-fill-selected) !important;
+	--background-color-notice-subtle: var(--g-fill) !important;
+	--background-color-success-subtle: var(--g-fill) !important;
+	--background-color-warning-subtle: var(--g-fill) !important;
+	--background-color-error-subtle: var(--g-fill) !important;
+	--background-color-error-subtle--hover: var(--g-fill-hover) !important;
+	--background-color-error-subtle--active: var(--g-fill-selected) !important;
+	--background-color-destructive-subtle: var(--g-fill) !important;
+	--background-color-destructive-subtle--hover: var(--g-fill-hover) !important;
+	--background-color-destructive-subtle--active: var(--g-fill-selected) !important;
+	--background-color-button-quiet--hover: var(--g-fill-hover) !important;
+	--background-color-button-quiet--active: var(--g-fill-selected) !important;
+	--background-color-tab-list-item-framed--hover: var(--g-fill-hover) !important;
+	--background-color-tab-list-item-framed--active: var(--g-fill-selected) !important;
+	--background-color-backdrop-light: var(--g-scrim) !important;
+	--background-color-backdrop-dark: var(--g-scrim) !important;
+
+	/* text */
+	--color-base: var(--g-fg) !important;
+	--color-base--hover: var(--g-fg) !important;
+	--color-emphasized: var(--g-fg) !important;
+	--color-neutral: var(--g-fg-2) !important;
+	--color-subtle: var(--g-fg-2) !important;
+	--color-base--subtle: var(--g-fg-2) !important;
+	--color-placeholder: var(--g-fg-3) !important;
+	--color-disabled: var(--g-fg-3) !important;
+	--color-notice: var(--g-fg-2) !important;
+	--color-progressive: var(--g-blue) !important;
+	--color-progressive--hover: var(--g-blue) !important;
+	--color-progressive--active: var(--g-blue) !important;
+	--color-progressive--focus: var(--g-blue) !important;
+	--color-visited: var(--g-purple) !important;
+	--color-visited--hover: var(--g-purple) !important;
+	--color-visited--active: var(--g-purple) !important;
+	--color-destructive: var(--g-red) !important;
+	--color-destructive--hover: var(--g-red) !important;
+	--color-destructive--active: var(--g-red) !important;
+	--color-destructive--visited: var(--g-red) !important;
+	--color-destructive--visited--hover: var(--g-red) !important;
+	--color-destructive--visited--active: var(--g-red) !important;
+	--color-error: var(--g-red) !important;
+	--color-warning: var(--g-orange) !important;
+	--color-success: var(--g-green) !important;
+
+	/* lines */
+	--border-color-base: var(--g-line-strong) !important;
+	--border-color-divider: var(--g-line) !important;
+	--border-color-subtle: var(--g-line) !important;
+	--border-color-muted: var(--g-line) !important;
+	--border-color-emphasized: var(--g-line-strong) !important;
+	--border-color-interactive: var(--g-line-strong) !important;
+	--border-color-disabled: var(--g-line) !important;
+	--box-shadow-color-base: var(--g-line-strong) !important;
+	--box-shadow-color-alpha-base: var(--g-line) !important;
+}
+
+/* page shell: one body tint; side columns (TOC, tools) sit on it */
+:is(html, body, .mw-page-container, .vector-header-container, .mw-header, .vector-pinned-container) {
+	background-color: transparent !important;
+}
+.vector-sticky-header {
+	background: var(--g-popover) !important; /* floats over the article while scrolling */
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow);
+}
+
+/* floating layers → popover */
+:is(.vector-dropdown-content, .cdx-menu, .mwe-popups, .rt-tooltip, .vector-popup-notification, .oo-ui-window-frame,
+	.cdx-dialog, .cdx-popover, .oo-ui-popupWidget-popup) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow), var(--g-highlight) !important;
+	color: var(--g-fg) !important;
+}
+.cdx-menu .cdx-menu__listbox,
+.cdx-menu .cdx-menu-item {
+	background-color: transparent !important;
+	box-shadow: none !important;
+}
+.cdx-menu .cdx-menu-item--highlighted {
+	background-color: var(--g-fill-hover) !important;
+}
+.mwe-popups .mwe-popups-extract::after {
+	background-image: none !important; /* fade-out gradient painted in the old page colour */
+}
+
+/* article: TemplateStyles hard-code light colours (navboxes, Main Page boxes) → re-tier */
+:is(.navbox, .navbox-subgroup, .navbox-list, .mp-box, .MainPageBG, .hatnote) {
+	background: transparent !important;
+	border-color: var(--g-line) !important;
+}
+:is(.navbox-title, .navbox-group, .navbox-abovebelow, .mp-h2, .infobox-header, .infobox-above, .infobox-subheader,
+	.sidebar-title, .sidebar-heading) {
+	background: var(--g-fill) !important;
+	color: var(--g-fg) !important;
+}
+:is(.mp-box, .infobox, .sidebar, .wikitable, .navbox, .ambox, .tmbox, .ombox) {
+	border-radius: var(--g-radius-card);
+}
+:is(.infobox, .wikitable, .sidebar, .ambox, .mp-box) {
+	color: var(--g-fg) !important;
+}
+:is(.navbox-title, .navbox-group, .mp-h2) :is(a, a *) {
+	color: var(--g-blue) !important;
+}
+
+/* user content that keeps its own light colours (Wikipedia's .notheme) → paper (GLASS rule 6) */
+.notheme {
+	background-color: var(--g-paper) !important;
+	color: var(--g-paper-fg) !important;
+}
+
+/* dark glass: Wikipedia's own night-mode conventions — .skin-invert art (wordmark) inverts, transparent diagrams get
+   a light sheet so black line art stays visible */
+:root[data-tz-glass="dark"] .skin-invert {
+	filter: invert(1) hue-rotate(180deg);
+}
+:root[data-tz-glass="dark"] .mw-parser-output img.mw-file-element:not(.skin-invert) {
+	background-color: var(--g-paper);
+}

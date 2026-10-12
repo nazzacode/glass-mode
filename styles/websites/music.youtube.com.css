@@ -1,0 +1,133 @@
+@import url("../shared/glass.css");
+
+/* YouTube Music. Styles by nazzacode (replaces upstream). Media-first (Apple Music pattern, like Spotify/YouTube):
+   body = frame glass, guide + browse grid clear on it, artwork floats. Forced dark (registry "glass": "dark"; no light
+   theme). Semantic --ytmusic-* tokens drive most colours; Polymer/yt-formatted-string hard-codes the rest → selectors. */
+
+:root,
+ytmusic-app,
+ytmusic-app-layout {
+	/* surfaces: page/nav/guide backgrounds clear (body tint shows), bars + popups re-tiered */
+	--ytmusic-background: transparent !important;
+	--ytmusic-general-background-c: transparent !important;
+	--ytmusic-nav-bar: transparent !important;
+	--ytmusic-detail-header: transparent !important;
+	--ytmusic-player-page-background: var(--g-frame) !important;
+	--ytmusic-player-bar-background: transparent !important;
+	--ytmusic-general-background-a: var(--g-popover) !important;
+	--ytmusic-brand-background-solid: var(--g-popover) !important;
+	--ytmusic-search-background: var(--g-popover) !important;
+	--ytmusic-dropdown-background: var(--g-popover) !important;
+	--ytmusic-dialog-background-color: var(--g-popover) !important;
+	--ytmusic-alert-with-actions-background: var(--g-popover) !important;
+	--ytmusic-multiselect-form-footer-background: var(--g-popover) !important;
+	--ytmusic-horizontal-action-card-background: var(--g-fill) !important;
+	--ytmusic-dropdown-item-hover-background: var(--g-fill-hover) !important;
+	--ytmusic-search-bar-background-bauhaus: var(--g-fill) !important;
+	--ytmusic-explore-chip-background: var(--g-fill) !important;
+	--ytmusic-badge-chip-background: var(--g-fill) !important;
+	--ytmusic-badge-chip-inactive-hover: var(--g-fill-hover) !important;
+	--ytmusic-guide-hover: var(--g-fill-hover) !important;
+	--ytmusic-ten-percent-layer: var(--g-fill-hover) !important;
+	--ytmusic-search-suggestion-focus-active-background: var(--g-fill-selected) !important;
+	--ytmusic-multiselect-form-item-hover-background-color: var(--g-fill-hover) !important;
+	--ytmusic-multiselect-form-item-focus-background-color: var(--g-fill-hover) !important;
+	--ytmusic-responsive-list-item-checked-background-bauhaus: var(--g-fill-selected) !important;
+	--ytmusic-overlay-button-secondary: var(--g-fill) !important;
+	--ytmusic-fullscreen-scrim-background: var(--g-scrim) !important;
+
+	/* text */
+	--ytmusic-text-primary: var(--g-fg) !important;
+	--ytmusic-overlay-text-primary: var(--g-fg) !important;
+	--ytmusic-wordmark-text: var(--g-fg) !important;
+	--ytmusic-text-secondary: var(--g-fg-2) !important;
+	--ytmusic-color-white1-alpha70: var(--g-fg-2) !important;
+	--ytmusic-overlay-text-secondary: var(--g-fg-2) !important;
+	--ytmusic-player-bar-ink-color: var(--g-fg-2) !important;
+	--ytmusic-inline-badge-color: var(--g-fg-2) !important;
+	--ytmusic-call-to-action-disclaimer: var(--g-fg-2) !important;
+	--ytmusic-search-suggestion-text-secondary: var(--g-fg-3) !important;
+	--ytmusic-search-box-text-secondary: var(--g-fg-3) !important;
+	--ytmusic-search-suggestion-icon-color: var(--g-fg-3) !important;
+	--ytmusic-inactive-tab: var(--g-fg-3) !important;
+	--ytmusic-guide-signin-promo-text-secondary: var(--g-fg-3) !important;
+	--ytmusic-message-renderer-text-color: var(--g-fg-3) !important;
+	--ytmusic-text-disabled: var(--g-fg-3) !important;
+	--ytmusic-color-badge: var(--g-fg-3) !important;
+	--ytmusic-call-to-action: var(--g-blue) !important;
+	--ytmusic-focus-active: var(--g-blue) !important;
+	--ytmusic-brand-link-text: var(--g-red) !important;
+	--yt-endpoint-color: var(--g-fg) !important;
+	--yt-endpoint-hover-color: var(--g-fg) !important;
+	--yt-endpoint-visited-color: var(--g-fg) !important;
+	--yt-spec-text-primary: var(--g-fg) !important;
+	--yt-spec-text-secondary: var(--g-fg-2) !important;
+	--yt-spec-menu-background: var(--g-popover) !important;
+	--yt-spec-brand-background-solid: var(--g-popover) !important;
+	--yt-spec-raised-background: var(--g-popover) !important;
+	--paper-dialog-background-color: var(--g-popover) !important;
+	--paper-listbox-background-color: transparent !important;
+
+	/* lines */
+	--ytmusic-divider: var(--g-line) !important;
+	--ytmusic-guide-divider: var(--g-line) !important;
+	--ytmusic-search-border: var(--g-line) !important;
+	--ytmusic-dropdown-border-color: var(--g-line) !important;
+}
+
+/* app shell: hard #030303 backgrounds (guide, nav-bar fade layer) → clear; the bars content scrolls under keep a blur */
+:is(#guide-wrapper, #mini-guide-background, ytmusic-app-layout > #content) {
+	background: transparent !important;
+}
+:is(#nav-bar-background, #player-bar-background) {
+	background: transparent !important;
+	backdrop-filter: var(--g-blur);
+}
+#player-bar-background {
+	border-top: 1px solid var(--g-line);
+}
+
+/* per-page artwork wash behind the header (blurred cover art, hard bottom edge on glass) → soft wash fading into the
+   glass, as Spotify's colour band; YTM's black darkening gradient over it dropped (it tints the glass) */
+ytmusic-browse-response ytmusic-fullbleed-thumbnail-renderer {
+	opacity: 0.5;
+	mask-image: linear-gradient(black, transparent);
+}
+ytmusic-browse-response .background-gradient {
+	background-image: none !important;
+}
+
+/* popups: search suggestions, account menu, dropdowns, dialogs */
+:is(ytmusic-search-box #suggestion-list, ytmusic-search-suggestions-section, ytmusic-multi-page-menu-renderer, ytmusic-menu-popup-renderer,
+	tp-yt-paper-dialog, tp-yt-iron-dropdown #contentWrapper > *, :is([role="dialog"], [role="listbox"]):not(.search-container)) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+}
+/* the search container (role=dialog, overflow: hidden) holds bar + list: no backdrop-filter on it or the bar — it would
+   become the list's containing block and clip it */
+ytmusic-search-box[opened] .search-box {
+	background-color: var(--g-popover) !important;
+	border-color: var(--g-line) !important;
+}
+ytmusic-search-suggestions-section ytmusic-search-suggestion {
+	background-color: transparent !important;
+}
+/* search field (closed) = control fill */
+ytmusic-search-box:not([opened]) .search-box {
+	background-color: var(--g-fill) !important;
+	border-color: var(--g-line) !important;
+}
+
+/* text Polymer hard-codes (#fff titles/labels, 50 % white secondaries) → shared roles; buttons keep theirs */
+ytmusic-app :is(yt-formatted-string, a.yt-simple-endpoint, .title, #label, #account-name, #channel-handle):where(:not(button *, [style*="color"],
+		ytmusic-play-button-renderer *, yt-button-shape *, .ytSpecButtonShapeNextFilled *)) {
+	color: var(--g-fg) !important;
+}
+ytmusic-app :is(.subtitle, .subtitle *, .secondary-flex-columns *, .strapline, .strapline *, #channel-handle, ytmusic-search-suggestion span:not(.bold)) {
+	color: var(--g-fg-2) !important;
+}
+/* explore: mood/genre buttons (bauhaus) — fill + own label */
+ytmusic-navigation-button-renderer button {
+	background-color: var(--g-fill) !important;
+	color: var(--g-fg) !important;
+}

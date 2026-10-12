@@ -1,229 +1,283 @@
 {
 	"supportedWebsites": [
 		{
+			"name": "Hacker News",
+			"matches": [
+				"^https?://(www\\.)?news\\.ycombinator\\.com/"
+			],
+			"css": [
+				"./styles/websites/news.ycombinator.com.css"
+			],
+			"run_at": "document_start",
+			"favicon": "https://icons.duckduckgo.com/ip3/news.ycombinator.com.ico"
+		},
+		{
 			"name": "Substack",
-			"matches": ["[^ ]*://[^ ]*.?substack.com/[^ ]*"],
-			"css": ["./styles/websites/substack.css"],
+			"matches": [
+				"[^ ]*://[^ ]*.?substack.com/[^ ]*"
+			],
+			"css": [
+				"./styles/websites/substack.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/substack.com.ico"
 		},
 		{
-			"name": "Steam Store & Community",
-			"matches": ["[^ ]*://[^ ]*.?steampowered.com/[^ ]*", "[^ ]*://[^ ]*.?steamcommunity.com/[^ ]*"],
-			"css": ["./styles/websites/steam.css"],
-			"run_at": "document_start",
-			"favicon": "https://icons.duckduckgo.com/ip3/www.steampowered.com.ico"
-		},
-		{
-			"name": "Bing",
-			"matches": ["[^ ]*://[^ ]*.?bing.com/[^ ]*"],
-			"css": ["./styles/websites/bing.css"],
-			"run_at": "document_start",
-			"favicon": "https://icons.duckduckgo.com/ip3/www.bing.com.ico"
-		},
-		{
-			"name": "DDL-Warez",
-			"matches": ["[^ ]*://[^ ]*.?ddl-warez.cc/[^ ]*"],
-			"css": ["./styles/websites/ddl-warez.css"],
-			"run_at": "document_start",
-			"favicon": "https://ddl-warez.cc/wp-content/uploads/logo.png"
-		},
-		{
-			"name": "Epic Games",
-			"matches": ["[^ ]*://[^ ]*.?epicgames.com/[^ ]*"],
-			"css": ["./styles/websites/epicgames.css"],
-			"run_at": "document_start",
-			"favicon": "https://icons.duckduckgo.com/ip3/www.epicgames.com.ico"
-		},
-		{
-			"name": "Kryptex",
-			"matches": ["[^ ]*://[^ ]*.?kryptex.com/[^ ]*"],
-			"css": ["./styles/websites/kryptex.css"],
-			"run_at": "document_start",
-			"favicon": "https://icons.duckduckgo.com/ip3/www.kryptex.com.ico"
-		},
-		{
-			"name": "Proton Mail",
-			"matches": ["[^ ]*://mail.proton.me/[^ ]*"],
-			"css": ["./styles/websites/mail.proton.css"],
-			"run_at": "document_start",
-			"favicon": "https://icons.duckduckgo.com/ip3/mail.proton.me.ico"
-		},
-		{
-			"name": "WuwaTracker",
-			"matches": ["[^ ]*://[^ ]*.?wuwatracker.com/[^ ]*"],
-			"css": ["./styles/websites/wuwatracker.css"],
-			"run_at": "document_start",
-			"favicon": "https://icons.duckduckgo.com/ip3/www.wuwatracker.com.ico"
-		},
-		{
 			"name": "YouTube",
-			"matches": ["[^ ]*://www.youtube.com/[^ ]*"],
-			"css": ["./styles/websites/youtube.css"],
+			"matches": [
+				"[^ ]*://www.youtube.com/[^ ]*"
+			],
+			"css": [
+				"./styles/websites/youtube.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/www.youtube.com.ico"
 		},
 		{
 			"name": "YouTube Music",
-			"matches": ["[^ ]*://music.youtube.com/[^ ]*"],
-			"css": ["./styles/websites/music.youtube.css"],
+			"matches": [
+				"^https?://music\\.youtube\\.com/"
+			],
+			"css": [
+				"./styles/websites/music.youtube.com.css"
+			],
+			"glass": "dark",
 			"run_at": "document_start",
 			"favicon": "https://music.youtube.com/favicon.ico"
 		},
 		{
 			"name": "GitHub",
-			"matches": ["[^ ]*://github.com/[^ ]*"],
-			"css": ["./styles/websites/github.css"],
+			"matches": [
+				"^https?://(www\\.|gist\\.)?github\\.com/"
+			],
+			"css": [
+				"./styles/websites/github.com.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://github.githubassets.com/favicons/favicon-dark.png"
 		},
 		{
 			"name": "Reddit",
-			"matches": ["[^ ]*://[^ ]*.?reddit.com/[^ ]*"],
-			"css": ["./styles/websites/reddit.css"],
+			"matches": [
+				"^https?://([a-z0-9-]+\\.)?reddit\\.com/"
+			],
+			"css": [
+				"./styles/websites/reddit.com.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/www.reddit.com.ico"
 		},
 		{
-			"name": "NexusMods",
-			"matches": ["[^ ]*://[^ ]*.?nexusmods.com/[^ ]*"],
-			"css": ["./styles/websites/nexusmods.css"],
-			"run_at": "document_start",
-			"favicon": "https://icons.duckduckgo.com/ip3/www.nexusmods.com.ico"
-		},
-		{
 			"name": "Wikipedia",
-			"matches": ["[^ ]*://[^ ]*.?wikipedia.org/[^ ]*"],
-			"css": ["./styles/websites/wikipedia.css"],
+			"matches": [
+				"^https?://([a-z0-9-]+\\.)*wikipedia\\.org/"
+			],
+			"css": [
+				"./styles/websites/wikipedia.org.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/www.wikipedia.org.ico"
 		},
 		{
-			"name": "Microsoft Copilot",
-			"matches": ["[^ ]*://copilot.microsoft.com/[^ ]*"],
-			"css": ["./styles/websites/copilot.microsoft.css"],
-			"run_at": "document_start",
-			"favicon": "https://copilot.microsoft.com/static/cmc/favicon.ico"
-		},
-		{
 			"name": "ChatGPT",
-			"matches": ["[^ ]*://[^ ]*.?chatgpt.com/[^ ]*"],
-			"css": ["./styles/websites/chatgpt.css"],
+			"matches": [
+				"^https?://(www\\.)?chatgpt\\.com/"
+			],
+			"css": [
+				"./styles/websites/chatgpt.com.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/www.chatgpt.com.ico"
 		},
 		{
-			"name": "Chess.com",
-			"matches": ["[^ ]*://[^ ]*.?chess.com/[^ ]*"],
-			"css": ["./styles/websites/chess.css"],
-			"run_at": "document_start",
-			"favicon": "https://icons.duckduckgo.com/ip3/chess.com.ico"
-		},
-		{
-			"name": "Leetcode",
-			"matches": ["[^ ]*://[^ ]*.?leetcode.com/[^ ]*"],
-			"css": ["./styles/websites/leetcode.css"],
-			"run_at": "document_start",
-			"favicon": "https://leetcode.com/favicon.ico"
-		},
-		{
-			"name": "Programiz",
-			"matches": ["[^ ]*://[^ ]*.?programiz.com/[^ ]*"],
-			"css": ["./styles/websites/programiz.css"],
-			"run_at": "document_start",
-			"favicon": "https://icons.duckduckgo.com/ip3/www.programiz.com.ico"
-		},
-		{
 			"name": "DuckDuckGo",
-			"matches": ["[^ ]*://[^ ]*.?duckduckgo.com/[^ ]*"],
-			"css": ["./styles/websites/duckduckgo.css"],
+			"matches": [
+				"^https?://([a-z0-9-]+\\.)?duckduckgo\\.com/",
+				"^https?://(www\\.)?duck\\.ai/"
+			],
+			"css": [
+				"./styles/websites/duckduckgo.com.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/www.duckduckgo.com.ico"
 		},
 		{
 			"name": "Google",
-			"matches": ["^https://www\\.google\\.(com|co\\.uk)/search"],
-			"css": ["./styles/websites/google.css"],
+			"matches": [
+				"^https://www\\.google\\.(com|co\\.uk)/search"
+			],
+			"css": [
+				"./styles/websites/google.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/www.google.com.ico"
 		},
 		{
-			"name": "Google NotebookLM",
-			"matches": ["[^ ]*://notebooklm.google.com/[^ ]*"],
-			"css": ["./styles/websites/notebooklm.google.css"],
-			"run_at": "document_start",
-			"favicon": "https://notebooklm.google.com/_/static/branding/v5/dark_mode/favicon/favicon-32x32.png"
-		},
-		{
-			"name": "Outlook Mail",
-			"matches": ["[^ ]*://outlook.live.com/[^ ]*"],
-			"css": ["./styles/websites/outlook.live.css"],
-			"run_at": "document_start",
-			"favicon": "https://icons.duckduckgo.com/ip3/outlook.live.com.ico"
-		},
-		{
 			"name": "Gmail",
-			"matches": ["[^ ]*://mail.google.com/[^ ]*"],
-			"css": ["./styles/websites/mail.google.css"],
+			"matches": [
+				"[^ ]*://mail.google.com/[^ ]*"
+			],
+			"css": [
+				"./styles/websites/mail.google.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/mail.google.com.ico"
 		},
 		{
 			"name": "Google Drive",
-			"matches": ["[^ ]*://drive.google.com/[^ ]*"],
-			"css": ["./styles/websites/drive.google.css"],
+			"matches": [
+				"^https?://drive\\.google\\.com/"
+			],
+			"css": [
+				"./styles/websites/drive.google.com.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png"
 		},
 		{
-			"name": "WhatsApp Web",
-			"matches": ["[^ ]*://web.whatsapp.com/[^ ]*"],
-			"css": ["./styles/websites/web.whatsapp.css"],
+			"name": "WhatsApp",
+			"matches": [
+				"^https?://web\\.whatsapp\\.com/"
+			],
+			"css": [
+				"./styles/websites/web.whatsapp.com.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/whatsapp.com.ico"
 		},
 		{
+			"name": "Gemini",
+			"matches": [
+				"^https?://gemini\\.google\\.com/"
+			],
+			"css": [
+				"./styles/websites/gemini.google.com.css"
+			],
+			"run_at": "document_start",
+			"favicon": "https://icons.duckduckgo.com/ip3/gemini.google.com.ico"
+		},
+		{
+			"name": "Perplexity",
+			"matches": [
+				"^https?://(www\\.)?perplexity\\.ai/"
+			],
+			"css": [
+				"./styles/websites/perplexity.ai.css"
+			],
+			"run_at": "document_start",
+			"favicon": "https://icons.duckduckgo.com/ip3/perplexity.ai.ico"
+		},
+		{
 			"name": "Notion",
-			"matches": ["[^ ]*://[^ ]*.?notion.so/[^ ]*"],
-			"css": ["./styles/websites/notion.css"],
+			"matches": [
+				"^https?://([a-z0-9-]+\\.)?notion\\.(so|site)/"
+			],
+			"css": [
+				"./styles/websites/notion.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/www.notion.so.ico"
 		},
 		{
 			"name": "Discord",
-			"matches": ["[^ ]*://[^ ]*.?discord.com/[^ ]*"],
-			"css": ["./styles/websites/discord.css"],
+			"matches": [
+				"^https?://(www\\.|ptb\\.|canary\\.)?discord\\.com/(app|channels|login|register|activity|store|shop|discovery|library|quests|guild-discovery|invite)([/?#]|$)"
+			],
+			"css": [
+				"./styles/websites/discord.com.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/www.discord.com.ico"
 		},
 		{
+			"name": "Google apps launcher",
+			"matches": [
+				"^https://ogs\\.google\\.com/"
+			],
+			"css": [
+				"./styles/websites/ogs.google.css"
+			],
+			"run_at": "document_start",
+			"favicon": "https://icons.duckduckgo.com/ip3/google.com.ico"
+		},
+		{
 			"name": "Google Calendar",
-			"matches": ["[^ ]*://calendar.google.com/[^ ]*"],
-			"css": ["./styles/websites/calendar.google.css"],
+			"matches": [
+				"[^ ]*://calendar.google.com/[^ ]*"
+			],
+			"css": [
+				"./styles/websites/calendar.google.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/calendar.google.com.ico"
 		},
 		{
 			"name": "Spotify",
-			"matches": ["[^ ]*://open.spotify.com/[^ ]*"],
-			"css": ["./styles/websites/open.spotify.css"],
+			"matches": [
+				"[^ ]*://open.spotify.com/[^ ]*"
+			],
+			"css": [
+				"./styles/websites/open.spotify.css"
+			],
 			"glass": "dark",
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/open.spotify.com.ico"
 		},
 		{
 			"name": "Readwise Reader",
-			"matches": ["[^ ]*://read.readwise.io/[^ ]*"],
-			"css": ["./styles/websites/read.readwise.css"],
+			"matches": [
+				"[^ ]*://read.readwise.io/[^ ]*"
+			],
+			"css": [
+				"./styles/websites/read.readwise.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/read.readwise.io.ico"
 		},
 		{
 			"name": "Claude",
-			"matches": ["[^ ]*://claude.ai/[^ ]*"],
-			"css": ["./styles/websites/claude.ai.css"],
+			"matches": [
+				"[^ ]*://claude.ai/[^ ]*"
+			],
+			"css": [
+				"./styles/websites/claude.ai.css"
+			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/claude.ai.ico"
+		},
+		{
+			"name": "X",
+			"matches": [
+				"^https?://(www\\.|mobile\\.)?(x|twitter)\\.com/"
+			],
+			"css": [
+				"./styles/websites/x.com.css"
+			],
+			"run_at": "document_start",
+			"favicon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+		},
+		{
+			"name": "Linear",
+			"matches": [
+				"^https?://(www\\.)?linear\\.app/"
+			],
+			"css": [
+				"./styles/websites/linear.app.css"
+			],
+			"glass": "dark",
+			"run_at": "document_start",
+			"favicon": "https://icons.duckduckgo.com/ip3/linear.app.ico"
+		},
+		{
+			"name": "Google Translate",
+			"matches": [
+				"^https?://translate\\.google\\.com/"
+			],
+			"css": [
+				"./styles/websites/translate.google.com.css"
+			],
+			"run_at": "document_start",
+			"favicon": "https://icons.duckduckgo.com/ip3/translate.google.com.ico"
 		}
 	]
 }

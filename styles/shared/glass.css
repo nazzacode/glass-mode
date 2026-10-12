@@ -8,9 +8,10 @@
 
    tier      role (Apple)                                   alpha (s = slider)
    window    page backdrop, gaps between panes              s
-   frame     sidebars, top bars, nav rails (glass layer)    clamp(.50, s+.10, .92)   light floor .75
-   content   lists, reading panes, grids (content layer)    clamp(.78, s+.25, .96)   light floor .88
-   popover   menus, dialogs, tooltips ("thicker" glass)     clamp(.85, s+.35, .96)   light floor .88  + blur
+   frame     sidebars, top bars, nav rails (glass layer)    .50 → .92   light .75 → .92
+   content   lists, reading panes, grids (content layer)    .78 → .96   light .88 → .96
+   popover   menus, dialogs, tooltips ("thicker" glass)     .85 → .96   light .88 → .96  + blur
+   (floor at slider 10 %, cap at 90 %, linear in between: every slider step changes every tier)
    rows / controls: fixed overlay fills (no slider); text: solid colours only, never low-alpha text on glass.
 
    Stacking (typical app = frame + pane): body carries the FRAME tint (--g-frame = chrome tier, absolute), panes sit on
@@ -24,9 +25,12 @@
 	--g-s: var(--tz-glass-alpha, 0.45);
 
 	--g-a-window: var(--g-s);
-	--g-a-chrome: clamp(var(--g-floor-chrome), calc(var(--g-s) + 0.1), 0.92);
-	--g-a-content: clamp(var(--g-floor-content), calc(var(--g-s) + 0.25), 0.96);
-	--g-a-popover: clamp(var(--g-floor-popover), calc(var(--g-s) + 0.35), 0.96);
+	/* slider position 0..1 (10 % → 0, 90 % → 1). Each tier runs linearly from its readability floor to its cap, so every
+	   step changes every tier (the old clamp(floor, s + x, cap) sat flat on the floor below ~65 % in light mode) */
+	--g-t: clamp(0, calc((var(--g-s) - 0.1) / 0.8), 1);
+	--g-a-chrome: calc(var(--g-floor-chrome) + (0.92 - var(--g-floor-chrome)) * var(--g-t));
+	--g-a-content: calc(var(--g-floor-content) + (0.96 - var(--g-floor-content)) * var(--g-t));
+	--g-a-popover: calc(var(--g-floor-popover) + (0.96 - var(--g-floor-popover)) * var(--g-t));
 	--g-a-content-on: max(0, calc((var(--g-a-content) - var(--g-a-chrome)) / (1 - var(--g-a-chrome))));
 
 	/* dark (default) */

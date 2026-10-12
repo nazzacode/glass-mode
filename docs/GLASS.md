@@ -32,10 +32,13 @@ system for every site, verified by a headless test suite (`glasslab`).
 | token | tier | dark | light |
 |---|---|---|---|
 | `--g-window` | page backdrop | `s` | `s` |
-| `--g-frame` | app shell, sidebars, top bars (default `body`) | `clamp(.50, s+.10, .92)` | `clamp(.75, s+.10, .92)` |
-| `--g-content` | pane inside the frame (compensated) | total `clamp(.78, s+.25, .96)` | total `clamp(.88, s+.25, .96)` |
+| `--g-frame` | app shell, sidebars, top bars (default `body`) | `.50 → .92` | `.75 → .92` |
+| `--g-content` | pane inside the frame (compensated) | total `.78 → .96` | total `.88 → .96` |
 | `--g-content-abs` | content tier, absolute (content-first `--g-body`) | same total | same total |
-| `--g-popover` | menus, dialogs, tooltips (+ `--g-blur`) | `clamp(.85, s+.35, .96)` | `clamp(.88, s+.35, .96)` |
+| `--g-popover` | menus, dialogs, tooltips (+ `--g-blur`) | `.85 → .96` | `.88 → .96` |
+
+Tiers run linearly from their readability floor (slider 10 %) to their cap (90 %), so every slider step changes every
+tier. (Until 2026-10-12 they were `clamp(floor, s + offset, cap)`, which left light mode flat below ~65 %.)
 | `--g-fill` / `-hover` / `-selected` | rows, controls | white .05 / .07, accent .24 | white frost .55 / .72, accent .10 |
 | `--g-paper` | user content with own colours | `rgba(250,250,252,.97)` | same |
 | `--g-fg` / `-2` / `-3` | text | `#f2f2f5 / #dfdfe3 / #a8a8b0` | `#1c1c1e / #333338 / #55555c` |

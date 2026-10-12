@@ -51,3 +51,10 @@ def test_merge_runs_into_baseline():
     merged = suite.merge_baseline({"old.dark.45": {"contrast": 1, "surface": 1, "text": 1, "ok": True}}, [rows[:1], rows[1:]])
     assert set(merged) == {"old.dark.45", "app~file-menu.dark.45", "app~file-menu.light.45"}
     assert list(merged) == sorted(merged)
+
+
+def test_compare_without_exploring_ignores_state_rows():
+    rows = suite.state_rows(STATES, "app", 0.45)
+    screen_row = [dict(rows[0], key="app.dark.45")]
+    bl = suite.baseline_numbers(rows + screen_row)
+    assert suite.compare(screen_row, bl, explored=False) == []

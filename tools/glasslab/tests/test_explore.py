@@ -86,7 +86,7 @@ def test_saves_state_shots(explored):
 
 def test_drawer_over_empty_glass_is_not_a_popover(explored):
     s = state(explored, "drawer-btn")
-    assert s["modes"]["dark"]["over_content"] is False and s["modes"]["dark"]["opacity"] < 0.8
+    assert s["modes"]["dark"]["over_content"] is False and s["ok"]   # judged as frame glass, not as a popover
 
 
 def test_menus_float_over_content(explored):

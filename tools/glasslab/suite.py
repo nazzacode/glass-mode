@@ -148,7 +148,7 @@ def merge_baseline(baseline, runs):
     return dict(sorted(merged.items()))
 
 
-def compare(results, baseline):
+def compare(results, baseline, explored=True):
     """regressions vs baseline + baseline rows that vanished for screens that ran (a broken probe or explorer yields
     fewer rows, which must not read as 'no regressions')"""
     now_all = baseline_numbers(results)
@@ -159,7 +159,8 @@ def compare(results, baseline):
             if now[m] < was[m] - REGRESSION:
                 regs.append(f"{k} {m} {was[m]:.0%} → {now[m]:.0%}")
     ran = {r["screen"] for r in results}
-    regs += [f"{k} missing" for k in baseline if k not in now_all and k.split("~")[0].split(".")[0] in ran]
+    regs += [f"{k} missing" for k in baseline if k not in now_all and k.split("~")[0].split(".")[0] in ran
+             and (explored or "~" not in k)]   # --no-explore: hidden-UI rows weren't measured, not lost
     return regs
 
 
@@ -184,7 +185,7 @@ def main(xpi, filt="", out=None, save_baseline=False, compare_baseline=False, do
     results = run(xpi, filt, out, do_explore)
     fails, extremes = failures(results), failures(results, default_only=False)
     bl = HERE / "baseline.json"
-    regs = compare(results, json.loads(bl.read_text())) if compare_baseline and bl.exists() else []
+    regs = compare(results, json.loads(bl.read_text()), do_explore) if compare_baseline and bl.exists() else []
     if save_baseline:
         bl.write_text(json.dumps(merge_baseline(json.loads(bl.read_text()) if bl.exists() else {}, [results]), indent=1) + "\n")
     print(f"fails at default α (screens + hidden UI): {fails or 'none'}\nfails at slider extremes: {extremes or 'none'}"

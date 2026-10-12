@@ -42,14 +42,14 @@
     for (let k = stack.length - 1; k >= i; k--) { if (stack[k] === document.documentElement) continue; const s = getComputedStyle(stack[k]);
       // image/gradient counts only if nothing opaque paints above it (bottom→top walk: an opaque layer resets it)
       if (s.backgroundImage !== 'none') img = true;
-      else if (P(s.backgroundColor)[3] >= .95) img = false;
+      else if (P(s.backgroundColor)[3] * opacity(stack[k]) >= .8) img = false;  // glass popover over a photo: text is on the popover
       const c = P(s.backgroundColor); c[3] *= opacity(stack[k]); if (c[3] > 0) layers.push(c);  // state layers: full colour × .08
       // pseudo-element fills paint above their element's own background (pill buttons, cards drawn with ::before)
       for (const pe of ['::before', '::after']) { const ps = getComputedStyle(stack[k], pe);
         // only pseudo fills that cover the element (inset 0 / full size), e.g. pill buttons
         if (ps.content !== 'none' && ps.position === 'absolute' && (ps.inset === '0px' || (ps.top === '0px' && ps.left === '0px'
             && (ps.width === stack[k].getBoundingClientRect().width + 'px' || ps.right === '0px')))) {
-          const pc = P(ps.backgroundColor); if (pc[3] > 0) layers.push(pc); } }
+          const pc = P(ps.backgroundColor); pc[3] *= +ps.opacity * opacity(stack[k]); if (pc[3] > 0) layers.push(pc); } }
       if (c[3] >= .85 && (stack[k].getAttribute('style') || '').includes('background-color')) chip = true;  // site-coloured chip
       if (c[3] >= .85 && Math.max(c[0], c[1], c[2]) - Math.min(c[0], c[1], c[2]) > 60) chip = true; }  // saturated fill = accent control
     // site data colour on the nearest inline-coloured ancestor (chip colour may sit outside the hit-test stack)

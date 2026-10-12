@@ -20,6 +20,9 @@
 	/* small fills */
 	--gm3-sys-color-surface-container-highest: var(--g-fill-selected) !important;
 	--gm3-sys-color-surface-variant: var(--g-fill) !important;
+	/* selected state (nav pill, toggles): Google's secondary container = glass selection tint, one look across apps */
+	--gm3-sys-color-secondary-container: var(--g-fill-selected) !important;
+	--gm3-sys-color-on-secondary-container: var(--g-fg) !important;
 	--gm3-sys-color-surface-dim: var(--g-fill) !important;
 	/* -rgb twins feed Google's state layers (rgba(var(--…-rgb), .08)) */
 	--gm3-sys-color-background-rgb: var(--g-rgb) !important;
@@ -48,9 +51,7 @@
 	--gm3-sys-color-primary-container: #0842a0 !important;
 	--gm3-sys-color-primary-container-rgb: 8, 66, 160 !important;
 	--gm3-sys-color-on-primary-container: #d3e3fd !important;
-	--gm3-sys-color-secondary-container: #004a77 !important;
-	--gm3-sys-color-secondary-container-rgb: 0, 74, 119 !important;
-	--gm3-sys-color-on-secondary-container: #c2e7ff !important;
+	--gm3-sys-color-secondary-container-rgb: 10, 132, 255 !important; /* state layers over the selection tint */
 	--gm3-sys-color-tertiary-container: #0f5223 !important;
 	--gm3-sys-color-on-tertiary-container: #c4eed0 !important;
 	--gm3-sys-color-error-container: #8c1d18 !important;

@@ -25,6 +25,12 @@ def test_state_layer_opacity_counts_in_contrast(probed):
     assert min(row["cr"]) >= 60 and row["cr"][0] < 200, row
 
 
+def test_pseudo_state_layer_opacity_counts(probed):
+    runs, _ = probed
+    row = next(r for r in runs if r["t"].startswith("Pseudo state layer row"))
+    assert min(row["cr"]) >= 60, row
+
+
 def test_short_single_line_list_label_is_a_label(probed):
     runs, _ = probed
     row = next(r for r in runs if r["t"].startswith("Row with a state layer"))   # 22 chars, one line, 15px

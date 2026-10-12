@@ -10,7 +10,8 @@
 body :where(div, section, header, nav, aside, main, footer, ul, li, table, tbody, thead, tr, td, form):where(:not([role="button"], [role="progressbar"], [role="switch"], g-img, [style*="background"])) { /* containers only */
 	background-color: transparent !important;
 }
-:is([role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"], g-menu, .UjBGL) {
+/* + Google's role-less popup component ("More", "Tools" menus): positioned container with shadow (glasslab explore) */
+:is([role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"], g-menu, .UjBGL, .vH6rvf, [jsname="xl07Ob"]) {
 	background-color: var(--g-popover) !important;
 	backdrop-filter: var(--g-blur);
 	box-shadow: var(--g-shadow) !important;
@@ -36,6 +37,26 @@ a h3,
 a :is(h3 *) {
 	color: var(--g-blue) !important;
 }
+/* popup menu items are links Google paints grey (#4e5059) → menu text = primary ink */
+:is(.vH6rvf, [jsname="xl07Ob"]) :is(a, a *),
+.iXhQd /* unfilled tool chips ("Any time", "All results") */ {
+	color: var(--g-fg) !important;
+}
+
+/* "Show more" fade over the AI overview: fades to the page tint, not to white */
+.RDmXvc {
+	background-image: linear-gradient(transparent, var(--g-content-abs)) !important;
+}
+/* AI overview highlight (animated half-gradient) → selection tint */
+mark.MAeH {
+	background-image: linear-gradient(90deg, var(--g-fill-selected) 50%, transparent 50%) !important;
+	color: inherit !important;
+}
+/* search suggestions footer ("Report inappropriate predictions") hard-codes grey */
+.VfL2Y {
+	color: var(--g-fg-2) !important;
+}
+
 a:visited h3 {
 	color: var(--g-purple) !important;
 }

@@ -31,6 +31,10 @@
 	--print_on_web_bg_color: var(--g-fg) !important;
 	--print_secondary_on_web_bg_color: var(--g-fg-2) !important;
 	--web_bg_color: transparent !important;
+	/* links + mentions: Substack's #18a0fb is too thin on dark glass (glasslab: Lc 33 over bright wallpaper) */
+	--color-link-fg: var(--g-blue) !important;
+	--color-semantic-highlight-fg-primary: var(--g-blue) !important;
+	--color-dark-semantic-highlight-fg-primary: var(--g-blue) !important;
 }
 
 /* content-first: one content-tier tint for the whole page */
@@ -71,4 +75,12 @@
 /* floating surfaces: denser + frosted so text under them doesn't bleed through */
 :is([role="dialog"], [role="menu"], [role="listbox"], [data-radix-popper-content-wrapper] > *, [class*="popover"], [class*="dropdown"], [class*="modal"]) {
 	backdrop-filter: var(--g-blur);
+}
+/* global search: Radix dialog panel paints nothing itself (glasslab explore: results over the feed) + its dimming layer */
+[role="dialog"]:is([class^="panel-"], [class*=" panel-"]) {
+	background: var(--g-popover) !important;
+	box-shadow: var(--g-shadow), var(--g-highlight) !important;
+}
+:is([class^="backdrop-"], [class*=" backdrop-"]) {
+	background: var(--g-scrim) !important;
 }

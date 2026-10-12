@@ -2,7 +2,8 @@
 // text → plausible English-ish words: same length, case, punctuation; numbers ≥ 3 digits → other digits (function/UI
 // words, short numbers and years stay: plausible, never private). Deterministic per seed +
 // original word (a repeated name stays one fake name). Private attributes too; photos/avatars covered by neutral
-// shapes (cover, never blur: blur looks broken). Text nodes / attributes / CSSOM only (Trusted Types pages: no HTML
+// shapes (cover, never blur: blur looks broken). Iframes (the scrambler can't reach in: cross-origin, e.g. Google's app
+// launcher with the account photo) → flat grey box (filter: contrast(0)). Text nodes / attributes / CSSOM only (Trusted Types pages: no HTML
 // sinks). A MutationObserver keeps late DOM updates scrambled until the page unloads. → {texts, chars, attrs, images}
 (scopes, seed) => {
   scopes = scopes && scopes.length ? scopes : ['body'];
@@ -55,7 +56,7 @@
     return [...d].map((c, i) => String((+c + 1 + ((h >>> ((i % 8) * 4)) % 9)) % 10)).join(''); };
   const scr = s => s.replace(/\p{L}+|\p{N}+/gu, t => /^\p{N}+$/u.test(t) ? (/^\d+$/.test(t) ? digits(t) : t) : word(t));
 
-  const st = window.__tzScramble ||= { text: new WeakMap(), attr: new WeakMap(), stats: { texts: 0, chars: 0, attrs: 0, images: 0 } };
+  const st = window.__tzScramble ||= { text: new WeakMap(), attr: new WeakMap(), stats: { texts: 0, chars: 0, attrs: 0, images: 0, frames: 0 } };
   const stats = st.stats;
   const fontOk = new WeakMap();
   const iconFont = el => { if (!fontOk.has(el)) fontOk.set(el, ICON_FONT.test(getComputedStyle(el).fontFamily.split(',')[0]));
@@ -103,6 +104,13 @@
     el.dataset.tzCovered = 1;
     cover(el, round);
   };
+  const frame = el => {
+    if (el.dataset.tzCovered) return;
+    el.style.setProperty('filter', 'contrast(0)', 'important');
+    el.style.setProperty('border-radius', '6px', 'important');
+    el.dataset.tzCovered = 1;
+    stats.frames++;
+  };
   const scan = root => {
     if (root.nodeType === 3) return text(root);
     if (root.nodeType !== 1 || SKIP.has(root.tagName)) return;
@@ -110,6 +118,7 @@
     for (let n = w.nextNode(); n; n = w.nextNode()) text(n);
     for (const el of [root, ...root.querySelectorAll('*')]) {
       if (ATTRS.some(a => el.hasAttribute(a)) || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') attrs(el);
+      if (el.tagName === 'IFRAME') frame(el);
       if (el.tagName === 'IMG' || el.style.backgroundImage || el.tagName === 'DIV' || el.tagName === 'SPAN' || el.tagName === 'A') image(el);
     }
   };

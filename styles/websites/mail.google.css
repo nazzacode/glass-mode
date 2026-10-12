@@ -49,6 +49,11 @@ body :where(:not(.a3s, .a3s *, [style*="color"], a[href^="mailto"], .boq, .byT, 
 	color: var(--g-fg-2) !important;
 }
 
+/* quick-settings panel links ("See all settings", "Customise") hard-code Google blue → link ink */
+:is(button.Tj, button.OD) {
+	color: var(--g-blue) !important;
+}
+
 /* status text → shared status colours (Draft, follow-up nudges) */
 .boq {
 	color: var(--g-red) !important;

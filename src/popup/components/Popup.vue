@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { css } from "@codemirror/lang-css";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { computed, onMounted, ref, toRaw, watch } from "vue";
+import { computed, onMounted, ref, toRaw } from "vue";
 import { Codemirror } from "vue-codemirror";
-import { ColorPicker } from "vue3-colorpicker";
 import type { Browser } from "webextension-polyfill-ts";
 import { DEFAULT_SETTINGS } from "../../shared/Constants";
 import { REPO, issueUrl } from "../../shared/Glass";
@@ -32,23 +31,6 @@ const currentSupported = computed(() => {
 });
 const domainDisabled = ref(false);
 const siteSpecificSettings = ref<SiteSpecificSetting>({ domain: "", enabled: false, customStyles: "", backgroundSelectors: [] });
-
-const colorPickerTextColor = ref("");
-const colorPickerPrimaryColor = ref("");
-const colorPickerBackgroundColor = ref("");
-
-// biome-ignore format: readability
-watch(() => extensionSettings.value?.textColor, newValue => {
-	colorPickerTextColor.value = newValue?.length ? newValue : DEFAULT_SETTINGS.textColor;
-});
-// biome-ignore format: readability
-watch(() => extensionSettings.value?.primaryColor, newValue => {
-	colorPickerPrimaryColor.value = newValue?.length ? newValue : DEFAULT_SETTINGS.primaryColor;
-});
-// biome-ignore format: readability
-watch(() => extensionSettings.value?.backgroundColor, newValue => {
-	colorPickerBackgroundColor.value = newValue?.length ? newValue : DEFAULT_SETTINGS.backgroundColor;
-});
 
 const primaryColor = computed(() => {
 	const value = getValidColorOrFallback(extensionSettings.value?.primaryColor, DEFAULT_SETTINGS.primaryColor);
@@ -97,9 +79,6 @@ const changeSetting = (event: Event) => {
 			case "enable-whitelist":
 				sendMessageToAllTabs({ action: "toggleWhitelist", enabled: input.checked });
 				break;
-			case "lightweight-transparency":
-				sendMessageToAllTabs({ action: "toggleLightweight", enabled: input.checked });
-				break;
 			case "blacklist-domain":
 				await toggleDomainBlacklist(input.checked);
 				sendMessageToActiveTabs({ action: "toggleTransparency", enabled: extensionSettings.value?.enableWhitelist ? input.checked : !input.checked });
@@ -117,15 +96,6 @@ const changeSetting = (event: Event) => {
 				break;
 			case "glass-opacity":
 				sendMessageToAllTabs({ action: "changeGlassOpacity", value: Number(input.value) });
-				break;
-			case "text-color":
-				sendMessageToAllTabs({ action: "changeTextColor", value: getValidColorOrFallback(input.value, DEFAULT_SETTINGS.textColor) });
-				break;
-			case "primary-color":
-				sendMessageToAllTabs({ action: "changePrimaryColor", value: getValidColorOrFallback(input.value, DEFAULT_SETTINGS.primaryColor) });
-				break;
-			case "background-color":
-				sendMessageToAllTabs({ action: "changeBackgroundColor", value: getValidColorOrFallback(input.value, DEFAULT_SETTINGS.backgroundColor) });
 				break;
 		}
 
@@ -206,26 +176,6 @@ const toggleSupportedWebsite = (website: SupportedWebsite) => {
 	saveSettings(toRaw(extensionSettings.value));
 };
 
-const pickColor = (name: string) => {
-	if (!extensionSettings.value) return;
-	switch (name) {
-		case "textColor":
-			extensionSettings.value[name] = colorPickerTextColor.value;
-			sendMessageToActiveTabs({ action: "changeTextColor", value: colorPickerTextColor.value });
-			break;
-		case "primaryColor":
-			extensionSettings.value[name] = colorPickerPrimaryColor.value;
-			sendMessageToActiveTabs({ action: "changePrimaryColor", value: colorPickerPrimaryColor.value });
-			break;
-		case "backgroundColor":
-			extensionSettings.value[name] = colorPickerBackgroundColor.value;
-			sendMessageToActiveTabs({ action: "changeBackgroundColor", value: colorPickerBackgroundColor.value });
-			break;
-	}
-
-	saveSettings(toRaw(extensionSettings.value));
-};
-
 const enableWebInspector = () => {
 	sendMessageToActiveTabs({ action: "toggleInspector", enabled: true });
 	window.close();
@@ -282,18 +232,13 @@ const openSettingsPage = () => {
 					<label class="setting">
 						<input type="checkbox" name="enable-transparency" v-model="extensionSettings.enableTransparency" @input="changeSetting">
 						<span class="custom-checkbox"></span>
-						Enable Dynamic Transparency for all websites (experimental)
+						Auto glass on sites without a style (beta)
 					</label>
 					<div class="settings-group" data-depends-on="enable-transparency" v-show="extensionSettings.enableTransparency">
 						<label class="setting">
-							<input type="checkbox" name="lightweight-transparency" v-model="extensionSettings.lightweightTransparency" @input="changeSetting">
-							<span class="custom-checkbox"></span>
-							Lightweight Transparency
-						</label>
-						<label class="setting">
 							<input type="checkbox" name="enable-whitelist" v-model="extensionSettings.enableWhitelist" @input="changeSetting">
 							<span class="custom-checkbox"></span>
-							Whitelist instead of Blacklist
+							Only on sites I switch on
 						</label>
 						<label class="setting">
 							<input type="checkbox" name="blacklist-domain" :checked="domainDisabled" @input="changeSetting">
@@ -329,54 +274,6 @@ const openSettingsPage = () => {
 							/>
 						</div>
 					</div>
-					<div class="setting">
-						<label for="text-color">Text Color</label>
-						<div class="color-picker-container">
-							<input
-								type="text"
-								name="text-color"
-								id="text-color"
-								v-model="extensionSettings.textColor"
-								:placeholder="DEFAULT_SETTINGS.textColor"
-								@input="changeSetting">
-							<ColorPicker theme="black" :blur-close="true" v-model:pureColor="colorPickerTextColor" @update:pureColor="pickColor('textColor')" />
-						</div>
-					</div>
-					<div class="setting">
-						<label for="primary-color">Primary Color</label>
-						<div class="color-picker-container">
-							<input
-								type="text"
-								name="primary-color"
-								id="primary-color"
-								v-model="extensionSettings.primaryColor"
-								:placeholder="DEFAULT_SETTINGS.primaryColor"
-								@input="changeSetting">
-							<ColorPicker theme="black" :blur-close="true" v-model:pureColor="colorPickerPrimaryColor" @update:pureColor="pickColor('primaryColor')" />
-						</div>
-					</div>
-					<div class="setting">
-						<label for="background-color">Background Color</label>
-						<div class="color-picker-container">
-							<input
-								type="text"
-								name="background-color"
-								id="background-color"
-								v-model="extensionSettings.backgroundColor"
-								:placeholder="DEFAULT_SETTINGS.backgroundColor"
-								@input="changeSetting">
-							<ColorPicker theme="black" :blur-close="true" v-model:pureColor="colorPickerBackgroundColor" @update:pureColor="pickColor('backgroundColor')" />
-						</div>
-					</div>
-					<label class="setting">
-						Background Layers (requires reload)
-						<input
-							type="number"
-							name="transparency-depth"
-							v-model="extensionSettings.transparencyDepth" min="1" max="10"
-							:placeholder="DEFAULT_SETTINGS.transparencyDepth?.toString()"
-							@input="changeSetting">
-					</label>
 				</form>
 				<div class="button-wrapper">
 					<button @click="openSettingsPage">

@@ -3,12 +3,12 @@ import asyncio
 
 import pytest
 
-from tools.glasslab import explore, lab, metrics
+from tools.glasslab import explore, lab, metrics, suite
 from tools.glasslab.tests.test_extension import xpi  # noqa: F401  (fixture)
 
 pytestmark = pytest.mark.e2e
 BOUNDS = [[0, 0, 0], [222, 222, 222]]
-START = "document.dispatchEvent(new CustomEvent('tz-auto-glass'))"   # lab hook = what the popup toggle does
+START = suite.AUTO   # lab hook = what the popup toggle does
 
 
 @pytest.fixture(scope="module", params=["dark", "light"])

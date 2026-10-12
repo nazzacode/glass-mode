@@ -1,42 +1,46 @@
-# Transparent Zen
+# Transparent Zen — websites as glass
 
-<p>
-    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
-    <a href="https://github.com/frostybiscuit/transparent-zen"><img src="https://img.shields.io/github/languages/top/frostybiscuit/transparent-zen"></a>
-    <a href="https://github.com/frostybiscuit/transparent-zen/issues"><img src="https://img.shields.io/github/issues/frostybiscuit/transparent-zen?label=Issues"></a>
-    <a href="https://github.com/frostybiscuit/transparent-zen/releases"><img src="https://img.shields.io/github/downloads/frostybiscuit/transparent-zen/total?label=Total%20Downloads"></a>
-    <a href="https://github.com/frostybiscuit/transparent-zen/releases/latest"><img src="https://img.shields.io/github/v/release/frostybiscuit/transparent-zen?label=Latest%20Release"></a>
-</p>
+Your mail, calendar, chat and music, rendered as translucent glass over your blurred desktop. One design system for every
+site, and a test lab that opens every screen and every menu to prove the text stays readable on any wallpaper.
 
-Transparent Zen is a browser extension specifically designed for Zen Browser. This extension injects styles into supported websites to make them transparent, providing a new experience.
+![Spotify as glass](site/shots/spotify-artist.dark.webp)
 
-> **nazzacode fork — Liquid Glass.** Every site style maps onto one shared glass design system (`styles/shared/glass.css`: Apple-style tiers with readability floors, auto light/dark, opacity slider), verified by a headless readability + consistency suite. Adding a site: `./glasslab new-site NAME URL` → `./glasslab test`. See [docs/GLASS.md](docs/GLASS.md).
+| | |
+|---|---|
+| ![Gmail, light glass](site/shots/gmail-inbox.light.webp) | ![Calendar, dark glass](site/shots/gcal-week.dark.webp) |
+| ![YouTube, light glass](site/shots/youtube-home.light.webp) | ![Google Search, dark glass](site/shots/google-search.dark.webp) |
 
-<p>
-    <a href="https://addons.mozilla.org/en-US/firefox/addon/transparent-zen/"><img alt="Firefox Add-Ons" src="https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png" height="42"></a>
-    <a href="https://www.buymeacoffee.com/frostybiscuit" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
-</p>
+*Real captures through the extension. Personal apps are shown with every word and photo scrambled.*
+**[Gallery, every tested screen and the sites database →](https://nazzacode.github.io/transparent-zen/)**
 
-![image](https://github.com/user-attachments/assets/98340649-945a-439c-a5a3-d9794434369c)
-![image](https://github.com/user-attachments/assets/daed97cd-9533-4b17-83da-4107defece39)
-![image](https://github.com/user-attachments/assets/df0adf7d-2b71-4e2c-90ab-011bb5958de4)
-<img src="https://github.com/frostybiscuit/transparent-zen/blob/master/assets/images/github/Preview_SettingsPage.gif">
+## Install
 
-## Table of Contents
+1. **Zen Browser with a transparent window.** In `about:config` set `browser.tabs.allow_transparent_browser` = `true`, then:
+   - **Linux:** `zen.widget.linux.transparency` = `true`, plus a compositor that blurs what's behind windows: Hyprland
+     (blur on by default), KDE ([kwin-effects-forceblur](https://github.com/taj-ny/kwin-effects-forceblur), add `zen`),
+     GNOME ([Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/) → Applications).
+   - **Windows 11:** `widget.windows.mica` = `true` (optionally [MicaForEveryone](https://github.com/MicaForEveryone/MicaForEveryone) → Acrylic for a stronger blur).
+   - **macOS:** untested by us — reports welcome.
+2. **The extension:** download the `.xpi` from [Releases](https://github.com/nazzacode/transparent-zen/releases) and drop it onto Zen.
+3. **Optional — web apps.** Chromeless app windows for any site (Gmail, WhatsApp, Claude…) that show the glass, with their
+   own taskbar icon: [`webapp/zen-webapp`](webapp/README.md) (Linux).
+   ```sh
+   ./webapp/zen-webapp add "WhatsApp" https://web.whatsapp.com/ --icon auto
+   ```
 
-- [Transparent Zen](#transparent-zen)
-- [Supported Websites](#supported-websites)
-- [Dynamic Transparency](#dynamic-transparency)
-- [Prerequisites](#prerequisites)
-  - [Windows 11](#windows-11)
-- [Installation](#installation)
-  - [Dark Reader](#dark-reader)
-- [Usage](#usage)
-  - [Customization](#customization)
-- [Contributing](#contributing)
-- [License](#license)
+If you use Dark Reader, switch it off for glass sites — it repaints them opaque.
 
-## Supported Websites
+## One knob
+
+Glass has a single variable: **opacity**. Drag the slider in the toolbar popup, or from any window — including web-app
+windows, which have no toolbar — press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd>.
+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> cycles **Auto** (follows your desktop's light/dark) → Dark → Light.
+Every site follows the same tiers, so one setting changes everything consistently; text keeps a readability floor at any setting.
+
+## Sites
+
+Every site in the table is styled on the shared system and tested in dark and light — the page itself, and every menu,
+dropdown, dialog and search box the lab could open.
 
 <!-- sites:start -->
 Generated by `./glasslab site` from the test baseline (default opacity 45 %). [Request a site](https://github.com/nazzacode/transparent-zen/issues/new?template=site-request.yml&title=Add+) · tested screens: see the project page.
@@ -85,106 +89,41 @@ Generated by `./glasslab site` from the test baseline (default opacity 45 %). [R
 | stackoverflow.com | auto glass benchmark | 1 | — | — | — |
 <!-- sites:end -->
 
-#### To Do
+**Not listed?** Turn on *Auto glass* in the popup: it classifies any page's surfaces into the same tiers on the fly
+(beta — good on documentation, news and simple apps). Then [request the site](https://github.com/nazzacode/transparent-zen/issues/new?template=site-request.yml)
+or add it yourself (below). Something off on a listed site? The popup's **Report a glass problem** button opens a
+prefilled issue.
 
-- [x] ~~outlook.live.com~~
-- [x] ~~notebooklm.google.com~~
-- [x] ~~web.whatsapp.com~~
-- [x] ~~music.youtube.com~~
-- [ ] deepseek.com
-- [ ] Plex Media Server (usually 127.0.0.1:32400)
-- [ ] linkedin.com
-- [x] ~~google.com~~
-- [ ] instagram.com
-- [ ] threads.net
-- [ ] monkeytype.com
-- [ ] quora.com
-- [ ] search.brave.com
-- [ ] facebook.com
-- [ ] messenger.com
-- [ ] x.com
+## Add a site in one command
 
-## Dynamic Transparency
-
-Transparent Zen has the option to make any website transparent by crawling the website and setting styles as good as possible.
-
-While this works well on many websites, this is a very early state of this feature and will be improved with future updates to get a better experience on more websites. For the case that a website is rendered unusable with this, it is possible to disable this per domain in the extension popup.
-
-![image](https://github.com/user-attachments/assets/bb86f9d3-2fe8-4143-a86e-df917babe59d)
-
-#### To-Do
-
-- [x] ~~Reduce flashing on style application~~
-- [x] Add per-site configuration
-- [x] ~~Add options to configure colors for supported sites~~
-- [x] ~~Improve stability~~
-- [ ] Find a solution for hover states
-- [x] ~~Rework popup for expandability~~
-
-## Prerequisites
-
-#### Windows 11
-
-1. Open Zen Browser and go to `about:config`
-2. Make sure that `browser.tabs.allow_transparent_browser`, `widget.transparent-windows` and `widget.windows.mica` are all set to **true**
-3. Install [MicaForEveryone](https://github.com/MicaForEveryone/MicaForEveryone) (optional)
-   - In MicaForEveryone add a new process rule and select "zen"
-   - Activate **Blur Behind** and set the Backdrop Type to **Acrylic**
-
-#### Linux
-
-1. Open Zen Browser and go to `about:config`. Ensure the installed version of Zen is above release **1.11.2b**
-2. Make sure that `browser.tabs.allow_transparent_browser` and `zen.widget.linux.transparency` are set to **true**
-3. For a blurred window with **KDE PLASMA**, install [kwin-effects-forceblur](https://github.com/taj-ny/kwin-effects-forceblur) through your system repository, or build from source
-   - Follow steps shown on the project Github to enable blur, and add `zen` to the allowlist
-
-##### TODO: Add other OS prerequisites
-
-## Installation
-
-To install Transparent Zen, you can either download it from the [Firefox Add-Ons Store](https://addons.mozilla.org/en-US/firefox/addon/transparent-zen) or grab the latest release from github and manually install it through the Zen Browser settings.
-
-#### Dark Reader
-
-If you are using Dark Reader, ensure that it is disabled for the websites you want to view as transparent.
-
-## Usage
-
-Once installed, Transparent Zen will automatically apply transparent styles to the supported websites listed above. No further configuration is required.
-
-#### Customization
-
-I highly recommend darkening the browser theme slightly by right-clicking the Zen Browser Toolbar and selecting **Change Theme Colors**. I'm personally using the hex code **#00000066** which darkens the browser background slightly while maintaining readability. But of course, feel free to play around to find the best color to your liking!
-
-##### ⚠️ Since Zen Browser 1.8.1b you need to set `zen.theme.gradient.show-custom-colors` to **true** in `about:config` in order to be able to set a hex code for the theme color
-
-For a really clean experience I also recommend to remove the light background behind the "website rendering area" which was added with a recent update. To do that, just add this snippet to your `userChrome.css`:
-
-```css
-:root:not([inDOMFullscreen="true"]):not([chromehidden~="location"]):not([chromehidden~="toolbar"]) {
-  & #tabbrowser-tabbox #tabbrowser-tabpanels .browserSidebarContainer {
-    & browser[transparent="true"] {
-      background: none !important;
-    }
-  }
-}
+```sh
+nix-shell        # or: Node 22 + Python 3 with websockets, pillow, numpy
+./glasslab add "Linear" https://linear.app/          # discover → scaffold → test every screen and menu → report
+./glasslab add "Linear" https://linear.app/ --agent  # + an AI agent fixes what fails; each edit kept only if scores improve
 ```
 
-If you're unsure where to find the `userChrome.css`, you can follow steps 1-5 here: https://www.userchrome.org/how-create-userchrome-css.html
+`add` finds which of the site's own design tokens actually paint it (it changes each candidate and watches), writes a
+style that maps them onto the shared tiers, registers the site, and runs the test lab. It uses your Zen cookies in a
+throwaway headless profile, so logged-in apps work, and it never touches your open browser. Contributors without Zen:
+`GLASSLAB_BROWSER=firefox`. Full guide: [docs/GLASS.md](docs/GLASS.md).
 
-## Contributing
+## How it's tested
 
-The main idea behind this project is for the community to contribute and add styles for their favorite websites, so that everyone can enjoy a fully transparent experience.
-<br>
-If you would like to contribute to Transparent Zen, please follow these steps:
+The lab renders each page headless over pure black and pure white, which gives every pixel's exact colour and
+transparency, then composites it onto blurred wallpapers. It checks:
 
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and commit them with a descriptive message.
-4. Push your changes to your fork and create a pull request.
+- **contrast** — every line of text, through its real stack of layers, against the darkest and the brightest
+  blurred-wallpaper patch (APCA; body text Lc 75, labels 60). Glass may never read worse than the site's own design.
+- **unity** — every surface is one of the shared glass tiers, and every neutral text colour is a shared ink, so
+  WhatsApp looks like Gmail looks like Spotify.
+- **hidden UI** — an explorer opens every menu, dropdown, dialog and search suggestion it can find, read-only (it never
+  clicks anything that sends, deletes or navigates), and scores each one, including whether it is opaque enough that
+  the page underneath doesn't bleed through.
 
-## License
+CI runs the same suite against local fixture pages in headless Firefox on every push.
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+## Credits
 
-Enjoy your transparent browsing experience with Transparent Zen!
+Fork of [Transparent Zen](https://github.com/frostybiscuit/transparent-zen) by FrostyBiscuit — the extension, the
+per-site idea and the original styles. Glass design system, test lab, auto glass and web apps by
+[nazzacode](https://github.com/nazzacode). MIT.

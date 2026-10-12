@@ -1,0 +1,23 @@
+# Publish site/ (built by `./glasslab site`) to GitHub Pages. Manual on purpose: enable Pages (Settings → Pages → Source:
+# GitHub Actions), then run this workflow when the gallery is ready to go public.
+name: Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: site }
+      - id: deployment
+        uses: actions/deploy-pages@v4

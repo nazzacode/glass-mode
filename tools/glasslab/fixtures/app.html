@@ -12,7 +12,7 @@
   nav { position: fixed; inset: 0 auto 0 0; width: 220px; padding: 16px; box-sizing: border-box; background: var(--surface); }
   nav a { display: block; color: var(--muted); padding: 6px 0; text-decoration: none; }
   main { margin-left: 220px; padding: 24px 32px; background: var(--bg); min-height: 100vh; box-sizing: border-box; }
-  .bar { display: flex; gap: 12px; align-items: center; position: relative; }
+  .bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; position: relative; }
   button, input { font: inherit; color: var(--text); background: var(--surface); border: 1px solid #ccc; border-radius: 8px; padding: 6px 12px; }
   .pop { position: absolute; top: 44px; min-width: 220px; padding: 8px; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.2); }
   .pop[hidden] { display: none; }
@@ -41,6 +41,11 @@
     <button id="dialog-btn" aria-haspopup="dialog">Settings</button>
     <button id="ripple-btn" aria-haspopup="menu" aria-expanded="false" style="position: relative; overflow: hidden">Sort</button>
     <button id="danger-btn" aria-haspopup="dialog">Delete everything</button>
+    <form id="f" onsubmit="window.__submitted = true; return false"><button id="form-more" aria-haspopup="menu">Format</button></form>
+    <button id="de-delete" aria-haspopup="menu">Löschen</button>
+    <button id="titled" aria-haspopup="menu" aria-label="More options" title="Delete forever">⋯</button>
+    <button id="icon-only" aria-haspopup="menu"><svg width="12" height="12"></svg></button>
+    <textarea id="composer" aria-expanded="false" placeholder="Message" rows="1"></textarea>
     <button id="drawer-btn" aria-expanded="false" aria-controls="drawer">Details</button>
     <div id="menu-bad" class="pop" role="menu" hidden><div role="menuitem">New window</div><div role="menuitem">Open recent file</div></div>
     <div id="menu-good" class="pop" role="menu" hidden><div role="menuitem">Compact density</div><div role="menuitem">Show preview pane</div></div>
@@ -76,6 +81,8 @@
   $('dialog-btn').addEventListener('click', () => $('settings').showModal());
   $('close').addEventListener('click', () => $('settings').close());
   $('danger-btn').addEventListener('click', () => { window.__danger = true; });
+  for (const id of ['de-delete', 'titled', 'icon-only']) $(id).addEventListener('click', () => { window.__danger = true; });
+  $('composer').addEventListener('input', () => { window.__typed = true; });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(); });
   document.addEventListener('click', closeAll);
 </script>

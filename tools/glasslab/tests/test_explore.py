@@ -19,6 +19,7 @@ def explored(fixture_url, tmp_path_factory):
             start = await pg.eval("location.href")
             states = await explore.explore(pg, BOUNDS, shots=out)
             return {"states": states, "danger": await pg.eval("!!window.__danger"), "start": start,
+                    "submitted": await pg.eval("!!window.__submitted"), "typed": await pg.eval("!!window.__typed"),
                     "end": await pg.eval("location.href"),
                     "open": await pg.eval("document.querySelectorAll('.pop:not([hidden]), dialog[open], #drawer:not([hidden])').length"),
                     "loads": await pg.eval("sessionStorage.loads"),
@@ -37,7 +38,16 @@ def test_opens_every_safe_trigger(explored):
 
 def test_never_touches_dangerous_controls(explored):
     assert explored["danger"] is False
-    assert state(explored, "danger-btn") is None
+    for t in ("danger-btn", "de-delete", "titled", "icon-only"):   # English/German verbs, any label source, unlabeled
+        assert state(explored, t) is None, t
+
+
+def test_never_submits_forms(explored):
+    assert explored["submitted"] is False and state(explored, "form-more") is None
+
+
+def test_types_only_into_search_fields(explored):
+    assert explored["typed"] is False
 
 
 def test_flags_unstyled_menu(explored):
@@ -88,7 +98,7 @@ def test_survives_a_broken_trigger(fixture_url, tmp_path):
     async def go():
         async with lab.session(None, tmp_path / "browser.log") as pg:
             await pg.goto(fixture_url("app.html"), settle=1)
-            return await explore.activate(pg, {"sel": "div:::nonsense", "kind": "click"})
+            return await explore.activate(pg, {"sel": "div:::nonsense", "label": "x", "kind": "click"})
     assert asyncio.run(go()) is False
 
 

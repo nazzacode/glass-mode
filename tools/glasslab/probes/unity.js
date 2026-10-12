@@ -21,7 +21,7 @@
       if (e === document.documentElement) break;      // scoped: a clear layer shows what's beneath → that surface counts
       const cs = getComputedStyle(e);
       if (/^(IMG|VIDEO|CANVAS|SVG|PICTURE|IFRAME)$/.test(e.tagName) || (cs.backgroundImage !== 'none' && !cs.backgroundImage.includes('gradient'))) break;
-      const c = P(cs.backgroundColor); if (!c || c[3] < .02) continue;
+      const c = P(cs.backgroundColor); if (!c || c[3] * opacity(e) < .15) continue;  // thin overlays (state layers) aren't surfaces
       if ((e.getAttribute('style') || '').includes('background')) break;  // site data colour (event chip, label) — exempt
       const t = tiers.find(([, v]) => near(c, v));
       if (t) { ok++; tally[t[0]] = (tally[t[0]] || 0) + 1; }

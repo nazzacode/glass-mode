@@ -26,6 +26,7 @@ REGRESSION = 0.03                   # baseline compare: a metric dropping more t
 BACKDROPS = Path(os.environ.get("GLASSLAB_BACKDROPS", Path.home() / ".cache/glasslab/backdrops"))
 DEFAULT_BOUNDS = [[0, 0, 0], [222, 222, 222]]   # measured over 22 live wallpapers (p5 / p95, blurred) on 2026-10-09
 METRICS = ("contrast", "surface", "text")
+AUTO = "document.dispatchEvent(new CustomEvent('tz-auto-glass'))"
 
 
 def backdrops():
@@ -79,6 +80,9 @@ async def run_screens(xpi, out, screens, bounds, do_explore=True):
         for sc in screens:
             print(f"· {sc['id']}", flush=True)
             await pg.goto(sc["url"], sc.get("settle", 7), sc.get("act"))
+            if sc.get("auto"):  # site without a style → measure auto glass (same switch as the popup toggle)
+                await pg.eval(AUTO)
+                await asyncio.sleep(1.5)
             results += await measure_screen(pg, sc, out, bounds)
             if do_explore and sc.get("explore", True):
                 states = await explore.explore(pg, bounds, sc["id"], sc.get("modes", MODES), DEFAULT_ALPHA, out / "raw",

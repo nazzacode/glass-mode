@@ -19,3 +19,7 @@ const onScreen = e => { const r = e.getBoundingClientRect();
   if (r.width < 1 || r.height < 1 || r.bottom <= 0 || r.right <= 0 || r.top >= H || r.left >= W) return false;
   const s = getComputedStyle(e); return s.visibility === 'visible' && +s.opacity > 0.05; };
 const rectOf = e => { const r = e.getBoundingClientRect(); return [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)]; };
+// opacity an element is painted with (its own × every ancestor's); cached per probe run
+const _op = new Map();
+const opacity = e => { if (!e || e.nodeType !== 1) return 1; if (_op.has(e)) return _op.get(e);
+  const o = +getComputedStyle(e).opacity * opacity(e.parentElement); _op.set(e, o); return o; };

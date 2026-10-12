@@ -43,7 +43,7 @@
       // image/gradient counts only if nothing opaque paints above it (bottom→top walk: an opaque layer resets it)
       if (s.backgroundImage !== 'none') img = true;
       else if (P(s.backgroundColor)[3] >= .95) img = false;
-      const c = P(s.backgroundColor); if (c[3] > 0) layers.push(c);
+      const c = P(s.backgroundColor); c[3] *= opacity(stack[k]); if (c[3] > 0) layers.push(c);  // state layers: full colour × .08
       // pseudo-element fills paint above their element's own background (pill buttons, cards drawn with ::before)
       for (const pe of ['::before', '::after']) { const ps = getComputedStyle(stack[k], pe);
         // only pseudo fills that cover the element (inset 0 / full size), e.g. pill buttons
@@ -57,7 +57,9 @@
     const fg = P(cs.color), px = parseFloat(cs.fontSize), bold = +cs.fontWeight >= 600;
     // APCA floors: <16px body Lc75 (short labels ≤20 chars = non-body Lc60), <24px Lc60, larger Lc45; bold eases one step
     // control labels (buttons/tabs/menu items/options) are labels whatever their length
-    const label = t.length <= 20 || !!el.closest('button, [role=button], [role=tab], [role=option], [role=menuitem]');
+    // + short single-line text (list items, sidebar entries): APCA "non-body" text, not continuous reading
+    const label = t.length <= 20 || (t.length <= 40 && r.getClientRects().length === 1)
+      || !!el.closest('button, [role=button], [role=tab], [role=option], [role=menuitem]');
     const tier = (px < 16 ? (label ? 1 : 0) : px < 24 ? 1 : 2) + (bold ? 1 : 0), need = [75, 60, 45, 45][Math.min(tier, 3)];
     const res = bounds.map(bd => { let bg = over(tint, bd); for (const l of layers) bg = over(l, bg); return apca(over(fg, bg), bg); });
     runs.push({ sel: sel(el), t: t.slice(0, 40), x: Math.round(x), y: Math.round(y), n: Math.min(t.length, 200), px: Math.round(px), need, img,

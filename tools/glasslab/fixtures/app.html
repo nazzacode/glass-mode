@@ -48,6 +48,8 @@
   <h2>Welcome back</h2>
   <p>Glass should show the desktop through the page while every line of text stays readable over the brightest and darkest wallpaper.</p>
   <p style="color: var(--muted)">Secondary text uses the muted token and must map to a shared glass foreground.</p>
+  <!-- state layer (Material hover/focus): full-colour box at low opacity behind the label — must not count as opaque -->
+  <div id="row" style="position: relative; padding: 8px; max-width: 320px"><span style="position: absolute; inset: 0; background: var(--text); opacity: .08"></span><span id="row-label" style="position: relative">Row with a state layer</span></div>
 </main>
 <aside id="drawer" hidden><h3>Details</h3><p>Side sheet on frame glass.</p></aside>
 <dialog id="settings"><h3>Settings</h3><p>Dialogs float on the popover tier.</p><button id="close">Close</button></dialog>

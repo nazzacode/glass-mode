@@ -16,12 +16,12 @@ import numpy as np
 from PIL import Image
 
 from . import lab
+from .metrics import TARGETS, composite, rkey, score, verdict
 
 HERE = Path(__file__).parent
 ALPHAS = [0.1, 0.45, 0.9]          # popup slider extremes + default
 DEFAULT_ALPHA = 0.45
 MODES = ["dark", "light"]
-TARGETS = {"contrast": 0.9, "surface": 0.9, "text": 0.85, "exempt_max": 0.1}
 REGRESSION = 0.03                   # baseline compare: a metric dropping more than this fails
 BACKDROPS = Path(os.environ.get("GLASSLAB_BACKDROPS", Path.home() / ".cache/glasslab/backdrops"))
 DEFAULT_BOUNDS = [[0, 0, 0], [222, 222, 222]]   # measured over 22 live wallpapers (p5 / p95, blurred) on 2026-10-09
@@ -42,58 +42,12 @@ def load_screens(filt=""):
     return [s for s in data["screens"] if re.search(filt, s["id"])]
 
 
-def rkey(r):
-    """identity of a text run across native/glass renders: selector + text + position (layout is identical)"""
-    return (r["sel"], r["t"], r.get("x", 0) // 4, r.get("y", 0) // 4)
 
 
-def neutral_text_conformance(runs, fgs, tol=10):
-    """share of neutral text chars whose colour is a glass foreground (saturated text = accent/status, ignored)"""
-    ok = tot = 0
-    foreign = {}
-    for r in runs:
-        c = [float(x) for x in re.findall(r"[\d.]+", r["fg"])[:3]]
-        if len(c) < 3 or max(c) - min(c) > 24:
-            continue
-        tot += r["n"]
-        if any(f and all(abs(c[i] - f[i]) <= tol for i in range(3)) for f in fgs):
-            ok += r["n"]
-        else:
-            k = f"{r['fg']} {r['sel']}"
-            foreign[k] = foreign.get(k, 0) + r["n"]
-    return (ok / tot if tot else 1.0), sorted(foreign.items(), key=lambda x: -x[1])[:6]
 
 
-def score(runs, native, fgs, unity):
-    """split exempt runs, set per-run targets, compute contrast pass per bound + unity"""
-    def exempt(r):
-        nv = native.get(rkey(r))
-        return (r.get("chip") or r.get("img")) and nv is not None and nv[1] == r["fg"]
-    ex = [r for r in runs if exempt(r)]
-    sc = [r for r in runs if not exempt(r)]
-    for r in sc:
-        nv = native.get(rkey(r))
-        r["native"] = nv and nv[0]
-        r["target"] = r["need"] if nv is None else min(r["need"], nv[0] * 0.9)
-    tot = sum(r["n"] for r in sc) or 1
-    nb = len(sc[0]["cr"]) if sc else 0
-    contrast = [sum(r["n"] for r in sc if r["cr"][k] >= r["target"]) / tot for k in range(nb)] or [1.0]
-    text, text_foreign = neutral_text_conformance(sc, fgs)
-    failing = {}
-    for r in sc:
-        if min(r["cr"]) < r["target"]:
-            g = failing.setdefault(r["sel"], {"sel": r["sel"], "chars": 0, "lc": r["cr"], "target": round(r["target"]), "fg": r["fg"], "t": r["t"]})
-            g["chars"] += r["n"]
-    img_exempt = sum(r["n"] for r in ex if r.get("img") and not r.get("chip")) / max(1, sum(r["n"] for r in runs))
-    return {"texts": len(sc), "exempt": len(ex), "exempt_img_share": round(img_exempt, 3), "contrast": [round(v, 3) for v in contrast],
-            "surface": round(unity.get("surface", 0), 3), "text": round(text, 3), "tiers": unity.get("tiers", {}),
-            "surface_foreign": unity.get("foreign", []), "text_foreign": text_foreign,
-            "failing": sorted(failing.values(), key=lambda g: -g["chars"])[:10]}
 
 
-def verdict(m):
-    return (min(m["contrast"]) >= TARGETS["contrast"] and m["surface"] >= TARGETS["surface"]
-            and m["text"] >= TARGETS["text"] and m["exempt_img_share"] <= TARGETS["exempt_max"])
 
 
 async def run_screens(xpi, out, screens, bounds):
@@ -123,13 +77,6 @@ async def run_screens(xpi, out, screens, bounds):
     return results
 
 
-def composite(black, white, wall):
-    """exact: out = B + (1-α)·wall, α = 1 - (W-B)/255 (mean over channels)"""
-    B = np.asarray(black.convert("RGB"), dtype=np.float32)
-    Wt = np.asarray(white.convert("RGB"), dtype=np.float32)
-    alpha = 1 - (Wt - B).mean(axis=2, keepdims=True) / 255
-    bg = np.asarray(wall.convert("RGB").resize(black.size), dtype=np.float32)
-    return Image.fromarray(np.clip(B + (1 - alpha) * bg, 0, 255).astype("uint8"))
 
 
 def sheets(results, out, walls):

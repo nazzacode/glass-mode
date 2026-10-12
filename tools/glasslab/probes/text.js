@@ -1,5 +1,6 @@
-// text runs: APCA per run through its real paint stack over backdrop bounds. args: bounds [[r,g,b]...], tint [r,g,b,a]
-((bounds, tint) => {
+// text runs: APCA per run through its real paint stack over backdrop bounds.
+// args: bounds [[r,g,b]...], tint [r,g,b,a], scopes — optional selectors: only text inside those roots (explore layers)
+((bounds, tint, scopes) => {
   const P = c => { const m = c && c.match(/rgba?\(([^)]+)\)/); if (!m) return [0,0,0,0];
     const p = m[1].split(/[ ,\/]+/).filter(Boolean).map(Number); return [p[0],p[1],p[2],p.length>3?p[3]:1]; };
   const over = (top, bot) => { const a = top[3]; return [0,1,2].map(i => top[i]*a + bot[i]*(1-a)); };
@@ -24,7 +25,8 @@
     if (+s.opacity === 0) return true;
     if (r.bottom <= 0 || r.right <= 0 || r.top >= H || r.left >= W) return true; }
     return false; };
-  const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const bases = scopes && scopes.length ? scopes.map(s => document.querySelector(s)).filter(Boolean) : [document.body];
+  for (const base of bases) { const tw = document.createTreeWalker(base, NodeFilter.SHOW_TEXT);
   for (let n; (n = tw.nextNode()) && runs.length < 600;) {
     const t = n.textContent.trim(); if (t.length < 2) continue;
     const el = n.parentElement; if (!el || seen.has(el)) continue; seen.add(el);
@@ -60,6 +62,6 @@
     const res = bounds.map(bd => { let bg = over(tint, bd); for (const l of layers) bg = over(l, bg); return apca(over(fg, bg), bg); });
     runs.push({ sel: sel(el), t: t.slice(0, 40), x: Math.round(x), y: Math.round(y), n: Math.min(t.length, 200), px: Math.round(px), need, img,
       cr: res.map(v => Math.round(v)), fg: cs.color, chip });
-  }
+  } }
   return JSON.stringify(runs);
 })

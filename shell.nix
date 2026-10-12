@@ -3,7 +3,7 @@
 pkgs.mkShell {
   packages = with pkgs; [
     nodejs_22
-    (python3.withPackages (p: [ p.websockets p.pillow p.numpy ]))
+    (python3.withPackages (p: [ p.websockets p.pillow p.numpy p.pytest ]))
     ffmpeg
   ];
 }

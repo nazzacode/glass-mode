@@ -1,0 +1,22 @@
+@import url("../../../styles/shared/glass.css");
+
+/* fixture site style: tokens → glass tiers. #menu-bad is deliberately not mapped (hard-coded #fff). */
+:root {
+	--bg: transparent !important;
+	--surface: var(--g-content) !important;
+	--raised: var(--g-popover) !important;
+	--text: var(--g-fg) !important;
+	--muted: var(--g-fg-2) !important;
+}
+nav {
+	background: transparent !important; /* frame = body tint */
+}
+.pop,
+dialog {
+	backdrop-filter: var(--g-blur);
+}
+button,
+input {
+	background: var(--g-fill) !important;
+	border-color: var(--g-line) !important;
+}

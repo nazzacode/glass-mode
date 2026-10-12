@@ -1,0 +1,64 @@
+<!doctype html>
+<!-- glasslab fixture: a small "web app" with known-good and known-bad surfaces. Native look = the site's own tokens;
+     app.glass.css = its site style (maps tokens onto glass tiers, deliberately MISSES #menu-bad).
+     Ground truth for tests/test_explore.py — change both together. -->
+<html lang="en" class="tz-initialized" data-tz-glass="dark">
+<head>
+<meta charset="utf-8">
+<title>Fixture app</title>
+<style>
+  :root { --bg: #ffffff; --surface: #f1f1f4; --raised: #ffffff; --text: #16161a; --muted: #55555c; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 sans-serif; }
+  nav { position: fixed; inset: 0 auto 0 0; width: 220px; padding: 16px; box-sizing: border-box; background: var(--surface); }
+  nav a { display: block; color: var(--muted); padding: 6px 0; text-decoration: none; }
+  main { margin-left: 220px; padding: 24px 32px; background: var(--bg); min-height: 100vh; box-sizing: border-box; }
+  .bar { display: flex; gap: 12px; align-items: center; position: relative; }
+  button, input { font: inherit; color: var(--text); background: var(--surface); border: 1px solid #ccc; border-radius: 8px; padding: 6px 12px; }
+  .pop { position: absolute; top: 44px; min-width: 220px; padding: 8px; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+  .pop[hidden] { display: none; }
+  .pop div { padding: 6px 10px; }
+  #menu-bad { left: 0; background: #ffffff; }            /* hard-coded: the bug glass must catch */
+  #menu-good { left: 120px; background: var(--raised); }
+  #suggest { left: 260px; background: var(--raised); }
+  dialog { background: var(--raised); color: var(--text); border: 0; border-radius: 14px; padding: 24px; width: 360px; }
+  dialog::backdrop { background: rgba(0,0,0,.3); }
+  p { max-width: 60ch; }
+</style>
+<link data-tz-file rel="stylesheet" href="app.glass.css">
+</head>
+<body>
+<nav aria-label="Sections">
+  <a href="#inbox">Inbox</a><a href="#drafts">Drafts</a><a href="#archive">Archive</a>
+</nav>
+<main>
+  <div class="bar">
+    <button id="menu-bad-btn" aria-haspopup="menu" aria-expanded="false">File menu</button>
+    <button id="menu-good-btn" aria-haspopup="menu" aria-expanded="false">View menu</button>
+    <input id="search" type="search" role="combobox" aria-expanded="false" placeholder="Search mail" aria-controls="suggest">
+    <button id="dialog-btn" aria-haspopup="dialog">Settings</button>
+    <button id="danger-btn" aria-haspopup="dialog">Delete everything</button>
+    <div id="menu-bad" class="pop" role="menu" hidden><div role="menuitem">New window</div><div role="menuitem">Open recent file</div></div>
+    <div id="menu-good" class="pop" role="menu" hidden><div role="menuitem">Compact density</div><div role="menuitem">Show preview pane</div></div>
+    <div id="suggest" class="pop" role="listbox" hidden><div role="option">liquid glass design</div><div role="option">liquid glass wallpapers</div></div>
+  </div>
+  <h2>Welcome back</h2>
+  <p>Glass should show the desktop through the page while every line of text stays readable over the brightest and darkest wallpaper.</p>
+  <p style="color: var(--muted)">Secondary text uses the muted token and must map to a shared glass foreground.</p>
+</main>
+<dialog id="settings"><h3>Settings</h3><p>Dialogs float on the popover tier.</p><button id="close">Close</button></dialog>
+<script>
+  const $ = id => document.getElementById(id);
+  const toggle = (btn, pop) => btn.addEventListener('click', e => { e.stopPropagation(); const open = pop.hidden; closeAll(); pop.hidden = !open; btn.setAttribute('aria-expanded', open); });
+  const closeAll = () => { document.querySelectorAll('.pop').forEach(p => p.hidden = true);
+    document.querySelectorAll('[aria-expanded]').forEach(b => b.setAttribute('aria-expanded', 'false')); };
+  toggle($('menu-bad-btn'), $('menu-bad'));
+  toggle($('menu-good-btn'), $('menu-good'));
+  $('search').addEventListener('input', () => { closeAll(); $('suggest').hidden = !$('search').value; });
+  $('dialog-btn').addEventListener('click', () => $('settings').showModal());
+  $('close').addEventListener('click', () => $('settings').close());
+  $('danger-btn').addEventListener('click', () => { window.__danger = true; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(); });
+  document.addEventListener('click', closeAll);
+</script>
+</body>
+</html>

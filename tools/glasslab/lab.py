@@ -12,6 +12,8 @@ PORT = int(os.environ.get("GLASSLAB_PORT", 9333))  # one lab per port → parall
 LAB = SANDBOX / f"glasslab-{PORT}"               # throwaway profile (sandbox can only read its own dir)
 EXT_ID = "transparent-zen@nazzacode"
 PROBES = Path(__file__).parent / "probes"
+KEY = {"Escape": "\uE00C", "Backspace": "\uE003", "Control": "\uE009", "Tab": "\uE004", "Enter": "\uE007"}  # WebDriver key values
+MODIFIERS = {KEY["Control"]}
 PREFS = {
     "xpinstall.signatures.required": False,
     "extensions.autoDisableScopes": 0,
@@ -42,7 +44,8 @@ def live_profile():
 def setup(xpi):
     shutil.rmtree(LAB, ignore_errors=True)
     (LAB / "extensions").mkdir(parents=True)
-    shutil.copy(xpi, LAB / "extensions" / f"{EXT_ID}.xpi")
+    if xpi:  # None → plain browser (fixture pages carry their own style)
+        shutil.copy(xpi, LAB / "extensions" / f"{EXT_ID}.xpi")
     (LAB / "user.js").write_text("".join(f'user_pref("{k}", {json.dumps(v)});\n' for k, v in PREFS.items()))
     live = live_profile()
     # live Zen holds an exclusive lock → copy raw db + WAL, then fold the WAL in on the copy
@@ -89,8 +92,28 @@ class Page:
 
     async def probe(self, name, *args):
         """run probes/<name>.js (a function expression) with JSON args; probes return JSON strings"""
-        src = (PROBES / f"{name}.js").read_text()
-        return json.loads(await self.eval(f"({src})({', '.join(json.dumps(a) for a in args)})") or "null")
+        lib, src = (PROBES / "_lib.js").read_text(), (PROBES / f"{name}.js").read_text()
+        call = f"(() => {{ {lib}\nreturn ({src})({', '.join(json.dumps(a) for a in args)}); }})()"
+        return json.loads(await self.eval(call) or "null")
+
+    async def actions(self, *sources):
+        """real (trusted) input via BiDi: sources = input.performActions sources"""
+        await self.b.call("input.performActions", context=self.ctx, actions=list(sources))
+        await self.b.call("input.releaseActions", context=self.ctx)
+
+    async def click(self, x, y):
+        await self.actions({"type": "pointer", "id": "mouse", "parameters": {"pointerType": "mouse"}, "actions": [
+            {"type": "pointerMove", "x": int(x), "y": int(y)}, {"type": "pointerDown", "button": 0}, {"type": "pointerUp", "button": 0}]})
+
+    async def keys(self, *keys):
+        """press keys in order (each = one key value: 'a', KEY['Escape'] …); KEY['Control'] etc. stay held until the end"""
+        mods = [k for k in keys if k in MODIFIERS]
+        acts = [{"type": "keyDown", "value": k} for k in mods]
+        for k in keys:
+            if k not in MODIFIERS:
+                acts += [{"type": "keyDown", "value": k}, {"type": "keyUp", "value": k}]
+        acts += [{"type": "keyUp", "value": k} for k in reversed(mods)]
+        await self.actions({"type": "key", "id": "kbd", "actions": acts})
 
     async def goto(self, url, settle=7, act=None):
         try:

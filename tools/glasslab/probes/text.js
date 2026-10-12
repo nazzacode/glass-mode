@@ -52,7 +52,7 @@
             && (ps.width === stack[k].getBoundingClientRect().width + 'px' || ps.right === '0px')))) {
           const pc = P(ps.backgroundColor); pc[3] *= +ps.opacity * opacity(stack[k]); if (pc[3] > 0) layers.push(pc); } }
       if (c[3] >= .85 && (stack[k].getAttribute('style') || '').includes('background-color')) chip = true;  // site-coloured chip
-      if (c[3] >= .85 && Math.max(c[0], c[1], c[2]) - Math.min(c[0], c[1], c[2]) > 60) chip = true; }  // saturated fill = accent control
+      if (c[3] >= .85 && Math.max(c[0], c[1], c[2]) - Math.min(c[0], c[1], c[2]) > 32) chip = true; }  // coloured fill (accent control, tag, data colour): clearly not neutral (> 24)
     // site data colour on the nearest inline-coloured ancestor (chip colour may sit outside the hit-test stack)
     { const anc = el.closest('[style*="background-color"]'); if (anc && P(getComputedStyle(anc).backgroundColor)[3] >= .85) chip = true; }
     const fg = P(cs.color), px = parseFloat(cs.fontSize), bold = +cs.fontWeight >= 600;

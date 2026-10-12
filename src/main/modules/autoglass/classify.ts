@@ -2,7 +2,7 @@
 // Features are measured by engine.ts. Design: docs/research/auto-glass-algorithm.md (surface pass + rank-mapped text).
 export type Rgb = [number, number, number];
 export type Rgba = [number, number, number, number];
-export type Tier = "clear" | "content" | "popover" | "fill" | "scrim" | "keep";
+export type Tier = "clear" | "chrome" | "content" | "popover" | "fill" | "scrim" | "keep";
 export type Box = {
 	bg: Rgba; // the site's own background colour (before glass)
 	w: number;
@@ -31,6 +31,8 @@ export const classify = (b: Box, vw: number, vh: number): Tier => {
 	const bar = b.h <= 80 && b.w >= 0.5 * vw, sidebar = b.w <= 0.3 * vw && b.h >= 0.5 * vh;
 	if (b.floating && area >= 0.8 * view) return b.bg[3] < 0.95 ? "scrim" : "clear"; // dimming layer vs full-screen shell
 	if (!neutral(b.bg)) return "keep"; // brand fills, chips, data colours: the site's own
+	// fixed/floating bars and sidebars sit over scrolling content: frame glass + blur (Apple toolbars), not clear
+	if (b.floating && ((b.w >= 0.5 * vw && b.h <= 0.3 * vh) || sidebar)) return "chrome";
 	const onPage = b.parentTier === "page" || b.parentTier === "clear";
 	if (area >= 0.8 * view || (onPage && (bar || sidebar))) return "clear"; // full-bleed wrappers and chrome = frame (body tint)
 	if (b.floating) return "popover";
@@ -78,7 +80,7 @@ export const statusInk = ([r, g, b]: Rgb): "red" | "orange" | "green" | "blue" |
 /** ink for a rank where the text sits: on frame glass (no pane under it) one rank stronger; the tertiary ink only for
  *  large text (≥ 24px) — glass.css floors are calibrated for fg-2 labels; fg-3 needs size (APCA Lc45 large-text tier) */
 export const inkFor = (rank: number, surface: Tier | "page", px: number): number => {
-	const r = surface === "page" || surface === "clear" ? Math.max(1, rank - 1) : rank;
+	const r = surface === "page" || surface === "clear" || surface === "chrome" ? Math.max(1, rank - 1) : rank;
 	return r === 3 && px < 24 ? 2 : r;
 };
 

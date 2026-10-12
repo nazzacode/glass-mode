@@ -37,7 +37,8 @@ test("panes and cards on the page = content layer; a card inside content = fill;
 
 test("floating surfaces are popovers (but fixed bars/sidebars are chrome); their insides don't stack glass", () => {
 	assert.equal(classify(box({ floating: true, w: 220, h: 140 }), VW, VH), "popover");
-	assert.equal(classify(box({ floating: true, w: VW, h: 56 }), VW, VH), "clear");
+	assert.equal(classify(box({ floating: true, w: VW, h: 56 }), VW, VH), "chrome"); // fixed bar over content: frame + blur
+	assert.equal(classify(box({ floating: true, w: VW, h: 140 }), VW, VH), "chrome"); // cookie banner across the bottom
 	assert.equal(classify(box({ w: 200, h: 30, parentTier: "popover", parentBg: [255, 255, 255, 1] }), VW, VH), "clear");
 });
 

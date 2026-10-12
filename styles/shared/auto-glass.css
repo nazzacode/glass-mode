@@ -1,4 +1,6 @@
-/* auto glass: sites without a style. src/main/modules/autoglass marks boxes (data-tz-tier) and text (data-tz-ink);
+/* auto glass: sites without a style. Every rule carries :not(#tz-glass) = id-level specificity, because sites paint with
+   "#id { … !important }" (OneTrust consent banners) and must not win over the marks.
+   auto glass: sites without a style. src/main/modules/autoglass marks boxes (data-tz-tier) and text (data-tz-ink);
    this maps the marks onto the shared tiers — same colours as every hand-made site style. */
 @import url("./glass.css");
 
@@ -11,30 +13,34 @@
 	background: transparent !important;
 }
 
-:root.tz-auto [data-tz-tier="clear"] {
+:root.tz-auto:not(#tz-glass) [data-tz-tier="clear"] {
 	background-color: transparent !important;
 }
-:root.tz-auto [data-tz-tier="content"] {
+:root.tz-auto:not(#tz-glass) [data-tz-tier="chrome"] {
+	background-color: var(--g-frame) !important;
+	backdrop-filter: var(--g-blur);
+}
+:root.tz-auto:not(#tz-glass) [data-tz-tier="content"] {
 	background-color: var(--g-content) !important;
 }
-:root.tz-auto [data-tz-tier="fill"] {
+:root.tz-auto:not(#tz-glass) [data-tz-tier="fill"] {
 	background-color: var(--g-fill) !important;
 }
-:root.tz-auto [data-tz-tier="popover"] {
+:root.tz-auto:not(#tz-glass) [data-tz-tier="popover"] {
 	background-color: var(--g-popover) !important;
 	backdrop-filter: var(--g-blur);
 }
-:root.tz-auto [data-tz-tier="scrim"] {
+:root.tz-auto:not(#tz-glass) [data-tz-tier="scrim"] {
 	background-color: var(--g-scrim) !important;
 }
-:root.tz-auto :is([data-tz-tier="clear"], [data-tz-tier="content"], [data-tz-tier="fill"], [data-tz-tier="popover"]) {
+:root.tz-auto:not(#tz-glass) :is([data-tz-tier="clear"], [data-tz-tier="chrome"], [data-tz-tier="content"], [data-tz-tier="fill"], [data-tz-tier="popover"]) {
 	border-color: var(--g-line) !important;
 }
-:root.tz-auto [data-tz-ink="1"] { color: var(--g-fg) !important; }
-:root.tz-auto [data-tz-ink="2"] { color: var(--g-fg-2) !important; }
-:root.tz-auto [data-tz-ink="3"] { color: var(--g-fg-3) !important; }
-:root.tz-auto [data-tz-ink="red"] { color: var(--g-red) !important; }
-:root.tz-auto [data-tz-ink="orange"] { color: var(--g-orange) !important; }
-:root.tz-auto [data-tz-ink="green"] { color: var(--g-green) !important; }
-:root.tz-auto [data-tz-ink="blue"] { color: var(--g-blue) !important; }
-:root.tz-auto [data-tz-ink="purple"] { color: var(--g-purple) !important; }
+:root.tz-auto:not(#tz-glass) [data-tz-ink="1"] { color: var(--g-fg) !important; }
+:root.tz-auto:not(#tz-glass) [data-tz-ink="2"] { color: var(--g-fg-2) !important; }
+:root.tz-auto:not(#tz-glass) [data-tz-ink="3"] { color: var(--g-fg-3) !important; }
+:root.tz-auto:not(#tz-glass) [data-tz-ink="red"] { color: var(--g-red) !important; }
+:root.tz-auto:not(#tz-glass) [data-tz-ink="orange"] { color: var(--g-orange) !important; }
+:root.tz-auto:not(#tz-glass) [data-tz-ink="green"] { color: var(--g-green) !important; }
+:root.tz-auto:not(#tz-glass) [data-tz-ink="blue"] { color: var(--g-blue) !important; }
+:root.tz-auto:not(#tz-glass) [data-tz-ink="purple"] { color: var(--g-purple) !important; }

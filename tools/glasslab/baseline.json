@@ -1,4 +1,328 @@
 {
+ "auto-arstechnica.dark.10": {
+  "contrast": 0.981,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-arstechnica.dark.45": {
+  "contrast": 0.988,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-arstechnica.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-arstechnica.light.10": {
+  "contrast": 0.993,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-arstechnica.light.45": {
+  "contrast": 0.993,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-arstechnica.light.90": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-bbc-news.dark.10": {
+  "contrast": 0.928,
+  "surface": 0.904,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-bbc-news.dark.45": {
+  "contrast": 0.928,
+  "surface": 0.904,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-bbc-news.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.904,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-bbc-news.light.10": {
+  "contrast": 0.928,
+  "surface": 0.904,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-bbc-news.light.45": {
+  "contrast": 0.928,
+  "surface": 0.904,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-bbc-news.light.90": {
+  "contrast": 1.0,
+  "surface": 0.904,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-lobsters.dark.10": {
+  "contrast": 1.0,
+  "surface": 0.989,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-lobsters.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.989,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-lobsters.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.989,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-lobsters.light.10": {
+  "contrast": 1.0,
+  "surface": 0.989,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-lobsters.light.45": {
+  "contrast": 1.0,
+  "surface": 0.989,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-lobsters.light.90": {
+  "contrast": 1.0,
+  "surface": 0.989,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-mdn.dark.10": {
+  "contrast": 1.0,
+  "surface": 0.946,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-mdn.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.946,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-mdn.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.946,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-mdn.light.10": {
+  "contrast": 1.0,
+  "surface": 0.957,
+  "text": 0.94,
+  "ok": true
+ },
+ "auto-mdn.light.45": {
+  "contrast": 1.0,
+  "surface": 0.957,
+  "text": 0.94,
+  "ok": true
+ },
+ "auto-mdn.light.90": {
+  "contrast": 1.0,
+  "surface": 0.957,
+  "text": 0.94,
+  "ok": true
+ },
+ "auto-mdn~about-be2f.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.667,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~about-be2f.light.45": {
+  "contrast": 1.0,
+  "surface": 0.667,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~all-a7bd.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~all-a7bd.light.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~css-650d.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~css-650d.light.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~html-ac7f.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~html-ac7f.light.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~javascript-611c.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~javascript-611c.light.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~learn-01a6.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~learn-01a6.light.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~tools-fb3b.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~tools-fb3b.light.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~web-apis-ddd0.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-mdn~web-apis-ddd0.light.45": {
+  "contrast": 1.0,
+  "surface": 0.833,
+  "text": 1.0,
+  "ok": false
+ },
+ "auto-python-docs.dark.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-python-docs.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-python-docs.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-python-docs.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-python-docs.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-python-docs.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-stackoverflow.dark.10": {
+  "contrast": 0.992,
+  "surface": 1,
+  "text": 0.976,
+  "ok": true
+ },
+ "auto-stackoverflow.dark.45": {
+  "contrast": 0.992,
+  "surface": 1,
+  "text": 0.976,
+  "ok": true
+ },
+ "auto-stackoverflow.dark.90": {
+  "contrast": 0.992,
+  "surface": 1,
+  "text": 0.976,
+  "ok": true
+ },
+ "auto-stackoverflow.light.10": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 0.976,
+  "ok": true
+ },
+ "auto-stackoverflow.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 0.976,
+  "ok": true
+ },
+ "auto-stackoverflow.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 0.976,
+  "ok": true
+ },
+ "auto-stackoverflow~products-b1ac.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "auto-stackoverflow~products-b1ac.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
  "chatgpt-home.dark.10": {
   "contrast": 1.0,
   "surface": 0.993,
@@ -34,6 +358,114 @@
   "surface": 0.993,
   "text": 1.0,
   "ok": true
+ },
+ "chatgpt-home~2a953bd90f44.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "chatgpt-home~2a953bd90f44.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "chatgpt-home~a7686b524e65.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "chatgpt-home~a7686b524e65.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "chatgpt-home~c00d85b5c86b.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "chatgpt-home~c00d85b5c86b.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "claude-home.dark.10": {
+  "contrast": 0.367,
+  "surface": 1,
+  "text": 0.394,
+  "ok": false
+ },
+ "claude-home.dark.45": {
+  "contrast": 0.367,
+  "surface": 1,
+  "text": 0.394,
+  "ok": false
+ },
+ "claude-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 0.394,
+  "ok": false
+ },
+ "claude-home.light.10": {
+  "contrast": 0.0,
+  "surface": 1,
+  "text": 0.0,
+  "ok": false
+ },
+ "claude-home.light.45": {
+  "contrast": 0.0,
+  "surface": 1,
+  "text": 0.0,
+  "ok": false
+ },
+ "claude-home.light.90": {
+  "contrast": 0.0,
+  "surface": 1,
+  "text": 0.0,
+  "ok": false
+ },
+ "claude-recents.dark.10": {
+  "contrast": 0.367,
+  "surface": 1,
+  "text": 0.394,
+  "ok": false
+ },
+ "claude-recents.dark.45": {
+  "contrast": 0.367,
+  "surface": 1,
+  "text": 0.394,
+  "ok": false
+ },
+ "claude-recents.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 0.394,
+  "ok": false
+ },
+ "claude-recents.light.10": {
+  "contrast": 0.0,
+  "surface": 1,
+  "text": 0.0,
+  "ok": false
+ },
+ "claude-recents.light.45": {
+  "contrast": 0.0,
+  "surface": 1,
+  "text": 0.0,
+  "ok": false
+ },
+ "claude-recents.light.90": {
+  "contrast": 0.0,
+  "surface": 1,
+  "text": 0.0,
+  "ok": false
  },
  "ddg-assist.dark.10": {
   "contrast": 1.0,
@@ -71,13 +503,13 @@
   "text": 1.0,
   "ok": true
  },
- "ddg-assist~more-3975.dark.45": {
+ "ddg-assist~more-21b9.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "ddg-assist~more-3975.light.45": {
+ "ddg-assist~more-21b9.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -107,13 +539,13 @@
   "text": 1.0,
   "ok": true
  },
- "ddg-assist~private-a79a.dark.45": {
+ "ddg-assist~private-ae99.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "ddg-assist~private-a79a.light.45": {
+ "ddg-assist~private-ae99.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -131,13 +563,13 @@
   "text": 1.0,
   "ok": true
  },
- "ddg-assist~united-kingdom-2687.dark.45": {
+ "ddg-assist~united-kingdom-ff87.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "ddg-assist~united-kingdom-2687.light.45": {
+ "ddg-assist~united-kingdom-ff87.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -239,13 +671,13 @@
   "text": 1.0,
   "ok": true
  },
- "ddg-search~more-37a5.dark.45": {
+ "ddg-search~more-f98e.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "ddg-search~more-37a5.light.45": {
+ "ddg-search~more-f98e.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -275,13 +707,13 @@
   "text": 1.0,
   "ok": true
  },
- "ddg-search~private-24c2.dark.45": {
+ "ddg-search~private-b4af.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "ddg-search~private-24c2.light.45": {
+ "ddg-search~private-b4af.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -299,13 +731,13 @@
   "text": 1.0,
   "ok": true
  },
- "ddg-search~united-kingdom-e729.dark.45": {
+ "ddg-search~united-kingdom-d174.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "ddg-search~united-kingdom-e729.light.45": {
+ "ddg-search~united-kingdom-d174.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -432,67 +864,139 @@
   "ok": true
  },
  "gcal-event.dark.10": {
-  "contrast": 1.0,
-  "surface": 0.988,
+  "contrast": 0.96,
+  "surface": 0.996,
   "text": 1.0,
   "ok": true
  },
  "gcal-event.dark.45": {
-  "contrast": 1.0,
-  "surface": 0.988,
+  "contrast": 0.96,
+  "surface": 0.996,
   "text": 1.0,
   "ok": true
  },
  "gcal-event.dark.90": {
   "contrast": 1.0,
-  "surface": 0.988,
+  "surface": 0.996,
   "text": 1.0,
   "ok": true
  },
  "gcal-event.light.10": {
-  "contrast": 0.993,
-  "surface": 0.988,
+  "contrast": 0.954,
+  "surface": 0.996,
   "text": 1.0,
   "ok": true
  },
  "gcal-event.light.45": {
-  "contrast": 0.993,
-  "surface": 0.988,
+  "contrast": 0.954,
+  "surface": 0.996,
   "text": 1.0,
   "ok": true
  },
  "gcal-event.light.90": {
   "contrast": 1.0,
-  "surface": 0.988,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-event~26e4b6682f3f.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-event~26e4b6682f3f.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-event~5112e1fd0858.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-event~5112e1fd0858.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-event~6a41ee1f4df8.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-event~6a41ee1f4df8.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-event~bb4d3a670077.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-event~bb4d3a670077.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-event~caa582e189d6.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-event~caa582e189d6.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-event~e66b9ed40aa0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-event~e66b9ed40aa0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
   "text": 1.0,
   "ok": true
  },
  "gcal-month.dark.10": {
-  "contrast": 0.999,
-  "surface": 0.989,
+  "contrast": 0.993,
+  "surface": 0.993,
   "text": 1.0,
   "ok": true
  },
  "gcal-month.dark.45": {
-  "contrast": 0.999,
-  "surface": 0.989,
+  "contrast": 0.993,
+  "surface": 0.993,
   "text": 1.0,
   "ok": true
  },
  "gcal-month.dark.90": {
-  "contrast": 0.999,
-  "surface": 0.989,
-  "text": 1.0,
-  "ok": true
- },
- "gcal-month.light.10": {
   "contrast": 1.0,
   "surface": 0.993,
   "text": 1.0,
   "ok": true
  },
+ "gcal-month.light.10": {
+  "contrast": 0.993,
+  "surface": 0.993,
+  "text": 1.0,
+  "ok": true
+ },
  "gcal-month.light.45": {
-  "contrast": 1.0,
+  "contrast": 0.993,
   "surface": 0.993,
   "text": 1.0,
   "ok": true
@@ -503,39 +1007,183 @@
   "text": 1.0,
   "ok": true
  },
- "gcal-week.dark.10": {
+ "gcal-month~5112e1fd0858.dark.45": {
   "contrast": 1.0,
-  "surface": 0.987,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-month~5112e1fd0858.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-month~6a41ee1f4df8.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-month~6a41ee1f4df8.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-month~9fe88cc89a62.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-month~9fe88cc89a62.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-month~bb4d3a670077.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-month~bb4d3a670077.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-month~e66b9ed40aa0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-month~e66b9ed40aa0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-month~e8d96dd65cd1.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-month~e8d96dd65cd1.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week.dark.10": {
+  "contrast": 0.953,
+  "surface": 0.996,
   "text": 1.0,
   "ok": true
  },
  "gcal-week.dark.45": {
-  "contrast": 1.0,
-  "surface": 0.987,
+  "contrast": 0.953,
+  "surface": 0.996,
   "text": 1.0,
   "ok": true
  },
  "gcal-week.dark.90": {
   "contrast": 1.0,
-  "surface": 0.987,
+  "surface": 0.996,
   "text": 1.0,
   "ok": true
  },
  "gcal-week.light.10": {
-  "contrast": 0.984,
-  "surface": 0.987,
+  "contrast": 0.945,
+  "surface": 0.996,
   "text": 1.0,
   "ok": true
  },
  "gcal-week.light.45": {
-  "contrast": 0.984,
-  "surface": 0.987,
+  "contrast": 0.945,
+  "surface": 0.996,
   "text": 1.0,
   "ok": true
  },
  "gcal-week.light.90": {
   "contrast": 1.0,
-  "surface": 0.987,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week~26e4b6682f3f.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week~26e4b6682f3f.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week~5112e1fd0858.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week~5112e1fd0858.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week~6a41ee1f4df8.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week~6a41ee1f4df8.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week~bb4d3a670077.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week~bb4d3a670077.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week~caa582e189d6.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week~caa582e189d6.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week~e66b9ed40aa0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gcal-week~e66b9ed40aa0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
   "text": 1.0,
   "ok": true
  },
@@ -685,27 +1333,27 @@
  },
  "gdrive-mydrive~a54c7d2c02a7.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "gdrive-mydrive~a54c7d2c02a7.light.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "gdrive-mydrive~bb4d3a670077.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "gdrive-mydrive~bb4d3a670077.light.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "gdrive-new.dark.10": {
   "contrast": 0.961,
@@ -841,15 +1489,15 @@
  },
  "gdrive-new~bb4d3a670077.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "gdrive-new~bb4d3a670077.light.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "gdrive-new~e8ddf660b310.dark.45": {
   "contrast": 1.0,
@@ -985,27 +1633,27 @@
  },
  "gdrive-recent~a54c7d2c02a7.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "gdrive-recent~a54c7d2c02a7.light.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "gdrive-recent~bb4d3a670077.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "gdrive-recent~bb4d3a670077.light.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "gdrive-recent~d3c031c498a7.dark.45": {
   "contrast": 1.0,
@@ -1052,6 +1700,42 @@
  "gemini-home.light.90": {
   "contrast": 1.0,
   "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "gemini-home~3cc75c610a37.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gemini-home~3cc75c610a37.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gemini-home~79bad5c512fb.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gemini-home~79bad5c512fb.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gemini-home~b013e45f0fef.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gemini-home~b013e45f0fef.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
   "text": 1.0,
   "ok": true
  },
@@ -1271,49 +1955,49 @@
   "text": 1.0,
   "ok": true
  },
- "github-issues~filter-by-author-ef27.dark.45": {
+ "github-issues~filter-by-author-392a.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "github-issues~filter-by-author-ef27.light.45": {
+ "github-issues~filter-by-author-392a.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "github-issues~filter-by-labels-4e99.dark.45": {
+ "github-issues~filter-by-labels-17b2.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "github-issues~filter-by-labels-4e99.light.45": {
+ "github-issues~filter-by-labels-17b2.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "github-issues~filter-by-milestones-454c.dark.45": {
+ "github-issues~filter-by-milestones-2d3d.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "github-issues~filter-by-milestones-454c.light.45": {
+ "github-issues~filter-by-milestones-2d3d.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "github-issues~filter-by-projects-5a1a.dark.45": {
+ "github-issues~filter-by-projects-0382.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "github-issues~filter-by-projects-5a1a.light.45": {
+ "github-issues~filter-by-projects-0382.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -1500,7 +2184,7 @@
   "ok": true
  },
  "github-repo.dark.10": {
-  "contrast": 1.0,
+  "contrast": 0.995,
   "surface": 1,
   "text": 1.0,
   "ok": true
@@ -1535,94 +2219,370 @@
   "text": 1.0,
   "ok": true
  },
+ "github-repo~code-78c6.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~code-78c6.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~enterprise-2672.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~enterprise-2672.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~go-to-file-78fc.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~go-to-file-78fc.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~master-branch-5202.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~master-branch-5202.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~open-source-bef0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~open-source-bef0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~platform-6c82.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~platform-6c82.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~resources-37a0.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~resources-37a0.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~search-or-jump-to-type-to-search-08b6.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~search-or-jump-to-type-to-search-08b6.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~solutions-dbeb.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~solutions-dbeb.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~sponsor-frostybiscuit-transparen-fec8.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "github-repo~sponsor-frostybiscuit-transparen-fec8.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
  "gmail-inbox.dark.10": {
-  "contrast": 0.978,
-  "surface": 0.976,
-  "text": 0.991,
+  "contrast": 0.984,
+  "surface": 0.973,
+  "text": 0.992,
   "ok": true
  },
  "gmail-inbox.dark.45": {
-  "contrast": 0.978,
-  "surface": 0.976,
-  "text": 0.991,
+  "contrast": 0.984,
+  "surface": 0.973,
+  "text": 0.992,
   "ok": true
  },
  "gmail-inbox.dark.90": {
-  "contrast": 0.991,
-  "surface": 0.976,
-  "text": 0.991,
+  "contrast": 0.992,
+  "surface": 0.973,
+  "text": 0.992,
   "ok": true
  },
  "gmail-inbox.light.10": {
-  "contrast": 1.0,
-  "surface": 0.976,
+  "contrast": 0.996,
+  "surface": 0.973,
   "text": 1.0,
   "ok": true
  },
  "gmail-inbox.light.45": {
-  "contrast": 1.0,
-  "surface": 0.976,
+  "contrast": 0.996,
+  "surface": 0.973,
   "text": 1.0,
   "ok": true
  },
  "gmail-inbox.light.90": {
   "contrast": 1.0,
-  "surface": 0.976,
+  "surface": 0.973,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-inbox~7cf8f50a64d5.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-inbox~7cf8f50a64d5.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-inbox~80a19b3f6691.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-inbox~80a19b3f6691.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-inbox~87960cc7f66b.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-inbox~87960cc7f66b.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-inbox~9fc18686d243.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-inbox~9fc18686d243.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-inbox~a686c9d3331f.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-inbox~a686c9d3331f.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-inbox~bb4d3a670077.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-inbox~bb4d3a670077.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
   "text": 1.0,
   "ok": true
  },
  "gmail-thread.dark.10": {
-  "contrast": 0.982,
-  "surface": 0.976,
-  "text": 0.972,
+  "contrast": 0.985,
+  "surface": 0.973,
+  "text": 0.976,
   "ok": true
  },
  "gmail-thread.dark.45": {
-  "contrast": 0.982,
-  "surface": 0.976,
-  "text": 0.972,
+  "contrast": 0.985,
+  "surface": 0.973,
+  "text": 0.976,
   "ok": true
  },
  "gmail-thread.dark.90": {
-  "contrast": 0.993,
-  "surface": 0.976,
-  "text": 0.972,
+  "contrast": 0.992,
+  "surface": 0.973,
+  "text": 0.976,
   "ok": true
  },
  "gmail-thread.light.10": {
-  "contrast": 0.995,
-  "surface": 0.976,
+  "contrast": 0.996,
+  "surface": 0.973,
   "text": 0.998,
   "ok": true
  },
  "gmail-thread.light.45": {
-  "contrast": 0.995,
-  "surface": 0.976,
+  "contrast": 0.996,
+  "surface": 0.973,
   "text": 0.998,
   "ok": true
  },
  "gmail-thread.light.90": {
-  "contrast": 0.995,
-  "surface": 0.976,
+  "contrast": 1.0,
+  "surface": 0.973,
   "text": 0.998,
+  "ok": true
+ },
+ "gmail-thread~7cf8f50a64d5.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~7cf8f50a64d5.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~80a19b3f6691.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~80a19b3f6691.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~87960cc7f66b.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~87960cc7f66b.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~9fc18686d243.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~9fc18686d243.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~a686c9d3331f.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~a686c9d3331f.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~bb4d3a670077.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~bb4d3a670077.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~f8394f8fef9d.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "gmail-thread~f8394f8fef9d.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
   "ok": true
  },
  "google-search.dark.10": {
   "contrast": 0.988,
   "surface": 1,
-  "text": 0.967,
+  "text": 0.94,
   "ok": true
  },
  "google-search.dark.45": {
   "contrast": 0.988,
   "surface": 1,
-  "text": 0.967,
+  "text": 0.94,
   "ok": true
  },
  "google-search.dark.90": {
   "contrast": 0.988,
   "surface": 1,
-  "text": 0.967,
+  "text": 0.94,
   "ok": true
  },
  "google-search.light.10": {
@@ -1641,6 +2601,66 @@
   "contrast": 1.0,
   "surface": 1,
   "text": 0.988,
+  "ok": true
+ },
+ "google-search~08b7fd0aeba9.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "google-search~08b7fd0aeba9.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "google-search~370c14f624c9.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "google-search~370c14f624c9.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "google-search~4813bf904a80.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "google-search~4813bf904a80.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "google-search~bb4d3a670077.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "google-search~bb4d3a670077.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "google-search~dbaff325d371.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "google-search~dbaff325d371.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
   "ok": true
  },
  "hn-front.dark.10": {
@@ -1717,143 +2737,143 @@
  },
  "linear-changelog.dark.10": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.204,
-  "ok": false
+  "surface": 0.996,
+  "text": 0.982,
+  "ok": true
  },
  "linear-changelog.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.204,
-  "ok": false
+  "surface": 0.996,
+  "text": 0.982,
+  "ok": true
  },
  "linear-changelog.dark.90": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.204,
-  "ok": false
+  "surface": 0.996,
+  "text": 0.982,
+  "ok": true
  },
  "linear-changelog~product-d613.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.0,
-  "ok": false
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
  },
  "linear-changelog~resources-83ae.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.0,
-  "ok": false
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
  },
  "linear-home.dark.10": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.078,
-  "ok": false
+  "surface": 0.996,
+  "text": 0.993,
+  "ok": true
  },
  "linear-home.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.078,
-  "ok": false
+  "surface": 0.996,
+  "text": 0.993,
+  "ok": true
  },
  "linear-home.dark.90": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.078,
-  "ok": false
+  "surface": 0.996,
+  "text": 0.993,
+  "ok": true
  },
  "linear-home~linear-b286.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "linear-home~product-d613.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.0,
-  "ok": false
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
  },
  "linear-home~resources-83ae.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.0,
-  "ok": false
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
  },
  "linear-pricing.dark.10": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.133,
-  "ok": false
+  "surface": 0.996,
+  "text": 0.973,
+  "ok": true
  },
  "linear-pricing.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.133,
-  "ok": false
+  "surface": 0.996,
+  "text": 0.973,
+  "ok": true
  },
  "linear-pricing.dark.90": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.133,
-  "ok": false
+  "surface": 0.996,
+  "text": 0.973,
+  "ok": true
  },
  "linear-pricing~product-d613.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.0,
-  "ok": false
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
  },
  "linear-pricing~resources-83ae.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
-  "text": 0.0,
-  "ok": false
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
  },
  "notion-careers.dark.10": {
   "contrast": 1.0,
-  "surface": 1,
+  "surface": 0.95,
   "text": 1.0,
   "ok": true
  },
  "notion-careers.dark.45": {
   "contrast": 1.0,
-  "surface": 1,
+  "surface": 0.95,
   "text": 1.0,
   "ok": true
  },
  "notion-careers.dark.90": {
   "contrast": 1.0,
-  "surface": 1,
+  "surface": 0.95,
   "text": 1.0,
   "ok": true
  },
  "notion-careers.light.10": {
   "contrast": 1.0,
-  "surface": 1,
+  "surface": 0.95,
   "text": 1.0,
   "ok": true
  },
  "notion-careers.light.45": {
   "contrast": 1.0,
-  "surface": 1,
+  "surface": 0.95,
   "text": 1.0,
   "ok": true
  },
  "notion-careers.light.90": {
   "contrast": 1.0,
-  "surface": 1,
+  "surface": 0.95,
   "text": 1.0,
   "ok": true
  },
- "notion-careers~more-actions.dark.45": {
+ "notion-careers~more-actions-89a3.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "notion-careers~more-actions.light.45": {
+ "notion-careers~more-actions-89a3.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -1895,25 +2915,13 @@
   "text": 1.0,
   "ok": true
  },
- "notion-home~control.dark.45": {
+ "notion-home~more-actions-89a3.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": false
  },
- "notion-home~control.light.45": {
-  "contrast": 1.0,
-  "surface": 1,
-  "text": 1.0,
-  "ok": true
- },
- "notion-home~more-actions.dark.45": {
-  "contrast": 1.0,
-  "surface": 1,
-  "text": 1.0,
-  "ok": false
- },
- "notion-home~more-actions.light.45": {
+ "notion-home~more-actions-89a3.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -1921,63 +2929,63 @@
  },
  "notion-whatsnew.dark.10": {
   "contrast": 1.0,
-  "surface": 1,
+  "surface": 0.881,
   "text": 1.0,
-  "ok": true
+  "ok": false
  },
  "notion-whatsnew.dark.45": {
   "contrast": 1.0,
-  "surface": 1,
+  "surface": 0.881,
   "text": 1.0,
-  "ok": true
+  "ok": false
  },
  "notion-whatsnew.dark.90": {
   "contrast": 1.0,
-  "surface": 1,
+  "surface": 0.881,
   "text": 1.0,
-  "ok": true
+  "ok": false
  },
  "notion-whatsnew.light.10": {
   "contrast": 1.0,
-  "surface": 1,
+  "surface": 0.881,
   "text": 1.0,
-  "ok": true
+  "ok": false
  },
  "notion-whatsnew.light.45": {
   "contrast": 1.0,
-  "surface": 1,
+  "surface": 0.881,
   "text": 1.0,
-  "ok": true
+  "ok": false
  },
  "notion-whatsnew.light.90": {
   "contrast": 1.0,
-  "surface": 1,
+  "surface": 0.881,
   "text": 1.0,
-  "ok": true
+  "ok": false
  },
- "notion-whatsnew~more-actions.dark.45": {
+ "notion-whatsnew~more-actions-89a3.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": false
  },
- "notion-whatsnew~more-actions.light.45": {
+ "notion-whatsnew~more-actions-89a3.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
  "perplexity-home.dark.10": {
-  "contrast": 1.0,
+  "contrast": 0.892,
   "surface": 1,
   "text": 1.0,
-  "ok": true
+  "ok": false
  },
  "perplexity-home.dark.45": {
-  "contrast": 1.0,
+  "contrast": 0.892,
   "surface": 1,
   "text": 1.0,
-  "ok": true
+  "ok": false
  },
  "perplexity-home.dark.90": {
   "contrast": 1.0,
@@ -2003,13 +3011,13 @@
   "text": 1.0,
   "ok": true
  },
- "perplexity-home~filter-projects.dark.45": {
+ "perplexity-home~filter-projects-e632.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
   "ok": true
  },
- "perplexity-home~filter-projects.light.45": {
+ "perplexity-home~filter-projects-e632.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -2051,6 +3059,18 @@
   "text": 1.0,
   "ok": true
  },
+ "reader-doc~7ec4ac07a3c2.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reader-doc~7ec4ac07a3c2.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
  "reader-library.dark.10": {
   "contrast": 1.0,
   "surface": 0.996,
@@ -2084,6 +3104,54 @@
  "reader-library.light.90": {
   "contrast": 1.0,
   "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "reader-library~39ed757e1fb6.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reader-library~39ed757e1fb6.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reader-library~4ef1a269b371.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reader-library~4ef1a269b371.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reader-library~804875133766.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reader-library~804875133766.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reader-library~eb58f29d6473.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reader-library~eb58f29d6473.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
   "text": 1.0,
   "ok": true
  },
@@ -2123,6 +3191,18 @@
   "text": 1.0,
   "ok": true
  },
+ "reddit-home~65b8d2258da1.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-home~65b8d2258da1.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
  "reddit-home~6c8492487f5d.dark.45": {
   "contrast": 1.0,
   "surface": 1,
@@ -2130,18 +3210,6 @@
   "ok": true
  },
  "reddit-home~6c8492487f5d.light.45": {
-  "contrast": 1.0,
-  "surface": 1,
-  "text": 1.0,
-  "ok": true
- },
- "reddit-home~9771da7a2a0a.dark.45": {
-  "contrast": 1.0,
-  "surface": 1,
-  "text": 1.0,
-  "ok": true
- },
- "reddit-home~9771da7a2a0a.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -2190,6 +3258,18 @@
   "ok": true
  },
  "reddit-post~6c8492487f5d.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-post~c839d1c4610f.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "reddit-post~c839d1c4610f.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -2245,74 +3325,164 @@
  },
  "spotify-artist.dark.10": {
   "contrast": 1.0,
-  "surface": 0.995,
+  "surface": 0.967,
   "text": 0.929,
   "ok": true
  },
  "spotify-artist.dark.45": {
   "contrast": 1.0,
-  "surface": 0.995,
+  "surface": 0.967,
   "text": 0.929,
   "ok": true
  },
  "spotify-artist.dark.90": {
   "contrast": 1.0,
-  "surface": 0.995,
+  "surface": 0.967,
   "text": 0.929,
+  "ok": true
+ },
+ "spotify-artist~more-options-for-coldplay-56a5.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.912,
+  "text": 1.0,
+  "ok": true
+ },
+ "spotify-artist~what-do-you-want-to-play-26f7.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
   "ok": true
  },
  "spotify-home.dark.10": {
   "contrast": 1.0,
-  "surface": 1,
-  "text": 0.946,
+  "surface": 0.975,
+  "text": 0.944,
   "ok": true
  },
  "spotify-home.dark.45": {
   "contrast": 1.0,
-  "surface": 1,
-  "text": 0.946,
+  "surface": 0.975,
+  "text": 0.944,
   "ok": true
  },
  "spotify-home.dark.90": {
   "contrast": 1.0,
+  "surface": 0.975,
+  "text": 0.944,
+  "ok": true
+ },
+ "spotify-home~what-do-you-want-to-play-26f7.dark.45": {
+  "contrast": 1.0,
   "surface": 1,
-  "text": 0.946,
+  "text": 1.0,
   "ok": true
  },
  "substack-home.dark.10": {
-  "contrast": 0.967,
+  "contrast": 0.952,
   "surface": 0.991,
-  "text": 0.947,
+  "text": 0.949,
   "ok": true
  },
  "substack-home.dark.45": {
-  "contrast": 0.967,
+  "contrast": 0.952,
   "surface": 0.991,
-  "text": 0.947,
+  "text": 0.949,
   "ok": true
  },
  "substack-home.dark.90": {
   "contrast": 1.0,
   "surface": 0.991,
-  "text": 0.947,
+  "text": 0.949,
   "ok": true
  },
  "substack-home.light.10": {
-  "contrast": 0.967,
-  "surface": 0.991,
-  "text": 0.947,
+  "contrast": 0.952,
+  "surface": 0.99,
+  "text": 0.949,
   "ok": true
  },
  "substack-home.light.45": {
-  "contrast": 0.967,
-  "surface": 0.991,
-  "text": 0.947,
+  "contrast": 0.952,
+  "surface": 0.99,
+  "text": 0.949,
   "ok": true
  },
  "substack-home.light.90": {
   "contrast": 1.0,
-  "surface": 0.991,
-  "text": 0.947,
+  "surface": 0.99,
+  "text": 0.949,
+  "ok": true
+ },
+ "substack-home~252af00610b1.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "substack-home~252af00610b1.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "substack-home~26da2ecc7088.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "substack-home~26da2ecc7088.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "substack-home~925fbbe66588.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "substack-home~925fbbe66588.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "substack-home~dd17bc3c9433.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "substack-home~dd17bc3c9433.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "substack-home~ece7ae8a3b81.dark.45": {
+  "contrast": 0.932,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "substack-home~ece7ae8a3b81.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "substack-home~fd164c77bc1a.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "substack-home~fd164c77bc1a.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
   "ok": true
  },
  "translate-home.dark.10": {
@@ -2353,15 +3523,15 @@
  },
  "translate-home~google-apps-bb4d.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "translate-home~google-apps-bb4d.light.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "translate-home~main-menu-7324.dark.45": {
   "contrast": 1.0,
@@ -2461,15 +3631,15 @@
  },
  "translate-text~google-apps-bb4d.dark.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "translate-text~google-apps-bb4d.light.45": {
   "contrast": 1.0,
-  "surface": 0,
+  "surface": 1,
   "text": 1.0,
-  "ok": false
+  "ok": true
  },
  "translate-text~main-menu-7324.dark.45": {
   "contrast": 1.0,
@@ -2747,18 +3917,6 @@
   "text": 1.0,
   "ok": true
  },
- "x-home~1b638e41bbc7.dark.45": {
-  "contrast": 1.0,
-  "surface": 1,
-  "text": 1.0,
-  "ok": true
- },
- "x-home~1b638e41bbc7.light.45": {
-  "contrast": 1.0,
-  "surface": 1,
-  "text": 1.0,
-  "ok": true
- },
  "x-home~556f5f479578.dark.45": {
   "contrast": 1.0,
   "surface": 1,
@@ -2766,6 +3924,18 @@
   "ok": true
  },
  "x-home~556f5f479578.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~5cd50289655c.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "x-home~5cd50289655c.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -2790,18 +3960,6 @@
   "ok": true
  },
  "x-home~9beab98a6b79.light.45": {
-  "contrast": 1.0,
-  "surface": 1,
-  "text": 1.0,
-  "ok": true
- },
- "x-home~cf4e6d4aeffc.dark.45": {
-  "contrast": 1.0,
-  "surface": 1,
-  "text": 1.0,
-  "ok": true
- },
- "x-home~cf4e6d4aeffc.light.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -2880,39 +4038,51 @@
   "ok": true
  },
  "youtube-home.dark.10": {
-  "contrast": 0.965,
-  "surface": 0.995,
-  "text": 0.965,
+  "contrast": 1.0,
+  "surface": 0.981,
+  "text": 0.956,
   "ok": true
  },
  "youtube-home.dark.45": {
-  "contrast": 0.965,
-  "surface": 0.995,
-  "text": 0.965,
+  "contrast": 1.0,
+  "surface": 0.981,
+  "text": 0.956,
   "ok": true
  },
  "youtube-home.dark.90": {
   "contrast": 1.0,
-  "surface": 0.995,
-  "text": 0.965,
+  "surface": 0.981,
+  "text": 0.956,
   "ok": true
  },
  "youtube-home.light.10": {
-  "contrast": 0.929,
-  "surface": 0.995,
-  "text": 0.935,
+  "contrast": 0.934,
+  "surface": 0.981,
+  "text": 0.923,
   "ok": true
  },
  "youtube-home.light.45": {
-  "contrast": 0.929,
-  "surface": 0.995,
-  "text": 0.935,
+  "contrast": 0.934,
+  "surface": 0.981,
+  "text": 0.923,
   "ok": true
  },
  "youtube-home.light.90": {
-  "contrast": 0.97,
-  "surface": 0.995,
-  "text": 0.935,
+  "contrast": 0.939,
+  "surface": 0.981,
+  "text": 0.923,
+  "ok": true
+ },
+ "youtube-home~8e329f478a20.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "youtube-home~8e329f478a20.light.45": {
+  "contrast": 0.915,
+  "surface": 1,
+  "text": 0.915,
   "ok": true
  },
  "youtube-music-explore.dark.10": {
@@ -2928,12 +4098,6 @@
   "ok": true
  },
  "youtube-music-explore.dark.90": {
-  "contrast": 1.0,
-  "surface": 1,
-  "text": 1.0,
-  "ok": true
- },
- "youtube-music-explore~control-0923.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,
@@ -2958,12 +4122,6 @@
   "ok": true
  },
  "youtube-music-home.dark.90": {
-  "contrast": 1.0,
-  "surface": 1,
-  "text": 1.0,
-  "ok": true
- },
- "youtube-music-home~0923de595703.dark.45": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,

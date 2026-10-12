@@ -57,8 +57,8 @@ def test_score_native_relaxation():
 
 
 def test_layer_verdict_needs_opaque_enough_glass():
-    good = {"surface": 0.95, "alpha": 0.9, "contrast": [1.0, 1.0], "text": 1.0, "exempt_img_share": 0}
+    good = {"surface": 0.95, "opacity": 0.9, "contrast": [1.0, 1.0], "text": 1.0, "exempt_img_share": 0}
     assert metrics.layer_ok(good)
-    assert not metrics.layer_ok({**good, "alpha": 0.5})      # see-through popover: page text bleeds through
+    assert not metrics.layer_ok({**good, "opacity": 0.5})      # see-through popover: page text bleeds through
     assert not metrics.layer_ok({**good, "surface": 0.5})    # site's own colour (unstyled menu)
     assert not metrics.layer_ok({**good, "contrast": [1.0, 0.6]})

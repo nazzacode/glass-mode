@@ -63,8 +63,8 @@ async def measure(pg, key, layers, bounds, modes, alpha, shots):
         black, white = await pg.shot("#000"), await pg.shot("#fff")
         await pg.clear_backdrop()
         if shots:
-            black.save(shots / f"{key}.{mode}.black.png")
-            white.save(shots / f"{key}.{mode}.white.png")
+            black.save(shots / f"{key}.{mode}.{int(alpha * 100)}.black.png")
+            white.save(shots / f"{key}.{mode}.{int(alpha * 100)}.white.png")
         a = alpha_map(black, white)
         glass[mode] = (await pg.probe("text", bounds, [0, 0, 0, 0], scopes) or [], await pg.probe("unity", scopes) or {},
                        min(region_alpha(a, l["panel"]) for l in layers))
@@ -74,7 +74,7 @@ async def measure(pg, key, layers, bounds, modes, alpha, shots):
     out = {}
     for mode, (runs, unity, a) in glass.items():
         m = score(runs, native, unity.get("fgs", []), unity)
-        m["alpha"] = a
+        m["opacity"] = a
         m["ok"] = layer_ok(m)
         out[mode] = m
     return out
@@ -93,7 +93,7 @@ async def explore(pg, bounds, screen="page", modes=("dark", "light"), alpha=0.45
             key = f"{screen}~{slug(t['label'] or t['id'])}"
             modes_m = await measure(pg, key, layers, bounds, modes, alpha, shots)
             states.append({"key": key, "trigger": t, "layers": layers, "modes": modes_m, "ok": all(m["ok"] for m in modes_m.values())})
-            print(f"  ↳ {key:38s} " + "  ".join(f"{md} surface {m['surface']:4.0%} α {m['alpha']:.2f} contrast {min(m['contrast']):4.0%}"
+            print(f"  ↳ {key:38s} " + "  ".join(f"{md} surface {m['surface']:4.0%} opacity {m['opacity']:.2f} contrast {min(m['contrast']):4.0%}"
                                                  for md, m in modes_m.items()) + f"  {'ok' if states[-1]['ok'] else 'FAIL'}", flush=True)
         await reset(pg, url, t, settle)
     return states

@@ -92,4 +92,4 @@ def verdict(m):
 
 def layer_ok(m):
     """hidden-UI layer (menu, dialog, suggestions): screen verdict + opaque enough that the page doesn't bleed through"""
-    return verdict(m) and m["alpha"] >= LAYER_ALPHA
+    return verdict(m) and m["opacity"] >= LAYER_ALPHA

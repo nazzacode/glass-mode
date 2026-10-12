@@ -65,4 +65,4 @@ def test_restores_page_after_each_state(explored):
 
 def test_saves_state_shots(explored):
     s = state(explored, "menu-bad-btn")
-    assert (explored["out"] / f"{s['key']}.dark.black.png").exists()
+    assert (explored["out"] / f"{s['key']}.dark.45.black.png").exists()

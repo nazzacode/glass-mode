@@ -1,10 +1,12 @@
 """glasslab — liquid-glass site styles toolkit (docs/GLASS.md).
 
-  ./glasslab test [FILTER] [--save-baseline] [--compare] [--build]   readability + unity matrix over screens.json
+  ./glasslab add NAME URL [--agent] [--act JS] [--content-first] [--dark-only]  URL → verified site style, one command
+  ./glasslab test [FILTER] [--save-baseline] [--compare] [--no-explore]  readability + unity: screens + their hidden UI
   ./glasslab discover URL [--act JS]                                  what actually paints a site (causal tokens)
   ./glasslab new-site NAME URL [--content-first] [--dark-only]        scaffold style + registry + test screen
   ./glasslab wallpapers DIR|FILE…                                     backdrops + contrast bounds from your wallpapers
   ./glasslab report [RUN]                                             local HTML report (default: latest run)
+  ./glasslab shots [FILTER] [--out DIR] [--modes dark,light]          showcase gallery shots (private screens scrambled)
 """
 import argparse, subprocess, sys
 from pathlib import Path
@@ -27,18 +29,26 @@ def main(argv=None):
     sub = ap.add_subparsers(dest="cmd", required=True)
     t = sub.add_parser("test"); t.add_argument("filter", nargs="?", default="")
     t.add_argument("--save-baseline", action="store_true"); t.add_argument("--compare", action="store_true")
-    t.add_argument("--build", action="store_true"); t.add_argument("--out")
+    t.add_argument("--build", action="store_true"); t.add_argument("--out"); t.add_argument("--no-explore", action="store_true")
+    g = sub.add_parser("add"); g.add_argument("name"); g.add_argument("url"); g.add_argument("--act")
+    g.add_argument("--content-first", action="store_true"); g.add_argument("--dark-only", action="store_true")
+    g.add_argument("--agent", action="store_true"); g.add_argument("--rounds", type=int, default=4); g.add_argument("--force", action="store_true")
     d = sub.add_parser("discover"); d.add_argument("url"); d.add_argument("--act"); d.add_argument("--build", action="store_true")
     n = sub.add_parser("new-site"); n.add_argument("name"); n.add_argument("url"); n.add_argument("--act")
     n.add_argument("--content-first", action="store_true"); n.add_argument("--dark-only", action="store_true")
     n.add_argument("--force", action="store_true"); n.add_argument("--build", action="store_true")
     w = sub.add_parser("wallpapers"); w.add_argument("paths", nargs="+"); w.add_argument("--blur", type=int, default=22)
     r = sub.add_parser("report"); r.add_argument("run", nargs="?")
+    s = sub.add_parser("shots"); s.add_argument("filter", nargs="?", default=""); s.add_argument("--out")
+    s.add_argument("--modes", default="dark,light"); s.add_argument("--build", action="store_true")
     a = ap.parse_args(argv)
 
     if a.cmd == "test":
         from . import suite
-        return suite.main(xpi(a.build), a.filter, a.out, a.save_baseline, a.compare)
+        return suite.main(xpi(a.build), a.filter, a.out, a.save_baseline, a.compare, not a.no_explore)
+    if a.cmd == "add":
+        from . import pipeline
+        return pipeline.add(a.name, a.url, a.act, a.content_first, a.dark_only, a.agent, a.rounds, a.force)
     if a.cmd == "discover":
         from . import discover
         discover.discover(xpi(a.build), a.url, a.act)
@@ -52,6 +62,9 @@ def main(argv=None):
         from . import report
         run = Path(a.run) if a.run else max(RUNS.iterdir(), key=lambda p: p.stat().st_mtime)
         report.main(run)
+    if a.cmd == "shots":
+        from . import shots
+        return shots.main(xpi(a.build), a.filter, a.out, a.modes.split(","))
     return 0
 
 

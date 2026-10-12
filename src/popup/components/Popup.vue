@@ -6,6 +6,7 @@ import { Codemirror } from "vue-codemirror";
 import { ColorPicker } from "vue3-colorpicker";
 import type { Browser } from "webextension-polyfill-ts";
 import { DEFAULT_SETTINGS } from "../../shared/Constants";
+import { REPO, issueUrl } from "../../shared/Glass";
 import { getValidColorOrFallback } from "../../shared/Helper";
 import { getActivePageDomain, sendMessageToActiveTabs, sendMessageToAllTabs, sendMessageToDomainTabs, sendMessageToWorker } from "../../shared/MessageHelper";
 import { getContentScripts, loadSettings, saveSettings } from "../../shared/StorageHelper";
@@ -23,6 +24,12 @@ const extensionSettings = ref<ExtensionSettings["transparentZenSettings"] | null
 const supportedWebsites = ref<Array<SupportedWebsite>>([]);
 const showAllWebsites = ref(false);
 const currentDomain = ref<string>();
+const currentUrl = ref<string>();
+// is the active page covered by a site style? → feedback button reports a bug, else requests the site
+const currentSupported = computed(() => {
+	const url = currentUrl.value;
+	return !!url && supportedWebsites.value.some((w) => w.matches.some((m) => new RegExp(m).test(url)));
+});
 const domainDisabled = ref(false);
 const siteSpecificSettings = ref<SiteSpecificSetting>({ domain: "", enabled: false, customStyles: "", backgroundSelectors: [] });
 
@@ -52,6 +59,9 @@ const sortedWebsites = computed(() => {
 });
 
 onMounted(() => {
+	browser.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
+		currentUrl.value = tab?.url;
+	});
 	loadSettings().then(async (settings) => {
 		extensionSettings.value = { ...DEFAULT_SETTINGS, ...settings };
 		console.info("Extension settings loaded", settings);
@@ -221,6 +231,17 @@ const enableWebInspector = () => {
 	window.close();
 };
 
+// prefilled GitHub issue form (origin only: paths can carry private ids); the user reviews it before submitting
+const openIssue = () => {
+	if (!currentUrl.value) return;
+	const u = new URL(currentUrl.value);
+	const s = extensionSettings.value;
+	browser.tabs.create({
+		url: issueUrl(currentSupported.value ? "site-bug" : "site-request", { host: u.hostname, url: u.origin, version: manifest.version, theme: s?.glassThemeV2 ? s.glassTheme : "auto", opacity: s?.glassOpacity }),
+	});
+	window.close();
+};
+
 const openSettingsPage = () => {
 	browser.runtime.openOptionsPage();
 };
@@ -253,6 +274,10 @@ const openSettingsPage = () => {
 							<input type="range" min="10" max="90" name="glass-opacity" v-model.number="extensionSettings.glassOpacity" @input="changeSetting">
 							<span class="range-value">{{ extensionSettings.glassOpacity ?? DEFAULT_SETTINGS.glassOpacity }}%</span>
 						</div>
+					</div>
+					<p class="hint">Any window, incl. web apps: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd> opacity, <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> mode</p>
+					<div class="button-wrapper" v-if="currentUrl?.startsWith('http')">
+						<button type="button" class="feedback" @click="openIssue">{{ currentSupported ? "Report a glass problem on this site" : "Request glass for this site" }}</button>
 					</div>
 					<label class="setting">
 						<input type="checkbox" name="enable-transparency" v-model="extensionSettings.enableTransparency" @input="changeSetting">
@@ -377,8 +402,8 @@ const openSettingsPage = () => {
       </section>
     </main>
 		<footer id="extension-footer">
-			<p>Transparent Zen is open source and everyone can contribute their custom styles to support more websites.</p>
-			<a href="https://github.com/frostybiscuit/transparent-zen">GitHub Repository</a>
+			<p>Open source. Add a site in one command (<code>./glasslab add</code>) — every style is tested on every screen and menu.</p>
+			<a :href="`https://github.com/${REPO}`">GitHub Repository</a>
 		</footer>
   </div>
 </template>

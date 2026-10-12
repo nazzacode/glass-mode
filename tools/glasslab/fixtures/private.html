@@ -1,0 +1,34 @@
+<!doctype html>
+<!-- glasslab fixture: private data for probes/scramble.js (tests/test_scramble.py). Enforces Trusted Types like Google:
+     any innerHTML-style sink throws, so the scrambler must use text nodes / attributes / CSSOM only. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="require-trusted-types-for 'script'">
+<title>Private fixture</title>
+<!-- avatars = PNG photos (the scrambler leaves SVG/logo/icon images alone) -->
+<style>
+  body { margin: 0; font: 15px/1.45 sans-serif; }
+  .icon { font-family: "Material Symbols Outlined", monospace; }
+  .av { display: inline-block; width: 32px; height: 32px; border-radius: 50%; background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAFElEQVR4nGO8Y2TEgA0wYRUdtBIA/zIBULjhnL4AAAAASUVORK5CYII=") center/cover; }
+</style>
+</head>
+<body>
+<header id="public"><h1>Public Header Stays</h1><span class="icon">inbox</span></header>
+<main id="mail">
+  <div class="row" id="r1"><span class="from">Margaret Thornbury</span> <b class="subj">Invoice #4821 for Kestrel Analytics</b>
+    <span class="snip">Hi Nathan, attached is the invoice due 12 Oct 2026.</span> <span class="when">09:41</span></div>
+  <div class="row" id="r2"><span class="from">Margaret Thornbury</span> <b class="subj">Re: Quarterly planning — draft v2</b>
+    <span class="snip">Can we move the call to Thursday? Email me at margaret.t@kestrel.io</span></div>
+  <div class="row" id="r3"><span class="from">GITHUB</span> <b class="subj">[nazzacode/nix-config] PR #312 merged</b>
+    <span class="icon">star</span></div>
+  <div class="row" id="r4" style="font-family: Inter, 'Segoe UI Symbol', 'Apple Color Emoji', sans-serif">Regime notes from Martin Sellner</div>
+  <div class="row" id="r5"><span class="icon">Leaked Sentence Sellner</span> <span class="cal">S M T W T F S</span></div>
+  <img id="avatar" alt="Margaret Thornbury" title="Margaret Thornbury" width="40" height="40"
+       src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAFElEQVR4nGM0MrrDgA0wYRUdtBIA/d4BUMAdBk4AAAAASUVORK5CYII=">
+  <span id="bgav" class="av" aria-label="Avatar of Margaret"></span>
+  <input id="q" placeholder="Search mail for Thornbury" value="from:margaret invoice">
+  <button id="btn" aria-label="Archive conversation with Margaret" title="Archive">Archive</button>
+</main>
+</body>
+</html>

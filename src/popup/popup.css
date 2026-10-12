@@ -253,6 +253,19 @@ body {
       }
     }
 
+    .hint {
+      margin: 4px 0 12px;
+      font-size: 12px;
+      opacity: .75;
+
+      kbd {
+        font: inherit;
+        padding: 1px 5px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, .1);
+      }
+    }
+
     #extension-footer {
       background-color: var(--transparent-background-darker);
       text-align: center;

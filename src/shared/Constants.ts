@@ -1,4 +1,5 @@
 import type { ExtensionSettings } from "../types/ExtensionSettings";
+import { REPO } from "./Glass";
 
 export const DEFAULT_SETTINGS: ExtensionSettings["transparentZenSettings"] = {
 	enableTransparency: false,
@@ -20,5 +21,5 @@ export const DEFAULT_SETTINGS: ExtensionSettings["transparentZenSettings"] = {
 };
 
 export const GITHUB_ENDPOINTS = {
-	LATEST_RELEASE: "https://api.github.com/repos/frostybiscuit/transparent-zen/releases/latest",
+	LATEST_RELEASE: `https://api.github.com/repos/${REPO}/releases/latest`,
 };

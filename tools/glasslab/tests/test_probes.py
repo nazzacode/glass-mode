@@ -47,3 +47,27 @@ def test_probes_read_oklch(fixture_url, tmp_path):
     muted = next(r for r in runs if r["t"].startswith("Muted text"))
     assert min(muted["cr"]) > 30, muted
     assert unity["foreign"] and "oklch" not in str(unity["foreign"]), unity["foreign"]
+
+
+@pytest.fixture(scope="module")
+def edge(fixture_url, tmp_path_factory):
+    async def go():
+        async with lab.session(None, tmp_path_factory.mktemp("edge") / "browser.log") as pg:
+            await pg.goto(fixture_url("probes.html"), settle=1)
+            return await pg.probe("unity"), await pg.probe("unity", ["#frame"])
+    return asyncio.run(go())
+
+
+def test_shared_inks_immune_to_site_important_rules(edge):
+    unity, _ = edge
+    assert unity["fgs"][0] == [242, 242, 245], unity["fgs"]
+
+
+def test_inherit_wrapper_counts_as_its_tier(edge):
+    unity, _ = edge
+    assert unity["tiers"].get("--g-frame", 0) > 0, unity
+
+
+def test_iframe_only_layer_is_unmeasured_not_failed(edge):
+    _, frame = edge
+    assert frame["surface"] == 1 and frame.get("unmeasured", 0) > 0, frame

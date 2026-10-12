@@ -1,0 +1,14 @@
+<!doctype html>
+<!-- glasslab fixture: probe edge cases — a site rule forcing every colour (must not skew the shared-ink reference),
+     a background:inherit wrapper (paints its parent's tier, not a site data colour), an iframe-only region. -->
+<html lang="en" class="tz-initialized" data-tz-glass="dark"><head><meta charset="utf-8"><title>Probes</title>
+<link data-tz-file rel="stylesheet" href="../../../styles/shared/glass.css">
+<style>
+  body * { color: rgb(200, 30, 30) !important; }          /* hostile site rule */
+  #wrap { position: fixed; inset: 0 50% 0 0; }
+  #frame { position: fixed; top: 0; right: 0; width: 50%; height: 100%; border: 0; }
+</style></head>
+<body>
+<div id="wrap" style="background: inherit"><p>Wrapper painting the frame tint via inherit.</p></div>
+<iframe id="frame" src="data:text/html,%3Cbody%20style%3D%22background%3Awhite%22%3Eframe%3C%2Fbody%3E"></iframe>
+</body></html>

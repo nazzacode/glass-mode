@@ -66,9 +66,9 @@ jobs:
         env:
           NAME: ${{ steps.req.outputs.name }}
         run: |
-          slug=$(echo "$NAME" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-')
+          slug=$(echo "$NAME" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9\n' '-')
           mkdir -p out/styles/websites out/data out/tools/glasslab
-          cp ~/.cache/glasslab/add/$slug/report-public.md out/report.md || echo "no report" > out/report.md
+          cp ~/.cache/glasslab/add/"$slug"/report-public.md out/report.md || echo "no report" > out/report.md
           git status --porcelain -- styles/websites | awk '{print $2}' | xargs -r -I{} cp {} out/styles/websites/
           cp data/ContentScripts.json out/data/ && cp tools/glasslab/screens.json out/tools/glasslab/
 
@@ -115,4 +115,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           OUTCOME: ${{ needs.add-site.outputs.outcome }}
-        run: gh issue comment ${{ github.event.issue.number }} --body "glasslab add finished ($OUTCOME). Pull request: see linked PRs; report attached there."
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --body "glasslab add finished ($OUTCOME) — the pull request is linked above, with the test report."

@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Transparent Zen (nazzacode)",
-  "version": "0.9.4",
-  "description": "Applies custom styles to make your favorite websites transparent. For a full list of supported websites, check https://github.com/frostybiscuit/transparent-zen?tab=readme-ov-file#supported-websites",
+  "version": "1.0.0",
+  "description": "Websites as translucent liquid glass over your blurred desktop: one design system for every site, auto glass for the rest, tested for readability. Zen Browser.",
   "browser_specific_settings": {
     "gecko": {
       "id": "transparent-zen@nazzacode",

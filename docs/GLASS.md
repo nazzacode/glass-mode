@@ -12,7 +12,9 @@ system for every site, verified by a headless test suite (`glasslab`).
 | `styles/websites/<host>.css` | per site: maps the site's own tokens/regions onto glass tiers. Nothing else |
 | `data/ContentScripts.json` | site registry: `matches` (unanchored RegExp, first hit wins), `css`, optional `"glass": "dark"` (forced mode) |
 | `src/main/transparent-zen.ts` | sets `:root[data-tz-glass=dark\|light]` (auto = `prefers-color-scheme`) and `--tz-glass-alpha` (popup slider) |
-| `tools/glasslab/` | test suite + discovery + scaffolding (`./glasslab …`), `screens.json`, `baseline.json`, JS `probes/` |
+| `styles/shared/auto-glass.css` + `src/main/modules/autoglass/` | auto glass: on-the-fly tiers for sites without a style (beta) |
+| `tools/glasslab/` | test suite, explorer, discovery, `add` pipeline, showcase + site builder (`./glasslab …`), `screens.json`, `baseline.json`, JS `probes/` |
+| `webapp/` | `zen-webapp`: web apps as chromeless Zen windows (Firefox Taskbar Tabs) |
 
 ## Design rules (Apple Liquid Glass, adapted)
 
@@ -46,9 +48,16 @@ Also `--g-line(-strong)`, `--g-accent`, `--g-red/orange/green/blue/purple`, `--g
 
 ```sh
 nix-shell                                   # node + python deps (or let ./glasslab enter it for you)
-./glasslab wallpapers ~/Pictures/wallpapers  # once: backdrops + contrast bounds from your own wallpapers
-./glasslab new-site "Linear" https://linear.app/team/inbox
+./glasslab wallpapers ~/Pictures/wallpapers  # once (optional): backdrops + contrast bounds from your own wallpapers
+./glasslab add "Linear" https://linear.app/team/inbox            # the whole pipeline, one command
+./glasslab add "Linear" https://linear.app/team/inbox --agent    # + agent loop on the failures
 ```
+
+`add` = `new-site` (below) → build → `test` (screens + hidden UI) → `~/.cache/glasslab/add/<site>/report.md` (what to fix,
+worst first). With `--agent`, an LLM (`GLASSLAB_AGENT`, default Claude Code) edits **only** the site's CSS from a fixed
+prompt (these rules + current CSS + report); every round is re-tested and kept only if the score improves, else reverted,
+and anything else it touched is restored. Deterministic core, monotone loop. CI does the same for public pages when a
+maintainer labels a site request `add-site` (`.github/workflows/add-site.yml` → pull request).
 
 `new-site` opens the page headless with your Zen cookies (log in to the site in Zen first), then:
 
@@ -76,6 +85,10 @@ semantic framework classes (Encore `encore-text-*`). Never hashed classes.
 
 ## Test suite
 
+Two halves: **pytest** (`python3 -m pytest`; `-m "not e2e"` = pure maths, `-m e2e` = fixture pages in a real browser,
+`GLASSLAB_BROWSER=firefox` without Zen; CI runs both) proves the lab and the extension; **`./glasslab test`** measures
+real sites.
+
 `./glasslab test [FILTER]` — every screen × dark/light × slider 10 / 45 / 90 %:
 
 - **Capture**: the page over pure black and pure white → exact per-pixel colour and alpha → composited offline onto the
@@ -91,7 +104,38 @@ semantic framework classes (Encore `encore-text-*`). Never hashed classes.
 - Native twins are matched by selector + text + position. Results: `~/.cache/glasslab/runs/<time>/{summary.md,results.json}`
   (local: contains page text). `./glasslab report` → local HTML report with galleries. Never publish runs/reports.
 
+- **Hidden UI** (`explore.py`, after each screen, default slider, every mode): finds controls that reveal UI
+  (`aria-haspopup`, `aria-expanded=false`, comboboxes, search fields), activates each with real input (BiDi), diffs what
+  became visible, and scores each floating layer like a screen + **opacity**: a layer over page text needs ≥ 0.80
+  (popover tier) or the page bleeds through; a drawer over clear glass may stay thin. Read-only by construction: never
+  navigation links, submit buttons, or labels matching `DANGER` (send, delete, archive, buy, sign out, …); search fields
+  get typed text, never Enter. Restores via Escape → re-clicking an expanded toggle → blur → reload. Rows
+  `<screen>~<state>.<mode>.45`.
+- **Glass share**: share of the window where the desktop shows through (catches "styled but still opaque").
+- `--no-explore` skips hidden UI; screens with `"auto": true` measure auto glass on sites without a style (benchmark).
+
 Exit code ≠ 0 on any failure at the default slider or any regression (`--compare`). Extremes are reported.
+
+Debugging a failing state: `python3 -m tools.glasslab.inspect_layer URL "label regex" [dark|light]` dumps the layer's
+element chain with computed paint; `--gradients URL` and `--ancestry URL SELECTOR` find hard-coded fades and scopes.
+
+## Auto glass (sites without a style)
+
+`src/main/modules/autoglass/`: `classify.ts` (pure, `npm run test:unit`) decides, `engine.ts` measures and marks
+(`data-tz-tier`, `data-tz-ink`), `styles/shared/auto-glass.css` maps marks onto the same tiers. Surfaces: page/full-bleed/
+bars/sidebars → frame (root tint), panes and cards on the page → content, floating (popup role, top layer, positioned +
+shadow/z-index) → popover, small neutral → fill, translucent full-screen → scrim, chromatic → kept (brand, chips, data).
+Text: neutral colours ranked by APCA distance from the site's own page colour → `--g-fg/-2/-3` (frame text one rank
+stronger; tertiary only ≥ 24px); chromatic text → status ink by hue; text on kept surfaces untouched. Content-first pages
+(most text without a pane) take the content tint. One pass, then mutated subtrees only, + two re-scans for UI shown by
+style changes. Design notes: `docs/research/auto-glass-algorithm.md`.
+
+## Showcase + site
+
+`./glasslab shots` (beauty shots: one window centred on an owned procedural wallpaper, compositor blur behind it;
+private screens — `"private": [selectors]` — scrambled in-page first, iframes covered) → `site/shots/`.
+`./glasslab shots --all` → every screen + hidden-UI state as tiles in `site/tests/`. `./glasslab site [--run RUN]` →
+`site/index.html` + the README sites table from the registry, `screens.json`, baseline numbers (never page text).
 
 ## Gotchas (each cost an evening)
 
@@ -104,3 +148,12 @@ Exit code ≠ 0 on any failure at the default slider or any regression (`--compa
 - Spotify paints text from hashed classes (no tokens) → Encore semantic classes; forced dark.
 - Cloudflare-protected sites (claude.ai) may serve a bot check to the headless lab; open the site in Zen to refresh
   its clearance cookie, then rerun.
+- Material state layers are full-colour boxes (or `::before`) at 8 % opacity: probes multiply element + ancestor
+  opacity, else text measures Lc 0.
+- Google's popup menus have no role (`.vH6rvf[jsname=xl07Ob]`, positioned + shadow): neutralise rules must exempt them.
+- The Google apps launcher is a cross-origin iframe (`ogs.google.com`): the manifest runs the extension in those frames
+  only; probes can't see inside — inspect via a BiDi child-frame context.
+- The lab's black/white backdrop sits UNDER `<html>`'s own paint (auto glass tints the root), and upstream's 250 ms root
+  background transition is suspended while capturing — else probes read a mid-fade colour.
+- Content scripts are classic scripts: a shared chunk import kills them (and the background, unless it's a module) —
+  `tests/test_build.py` guards it.

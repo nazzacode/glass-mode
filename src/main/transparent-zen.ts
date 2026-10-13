@@ -1,16 +1,16 @@
 import { insertStyles, removeStyles } from "./modules/Styles";
 import { showHud } from "./modules/Hud";
-import { type GlassTheme, issueUrl } from "../shared/Glass";
+import { type GlassTheme, glassOff, issueUrl } from "../shared/Glass";
 import { panelMode, togglePanel } from "./modules/Panel";
 
-type GlassReply = { theme: GlassTheme; opacity: number; text: string };
+type GlassReply = { theme: GlassTheme; opacity: number; text: string; enabled: boolean; siteOff: boolean };
 import { glassKey } from "./modules/GlassKeys";
-import { mark } from "./modules/RootMarks";
+import { mark, unmark } from "./modules/RootMarks";
 import type { Browser } from "webextension-polyfill-ts";
 import type { ContentScripts, SupportedWebsite } from "../types/ContentScripts";
 import type { ExtensionSettings, SiteSpecificSetting } from "../types/ExtensionSettings";
 import type { Message } from "../types/Message";
-import { AutoGlass } from "./modules/autoglass/engine";
+import { AutoGlass, toRgba } from "./modules/autoglass/engine";
 import { SupportedSite } from "./modules/SupportedSite";
 import { WebInspector } from "./modules/WebInspector";
 import "./transparent-zen.css";
@@ -20,6 +20,9 @@ declare const browser: Browser;
 class TransparentZen {
 	private autoGlass = new AutoGlass();
 	private autoOn = false;
+	private siteStyle: SupportedWebsite | undefined; // registry entry when this page has a hand-made style
+	private siteStyleOn = false;
+	private opaque = false;
 	private supportedSite: SupportedSite | undefined;
 	private webInspector: WebInspector | undefined;
 	private transparentZenSettings: ExtensionSettings["transparentZenSettings"] | undefined;
@@ -38,21 +41,25 @@ class TransparentZen {
 				// pre-auto builds persisted "dark" as the default → treat as auto until the user picks in the new popup
 				const s = this.transparentZenSettings;
 				this.applyGlass(s?.glassThemeV2 ? s.glassTheme : "auto", s?.glassOpacity);
+				// every page listens, styled or not, on or off: the popup must reach a page to switch it back on
+				this.initBrowserEvents();
 				if (!contentScript) {
 					console.info("Website is not supported by Transparent Zen");
 					this.webInspector = new WebInspector(this.transparentZenSettings);
-					this.setAuto(this.autoAllowed());
 					// lab/test hook (glasslab): same as switching auto glass on for this page
-					document.addEventListener("tz-auto-glass", () => this.setAuto(true));
+					document.addEventListener("tz-auto-glass", () => {
+						this.setAuto(true);
+						this.setOpaque(false);
+					});
 					this.removeLoadingScreen();
-					this.initSiteSpecificSettings();
-					this.initBrowserEvents();
 				} else {
 					console.info("Website is supported by Transparent Zen");
-					this.supportedSite = new SupportedSite(this.transparentZenSettings, this.removeLoadingScreen, this.initExtensionSettingsStyles.bind(this), this.initBrowserEvents.bind(this));
-					await this.supportedSite?.initSupportedWebsite(contentScript);
-					this.initSiteSpecificSettings();
+					this.siteStyle = contentScript;
+					this.supportedSite = new SupportedSite(this.removeLoadingScreen, this.initExtensionSettingsStyles.bind(this));
+					await this.supportedSite.initSupportedWebsite();
 				}
+				this.refresh();
+				this.initSiteSpecificSettings();
 			}).catch((error) => {
 				console.error("Error checking supported websites:", error);
 				this.removeLoadingScreen();
@@ -124,12 +131,13 @@ class TransparentZen {
 	}
 
 	private initBrowserEvents(): void {
-		// auto glass switches (global, whitelist, per-domain list) follow storage — one source of truth for every tab
+		// every switch (off everywhere / on this site, site-style list, auto glass + its lists) follows storage — one
+		// source of truth for every tab in every window; popup and panel only write settings
 		browser.storage.onChanged.addListener((changes) => {
 			const next = changes.transparentZenSettings?.newValue as ExtensionSettings["transparentZenSettings"] | undefined;
-			if (!next || this.isSupportedWebsite) return;
+			if (!next) return;
 			this.transparentZenSettings = next;
-			this.setAuto(this.autoAllowed());
+			this.refresh();
 		});
 		browser.runtime.onMessage.addListener((request: Message) => {
 			switch (request.action) {
@@ -242,7 +250,7 @@ class TransparentZen {
 		const view = (r: GlassReply) => {
 			const u = new URL(location.href);
 			const kind = this.isSupportedWebsite ? "site-bug" : "site-request";
-			return { opacity: r.opacity, theme: r.theme, reportLabel: this.isSupportedWebsite ? "Report a problem" : "Request this site",
+			return { opacity: r.opacity, theme: r.theme, enabled: r.enabled, siteOff: r.siteOff, host: u.hostname, reportLabel: this.isSupportedWebsite ? "Report a problem" : "Request this site",
 				report: issueUrl(kind, { host: u.hostname, url: u.origin, version: browser.runtime.getManifest().version, theme: r.theme, opacity: r.opacity }) };
 		};
 		const mode = () => (document.documentElement.dataset.tzGlass === "light" ? "light" : "dark");
@@ -252,6 +260,48 @@ class TransparentZen {
 			panelMode(mode());
 			return view(r);
 		});
+	}
+
+	// what this page should show, from the settings; idempotent. Off (everywhere / this site) = the page as in any browser.
+	private refresh(): void {
+		const s = this.transparentZenSettings;
+		const off = glassOff(s, window.location.hostname);
+		if (this.siteStyle) {
+			const listedOff = (s?.disabledWebsites ?? []).some((w) => w.name === this.siteStyle?.name);
+			this.setSiteStyle(!off && !listedOff);
+		} else {
+			this.setAuto(!off && this.autoAllowed());
+		}
+		this.setOpaque(!this.siteStyleOn && !this.autoOn);
+	}
+
+	private setSiteStyle(on: boolean): void {
+		const file = this.siteStyle?.css?.[0];
+		if (on === this.siteStyleOn || !file) return;
+		this.siteStyleOn = on;
+		if (on) insertStyles(file, this.siteStyle?.matches);
+		else removeStyles(file);
+	}
+
+	// Zen draws pages over the desktop: a page that paints no background of its own (html and body transparent) shows
+	// the wallpaper through dark text. Without glass it gets the opaque canvas of any other browser (CSS Canvas colour).
+	// The paint is a background-IMAGE layer (transparent-zen.css), so the site's own background-color stays readable
+	// here. Checked again once the site's CSS is in (DOMContentLoaded, load): its own background wins.
+	private opaqueHooked = false;
+	private setOpaque(on: boolean): void {
+		this.opaque = on;
+		const check = () => {
+			const [html, body] = [document.documentElement, document.body].map((el) => el && getComputedStyle(el));
+			const bare = !toRgba(html.backgroundColor) && (!body || (!toRgba(body.backgroundColor) && body.backgroundImage === "none"));
+			if (this.opaque && bare) mark("tz-opaque");
+			else unmark("tz-opaque");
+		};
+		check();
+		setTimeout(check, 400); // after a live switch: the removed style's fade (root transition) has settled
+		if (this.opaqueHooked || document.readyState === "complete") return;
+		this.opaqueHooked = true;
+		document.addEventListener("DOMContentLoaded", check, { once: true });
+		window.addEventListener("load", check, { once: true });
 	}
 
 	// auto glass (sites without a style): global switch + per-domain black/whitelist, as upstream's dynamic mode

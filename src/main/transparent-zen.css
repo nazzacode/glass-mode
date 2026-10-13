@@ -2,3 +2,9 @@
 @import url("../styles/variables.css");
 @import url("../styles/loading-screen.css");
 @import url("../styles/custom-background.css");
+
+/* no glass on this page (off switch, or no style and auto glass off) and the site paints no background: opaque like any
+   browser, not raw see-through (Zen's transparent window) — set by refresh()/setOpaque() in transparent-zen.ts */
+:root.tz-opaque {
+	background-image: linear-gradient(Canvas, Canvas) !important; /* an image layer: background-color stays the site's */
+}

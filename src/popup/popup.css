@@ -275,3 +275,35 @@ body {
     }
   }
 }
+
+/* off switches: first thing in the popup */
+#power {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+
+  .switch {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-medium);
+    font-size: 15px;
+
+    &.disabled {
+      opacity: .45;
+    }
+
+    .toggle {
+      transform: scale(1.3);
+      transform-origin: right center;
+    }
+  }
+
+  .status {
+    margin: 0;
+    font-size: 12px;
+    opacity: .75;
+  }
+}

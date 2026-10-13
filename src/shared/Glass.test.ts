@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { glassKey } from "../main/modules/GlassKeys.ts";
-import { OPACITY, REPO, hudText, issueUrl, nextTheme, serial, stepOpacity } from "./Glass.ts";
+import { OPACITY, REPO, glassOff, hudText, issueUrl, nextTheme, serial, stepOpacity, withSiteOff } from "./Glass.ts";
 
 test("opacity steps by 5 within the slider range", () => {
 	assert.equal(stepOpacity(45, +1), 50);
@@ -66,4 +66,15 @@ test("serial runs async jobs one after another, in call order (held key = no los
 	const results = await Promise.all([step(5), step(5), step(-5)]);
 	assert.deepEqual(log, [50, 55, 50]);
 	assert.deepEqual(results, [50, 55, 50]);
+});
+
+test("off switches: global beats site, missing settings = on", () => {
+	assert.equal(glassOff(undefined, "a.com"), false);
+	assert.equal(glassOff({}, "a.com"), false);
+	assert.equal(glassOff({ glassEnabled: false }, "a.com"), true);
+	assert.equal(glassOff({ glassEnabled: true, offDomains: ["a.com"] }, "a.com"), true);
+	assert.equal(glassOff({ offDomains: ["a.com"] }, "b.com"), false);
+	assert.deepEqual(withSiteOff(["a.com"], "a.com", true), ["a.com"]);
+	assert.deepEqual(withSiteOff(undefined, "a.com", true), ["a.com"]);
+	assert.deepEqual(withSiteOff(["a.com", "b.com"], "a.com", false), ["b.com"]);
 });

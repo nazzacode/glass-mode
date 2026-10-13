@@ -5,9 +5,9 @@ import { computed, onMounted, ref, toRaw } from "vue";
 import { Codemirror } from "vue-codemirror";
 import type { Browser } from "webextension-polyfill-ts";
 import { DEFAULT_SETTINGS } from "../../shared/Constants";
-import { REPO, issueUrl } from "../../shared/Glass";
+import { REPO, glassOff, issueUrl, withSiteOff } from "../../shared/Glass";
 import { getValidColorOrFallback } from "../../shared/Helper";
-import { getActivePageDomain, sendMessageToActiveTabs, sendMessageToAllTabs, sendMessageToDomainTabs, sendMessageToWorker } from "../../shared/MessageHelper";
+import { getActivePageDomain, sendMessageToActiveTabs, sendMessageToAllTabs, sendMessageToDomainTabs } from "../../shared/MessageHelper";
 import { getContentScripts, loadSettings, saveSettings } from "../../shared/StorageHelper";
 import type { SupportedWebsite } from "../../types/ContentScripts";
 import type { ExtensionSettings, SiteSpecificSetting } from "../../types/ExtensionSettings";
@@ -28,6 +28,37 @@ const currentUrl = ref<string>();
 const currentSupported = computed(() => {
 	const url = currentUrl.value;
 	return !!url && supportedWebsites.value.some((w) => w.matches.some((m) => new RegExp(m).test(url)));
+});
+const host = computed(() => (currentUrl.value?.startsWith("http") ? new URL(currentUrl.value).hostname : undefined));
+const siteStyle = computed(() => {
+	const url = currentUrl.value;
+	return url ? supportedWebsites.value.find((w) => w.matches.some((m) => new RegExp(m).test(url))) : undefined;
+});
+// the off switches: pages follow storage (content script refresh()), so these only save
+const glassOn = computed(() => extensionSettings.value?.glassEnabled !== false);
+const siteOn = computed(() => !host.value || !(extensionSettings.value?.offDomains ?? []).includes(host.value));
+const setGlass = (on: boolean) => {
+	if (!extensionSettings.value) return;
+	extensionSettings.value.glassEnabled = on;
+	saveSettings(toRaw(extensionSettings.value));
+};
+const setSite = (on: boolean) => {
+	if (!extensionSettings.value || !host.value) return;
+	extensionSettings.value.offDomains = withSiteOff(toRaw(extensionSettings.value.offDomains), host.value, !on);
+	saveSettings(toRaw(extensionSettings.value));
+};
+// what this page shows right now — so a control that can't change anything here says why
+const status = computed(() => {
+	const s = extensionSettings.value;
+	if (!s) return "";
+	if (s.glassEnabled === false) return "Off everywhere: pages look as in any browser.";
+	if (!host.value) return "Glass only works on web pages.";
+	if (glassOff(s, host.value)) return "Off on this site: it looks as in any browser.";
+	const style = siteStyle.value;
+	if (style) return s.disabledWebsites.some((w) => w.name === style.name) ? `${style.name} style is switched off in the list below.` : `Glass: ${style.name} style.`;
+	const listed = s.blacklistedDomains.includes(host.value);
+	if (s.enableTransparency && (s.enableWhitelist ? listed : !listed)) return "Glass: auto (beta).";
+	return "No glass style for this site, so it stays opaque. Try auto glass below, or request it.";
 });
 const domainDisabled = ref(false);
 const siteSpecificSettings = ref<SiteSpecificSetting>({ domain: "", enabled: false, customStyles: "", backgroundSelectors: [] });
@@ -175,11 +206,9 @@ const toggleSupportedWebsite = (website: SupportedWebsite) => {
 	const isCurrentlyActive = toggledWebsiteIndex === -1;
 	const rawWebsite = toRaw(website);
 	if (isCurrentlyActive) {
-		extensionSettings.value.disabledWebsites.push(website);
-		sendMessageToWorker({ action: "removeStyles", filePath: rawWebsite.css?.[0] });
+		extensionSettings.value.disabledWebsites.push(rawWebsite);
 	} else {
 		extensionSettings.value.disabledWebsites.splice(toggledWebsiteIndex, 1);
-		sendMessageToWorker({ action: "insertStyles", filePath: rawWebsite.css?.[0], domains: rawWebsite.matches });
 	}
 
 	saveSettings(toRaw(extensionSettings.value));
@@ -215,6 +244,17 @@ const openSettingsPage = () => {
 		</header>
     <main id="extension-body" v-if="extensionSettings">
       <section>
+				<div id="power">
+					<div class="switch">
+						<span>Glass</span>
+						<button type="button" class="toggle" role="switch" :aria-checked="glassOn" :class="{active: glassOn}" @click="setGlass(!glassOn)"></button>
+					</div>
+					<div class="switch" v-if="host" :class="{disabled: !glassOn}">
+						<span>On {{ host }}</span>
+						<button type="button" class="toggle" role="switch" :aria-checked="siteOn" :class="{active: siteOn}" :disabled="!glassOn" @click="setSite(!siteOn)"></button>
+					</div>
+					<p class="status">{{ status }}</p>
+				</div>
 				<h2 class="headline">Settings</h2>
 				<form id="extension-settings">
 					<div class="setting">

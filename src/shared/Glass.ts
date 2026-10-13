@@ -11,6 +11,15 @@ export const clampOpacity = (v: number): number => clamp(Math.round(v / OPACITY.
 export const stepOpacity = (current: number | undefined, direction: number): number =>
 	clamp(Math.round((current ?? OPACITY.default) / OPACITY.step) * OPACITY.step + Math.sign(direction) * OPACITY.step);
 
+/** the off switches: glass off everywhere, or off for this host → no site style, no auto glass, page opaque as in any browser */
+export type Switches = { glassEnabled?: boolean; offDomains?: Array<string> };
+export const glassOff = (s: Switches | null | undefined, host: string): boolean =>
+	s?.glassEnabled === false || (s?.offDomains ?? []).includes(host);
+
+/** offDomains with host switched on (removed) or off (added) — new array, no duplicates */
+export const withSiteOff = (list: Array<string> | undefined, host: string, off: boolean): Array<string> =>
+	off ? [...new Set([...(list ?? []), host])] : (list ?? []).filter((h) => h !== host);
+
 export const nextTheme = (theme: GlassTheme): GlassTheme => ({ auto: "dark", dark: "light", light: "auto" } as const)[theme];
 
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);

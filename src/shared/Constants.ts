@@ -18,6 +18,8 @@ export const DEFAULT_SETTINGS: ExtensionSettings["transparentZenSettings"] = {
 	siteSpecificSettings: [],
 	glassTheme: "auto",
 	glassOpacity: 45,
+	glassEnabled: true,
+	offDomains: [],
 };
 
 export const GITHUB_ENDPOINTS = {

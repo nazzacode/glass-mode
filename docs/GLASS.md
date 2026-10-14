@@ -10,7 +10,7 @@ system for every site, verified by a headless test suite (`glasslab`).
 | `styles/shared/glass.css` | **single source of truth**: tiers, alphas, colours, fills, text, status, paper, reduced-transparency |
 | `styles/shared/gm3.css` | Google Material 3 token map, shared by Google apps (Calendar, Gmail, …) |
 | `styles/websites/<host>.css` | per site: maps the site's own tokens/regions onto glass tiers. Nothing else |
-| `data/ContentScripts.json` | site registry: `matches` (unanchored RegExp, first hit wins), `css`, optional `"glass": "dark"` (forced mode) |
+| `data/ContentScripts.json` | site registry: `matches` (unanchored RegExp, first hit wins), `css`, optional `"glass": "dark"` (forced mode), `"glassUnless"` (selector on `<html>`: those pages keep auto, e.g. Linear app vs its dark-only marketing site) |
 | `src/main/transparent-zen.ts` | sets `:root[data-tz-glass=dark\|light]` (auto = `prefers-color-scheme`) and `--tz-glass-alpha` (popup slider) |
 | `styles/shared/auto-glass.css` + `src/main/modules/autoglass/` | auto glass: on-the-fly tiers for sites without a style (beta) |
 | `tools/glasslab/` | test suite, explorer, discovery, `add` pipeline, showcase + site builder (`./glasslab …`), `screens.json`, `baseline.json`, JS `probes/` |
@@ -163,6 +163,14 @@ private screens — `"private": [selectors]` — scrambled in-page first, iframe
   "light" runs are light glass over a site's dark theme — check light glass over the light theme by hand; cross-origin
   iframes are reported `unmeasured`; WhatsApp keeps its session in IndexedDB (lab can't log in); some apps create data
   just by being opened (NotebookLM made an empty notebook) — keep screens to pages that only display.
+- Sites that follow `prefers-color-scheme` render dark in the lab by default: `"scheme": "light"` on a screen runs it in
+  a light-theme session (one browser session per scheme). Test both when the site has its own light/dark theme.
+- Logins kept on another machine, or apps that keep the session in IndexedDB/localStorage (Linear): copy that profile's
+  `cookies.sqlite` + `storage/default/<origin>` into a dir and run with `GLASSLAB_LOGINS=dir` (merged into the lab profile).
+  Public pages of such an app get `"test_logged_out": [domain]` (cookies deleted, run last in the session).
+- Linear's app paints from a runtime theme engine (`.theme-provider-<hash>` → StyleX `--sx-<hash>` vars) plus inline
+  dynamic styles; `discover` misses vars that feed relative colours, so its site file names vars from a full causal map
+  (every var → sentinel on every provider, diff all elements) — see the comment in `linear.app.css`.
 - SPAs that assign `html.className` (Discord) wipe the extension's root classes: `src/main/modules/RootMarks.ts` re-adds them.
 - Content scripts are classic scripts: a shared chunk import kills them (and the background, unless it's a module) —
   `tests/test_build.py` guards it.

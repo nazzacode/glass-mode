@@ -265,6 +265,7 @@
 				"./styles/websites/linear.app.css"
 			],
 			"glass": "dark",
+			"glassUnless": "[data-sw-cache]",
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/linear.app.ico"
 		},

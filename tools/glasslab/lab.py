@@ -53,12 +53,13 @@ def command():
     return [os.environ.get("GLASSLAB_FIREFOX", "firefox"), *common]
 
 
-def setup(xpi):
+def setup(xpi, scheme="dark"):
     shutil.rmtree(LAB, ignore_errors=True)
     (LAB / "extensions").mkdir(parents=True)
     if xpi and BROWSER == "zen":  # None → plain browser (fixture pages carry their own style); firefox: BiDi install
         shutil.copy(xpi, LAB / "extensions" / f"{EXT_ID}.xpi")
-    (LAB / "user.js").write_text("".join(f'user_pref("{k}", {json.dumps(v)});\n' for k, v in PREFS.items()))
+    prefs = {**PREFS, "ui.systemUsesDarkTheme": int(scheme == "dark")}  # the SITE's theme (prefers-color-scheme), not glass mode
+    (LAB / "user.js").write_text("".join(f'user_pref("{k}", {json.dumps(v)});\n' for k, v in prefs.items()))
     live = live_profile()
     if live is None:
         print("glasslab: no Zen profile → logged-out pages", flush=True)
@@ -71,6 +72,27 @@ def setup(xpi):
         db = sqlite3.connect(LAB / "cookies.sqlite")
         db.execute("pragma wal_checkpoint(truncate)")
         db.close()
+    extra_logins()
+
+
+def extra_logins():
+    """GLASSLAB_LOGINS=dir: logins kept on another machine — dir holds a Zen profile's cookies.sqlite + storage/default/<origin>
+    (apps that keep the session in IndexedDB/localStorage). Its cookies are merged over the live ones, its origins copied."""
+    src = os.environ.get("GLASSLAB_LOGINS")
+    if not src:
+        return
+    src = Path(src).expanduser()
+    if (src / "cookies.sqlite").exists() and (LAB / "cookies.sqlite").exists():
+        db = sqlite3.connect(LAB / "cookies.sqlite")
+        db.execute("attach ? as x", (str(src / "cookies.sqlite"),))
+        cols = [c[1] for c in db.execute("pragma table_info(moz_cookies)") if c[1] != "id"]
+        hosts = [h for (h,) in db.execute("select distinct host from x.moz_cookies")]
+        db.executemany("delete from moz_cookies where host = ?", [(h,) for h in hosts])
+        db.execute(f"insert into moz_cookies ({','.join(cols)}) select {','.join(cols)} from x.moz_cookies")
+        db.commit()
+        db.close()
+    for origin in (src / "storage/default").glob("*") if (src / "storage/default").exists() else []:
+        shutil.copytree(origin, LAB / "storage/default" / origin.name, dirs_exist_ok=True)
 
 
 def kill():
@@ -148,8 +170,8 @@ class Page:
         """a screens.json screen: navigate, `act` (JS), `keys` (real keypresses: apps that ignore synthetic events),
         `after` (JS once the keys are done)"""
         await self.goto(sc["url"], sc.get("settle", 7), sc.get("act"))
-        for k in sc.get("keys", []):
-            await self.keys(KEY.get(k, k))
+        for k in sc.get("keys", []):  # "Control+k" = chord (modifiers held)
+            await self.keys(*[KEY.get(x, x) for x in (k.split("+") if len(k) > 1 and "+" in k else [k])])
             await asyncio.sleep(0.6)
         if sc.get("after"):
             await self.eval(sc["after"])
@@ -188,11 +210,11 @@ class Page:
 
 
 @contextlib.asynccontextmanager
-async def session(xpi, log_path, viewport=(1400, 1000)):
-    """start the headless browser with a fresh lab profile → Page; always cleaned up"""
+async def session(xpi, log_path, viewport=(1400, 1000), scheme="dark"):
+    """start the headless browser with a fresh lab profile → Page; always cleaned up. scheme = the sites' own theme"""
     kill()
     time.sleep(1)
-    setup(xpi)
+    setup(xpi, scheme)
     proc = subprocess.Popen(command(), stdout=open(log_path, "w"), stderr=subprocess.STDOUT)
     try:
         for _ in range(60):

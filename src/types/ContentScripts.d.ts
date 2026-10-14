@@ -10,4 +10,5 @@ export type SupportedWebsite = {
 	run_at?: "document_start" | "document_end" | "document_idle";
 	favicon?: string;
 	glass?: "dark" | "light"; // force a glass mode for this site (e.g. dark-only apps), overrides the popup/auto setting
+	glassUnless?: string; // selector on <html>: pages of the site matching it keep popup/auto glass (Linear app vs dark-only marketing)
 };

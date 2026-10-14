@@ -37,7 +37,9 @@ class TransparentZen {
 		this.checkIfWebsiteAlreadySupported().then(contentScript => {
 			browser.storage.local.get("transparentZenSettings").then(async (settings) => {
 				this.transparentZenSettings = (settings as ExtensionSettings).transparentZenSettings;
-				this.siteGlass = contentScript ? contentScript.glass : undefined;
+				// forced site glass, unless this page is the site's own-theme app (`glassUnless`, matched on <html>: present at document_start)
+				const own = contentScript && contentScript.glassUnless && document.documentElement.matches(contentScript.glassUnless);
+				this.siteGlass = contentScript && !own ? contentScript.glass : undefined;
 				// pre-auto builds persisted "dark" as the default → treat as auto until the user picks in the new popup
 				const s = this.transparentZenSettings;
 				this.applyGlass(s?.glassThemeV2 ? s.glassTheme : "auto", s?.glassOpacity);

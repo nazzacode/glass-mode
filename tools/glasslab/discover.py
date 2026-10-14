@@ -11,16 +11,16 @@ HERE = Path(__file__).parent
 OUT = Path.home() / ".cache/glasslab/discover"
 
 
-async def _discover(xpi, url, act=None, settle=8):
-    async with lab.session(xpi, OUT / "zen.log") as pg:
+async def _discover(xpi, url, act=None, settle=8, scheme="dark"):
+    async with lab.session(xpi, OUT / "zen.log", scheme=scheme) as pg:
         await pg.goto(url, settle, act)
         await pg.detach_styles()            # judge the site's own paint, not ours
         return await pg.probe("discover")
 
 
-def discover(xpi, url, act=None):
+def discover(xpi, url, act=None, scheme="dark"):
     OUT.mkdir(parents=True, exist_ok=True)
-    d = asyncio.run(_discover(xpi, url, act))
+    d = asyncio.run(_discover(xpi, url, act, scheme=scheme))
     host = urlsplit(url).hostname.removeprefix("www.")
     (OUT / f"{host}.json").write_text(json.dumps(d, indent=1))
     print(f"surfaces (top painted backgrounds, share of viewport):")

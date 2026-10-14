@@ -76,9 +76,20 @@ async def measure_screen(pg, sc, out, bounds):
 
 async def run_screens(xpi, out, screens, bounds, do_explore=True):
     results = []
-    async with lab.session(xpi, out / "zen.log") as pg:
-        for sc in screens:
+    for scheme in dict.fromkeys(sc.get("scheme", "dark") for sc in screens):  # one session per site theme (pref at start)
+        results += await run_session(xpi, out, [sc for sc in screens if sc.get("scheme", "dark") == scheme], bounds, do_explore, scheme)
+    return results
+
+
+async def run_session(xpi, out, screens, bounds, do_explore, scheme):
+    results = []
+    async with lab.session(xpi, out / f"zen-{scheme}.log", scheme=scheme) as pg:
+        # `test_logged_out` screens (public pages whose site you're also logged in to) run last: their cookies go
+        for sc in sorted(screens, key=lambda s: bool(s.get("test_logged_out"))):
             print(f"· {sc['id']}", flush=True)
+            for d in sc.get("test_logged_out", []):
+                for dom in (d, "." + d):
+                    await pg.b.call("storage.deleteCookies", filter={"domain": dom})
             await pg.open(sc)
             if sc.get("auto"):  # site without a style → measure auto glass (same switch as the popup toggle)
                 await pg.eval(AUTO)

@@ -101,3 +101,132 @@ nav[class*="_popup"],
 header {
 	backdrop-filter: var(--g-blur);
 }
+
+/* ===================== the app (logged in: linear.app/<workspace>/…) =====================
+   Stable markers only: `body.is-bootstrapped` (set by the app's boot script, never on the marketing site), ids
+   (#mainLayoutContainer, #routeContentContainer), data-attributes (data-sidebar-surface, data-board-item …), ARIA roles.
+   Linear paints from a runtime theme engine: `.theme-provider-<theme hash>` elements (sidebar level, main level, card
+   level) define StyleX variables `--sx-<hash>`; glasslab varmap (causal: each var set to a sentinel on every provider)
+   named the ones below. Var hashes come from Linear's source names (stable across theme changes and deploys so far); if
+   they ever change, the structural rules still re-tier every big surface (no opaque Linear panels on glass) and text
+   falls back to Linear's own ink. Works for Linear's light and dark theme alike: both are remapped onto the glass mode. */
+
+/* frame: whole window is sidebar glass; the inset main panel is the content tier (Gmail/Calendar layout) */
+body.is-bootstrapped {
+	--g-body: var(--g-frame);
+}
+body.is-bootstrapped [class*="theme-provider-"] {
+	/* text. Linear has 4 inks for 12–13px UI; glass has 3 and fg-3 is too faint below ~20px on thin glass (glasslab
+	   Lc 55 < 60), so Linear's near-black secondary joins primary: primary+secondary → fg · tertiary → fg-2 ·
+	   quaternary/placeholder → fg-3 */
+	--sx-ys2i3t: var(--g-fg) !important;
+	--sx-3zwjav: var(--g-fg) !important;
+	--sx-10o0rs5: var(--g-fg) !important;
+	--sx-j1ai0m: var(--g-fg) !important;
+	--sx-16143rj: var(--g-fg-2) !important;
+	--sx-1dd5bcf: var(--g-fg-2) !important;
+	--sx-1fh23cp: var(--g-fg-2) !important;
+	--sx-1awr4hy: var(--g-fg-2) !important;
+	--sx-f6abet: var(--g-fg-3) !important;
+	--sx-1eapsa9: var(--g-fg-3) !important;
+	--sx-1rzu7x2: var(--g-fg-3) !important;
+	--sx-v3o8qy: var(--g-fg-3) !important;
+	--sx-1ltkoa: var(--g-fg-3) !important;
+	/* page/base backgrounds → clear (the level's surface is tiered structurally below) */
+	--sx-1ubxoo9: transparent !important;
+	--sx-1mc3c6y: transparent !important;
+	/* control/row fills: secondary · hover/pressed · selected (accent-tinted) */
+	--sx-1m4y240: var(--g-fill) !important;
+	--sx-1gxylln: var(--g-fill) !important;
+	--sx-629164: var(--g-fill) !important;
+	--sx-13kjjc4: var(--g-fill) !important;
+	--sx-1ccqs4f: var(--g-fill) !important;
+	--sx-16hn3q3: var(--g-fill) !important;
+	--sx-hfmm6c: var(--g-fill) !important; /* buttons (new issue, filter, display options) */
+	--sx-1fphd1n: var(--g-fill) !important; /* view tabs (Active, Backlog) */
+	--sx-ljw4h1: var(--g-fill-hover) !important;
+	--sx-1edn6di: var(--g-fill-selected) !important; /* current sidebar item */
+	--sx-1gm0lru: var(--g-fill-hover) !important;
+	--sx-7jk47a: var(--g-fill-hover) !important;
+	--sx-1gcjx5j: var(--g-fill-hover) !important;
+	--sx-g52i5g: var(--g-fill-hover) !important;
+	--sx-1gakdvt: var(--g-fill-selected) !important;
+	--sx-1rsaf4u: var(--g-fill-selected) !important;
+	--sx-pqiwo2: var(--g-fill-selected) !important;
+	--sx-35jz1e: var(--g-fill-selected) !important;
+	/* lines: primary/secondary → line, tertiary → line-strong */
+	--sx-15wwovl: var(--g-line) !important;
+	--sx-d29rh7: var(--g-line) !important;
+	--sx-1o1lnwn: var(--g-line) !important;
+	--sx-142jeir: var(--g-line) !important;
+	--sx-1uv3w6h: var(--g-line) !important;
+	--sx-k68kma: var(--g-line-strong) !important;
+	--sx-cx2ark: var(--g-line-strong) !important;
+	--sx-w1p5jj: var(--g-line-strong) !important;
+	--sx-138kmyo: var(--g-line-strong) !important;
+	/* overlay alphas (black in Linear light, white in Linear dark): hairlines, pressed states */
+	--sx-1n1r1h9: var(--g-line) !important;
+	--sx-1urpf9d: var(--g-line) !important;
+	--sx-irmyh9: var(--g-line) !important;
+	--sx-5igtf4: var(--g-line-strong) !important;
+	--sx-1jmjcvw: var(--g-line-strong) !important;
+	--sx-1ospiv4: var(--g-line-strong) !important;
+	--sx-193njt9: var(--g-line-strong) !important;
+	--sx-1ikf7kw: var(--g-line-strong) !important;
+	/* named leftovers the app still reads */
+	--app-link-color: var(--g-fg) !important;
+}
+/* named page tokens (html-level: sidebar/page colour, also painted by the agent toolbar strip under the panel) */
+body.is-bootstrapped {
+	--bg-color: transparent !important;
+	--bg-sidebar-color: transparent !important;
+	--content-bg-color: transparent !important;
+	--header-color: transparent !important;
+}
+
+/* sidebar text sits on the thin frame tier → one rank stronger (labels Lc 60 at slider 10 %) */
+body.is-bootstrapped [data-sidebar-surface] {
+	--sx-16143rj: var(--g-fg) !important;
+	--sx-1dd5bcf: var(--g-fg) !important;
+	--sx-1fh23cp: var(--g-fg) !important;
+	--sx-1awr4hy: var(--g-fg) !important;
+	--sx-f6abet: var(--g-fg-2) !important;
+	--sx-1eapsa9: var(--g-fg-2) !important;
+}
+/* dimmed text Linear computes in JS: primary-ink var + a literal inline colour (project list "No updates") → fg-2 */
+body.is-bootstrapped [style*="--x-4xs81a: var(--sx-ys2i3t)"][style*="color: lch("] {
+	color: var(--g-fg-2) !important;
+}
+
+body.is-bootstrapped :is([data-sidebar-surface], #routeContentContainer, #routeContentContainer > main header) {
+	background-color: transparent !important;
+}
+body.is-bootstrapped #routeContentContainer > main {
+	background-color: var(--g-content) !important;
+	border-radius: var(--g-radius-pane) !important;
+	border-color: var(--g-line) !important;
+}
+/* board: columns are a faint fill fading out (Linear's own shape), cards are cards. Column header + body backgrounds
+   are empty layers painted from inline StyleX dynamic styles (`--x-backgroundColor`, a gradient) = sidebar colour .4 */
+body.is-bootstrapped [data-restore-scroll-view="board-container"] [style*="--x-backgroundColor"]:empty:not([data-board-item] *) {
+	background-color: var(--g-fill) !important;
+}
+body.is-bootstrapped [data-restore-scroll-view="board-container"] [style*="linear-gradient"]::after {
+	background-image: linear-gradient(var(--g-fill), transparent) !important;
+}
+body.is-bootstrapped a[data-board-item] {
+	background-color: var(--g-card) !important;
+	box-shadow: var(--g-highlight) !important;
+}
+body.is-bootstrapped a[data-board-item]:hover {
+	background-color: var(--g-fill-hover) !important;
+}
+/* Cmd+K, menus, popovers, dialogs: popover glass; their inner level surfaces clear */
+body.is-bootstrapped :is([data-focus-trap-active], [role="dialog"], [role="menu"], [role="listbox"]:not(main *), [role="tooltip"]) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow), var(--g-highlight) !important;
+}
+body.is-bootstrapped [data-focus-trap-active] :where(div, ul) {
+	background-color: transparent;
+}

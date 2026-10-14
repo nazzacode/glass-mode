@@ -1,5 +1,5 @@
 {
- "_doc": "glasslab test screens. id = <site>-<view>; act = JS run after load (READ-ONLY: never send/archive/mark; open only already-read items); modes = restrict glass modes (forced-dark sites); settle = seconds to wait after load (default 7). private = selectors scrambled before showcase shots (probes/scramble.js; [\"body\"] = whole app). showcase = gallery screen for `glasslab shots`: true | {wallpaper: preset | {dark|light: preset}, modes: [...]} (wallpaper presets: tools/glasslab/wallgen.py; default per mode). auto = site without a style: measure auto glass (on-the-fly mode). logged_out = cookie domains deleted before shots (public pages shown logged out: no avatar, handle or recommendations). keys = real keypresses after act; after = JS once keys are done.",
+ "_doc": "glasslab test screens. id = <site>-<view>; act = JS run after load (READ-ONLY: never send/archive/mark; open only already-read items); modes = restrict glass modes (forced-dark sites); settle = seconds to wait after load (default 7). private = selectors scrambled before showcase shots (probes/scramble.js; [\"body\"] = whole app). showcase = gallery screen for `glasslab shots`: true | {wallpaper: preset | {dark|light: preset}, modes: [...]} (wallpaper presets: tools/glasslab/wallgen.py; default per mode). auto = site without a style: measure auto glass (on-the-fly mode). logged_out = cookie domains deleted before shots (public pages shown logged out: no avatar, handle or recommendations). keys = real keypresses after act (\"Control+k\" = chord); after = JS once keys are done. scheme = the site's own theme (prefers-color-scheme, default dark; one browser session per scheme). test_logged_out = cookie domains deleted before testing this screen (a public page of an app you're logged in to; runs last in its session).",
  "screens": [
   {
    "id": "gcal-week",
@@ -373,14 +373,26 @@
   {
    "id": "linear-home",
    "url": "https://linear.app/",
+   "showcase": true,
+   "test_logged_out": [
+    "linear.app"
+   ],
+   "logged_out": [
+    "linear.app"
+   ],
    "modes": [
     "dark"
-   ],
-   "showcase": true
+   ]
   },
   {
    "id": "linear-pricing",
    "url": "https://linear.app/pricing",
+   "test_logged_out": [
+    "linear.app"
+   ],
+   "logged_out": [
+    "linear.app"
+   ],
    "modes": [
     "dark"
    ]
@@ -388,8 +400,79 @@
   {
    "id": "linear-changelog",
    "url": "https://linear.app/changelog",
+   "test_logged_out": [
+    "linear.app"
+   ],
+   "logged_out": [
+    "linear.app"
+   ],
    "modes": [
     "dark"
+   ]
+  },
+  {
+   "id": "linear-app-board",
+   "url": "https://linear.app/nathan-personal-01/team/GEN/all",
+   "scheme": "light",
+   "private": [
+    "body"
+   ],
+   "settle": 10,
+   "act": "(async () => { document.querySelector('#mainLayoutContainer a[href$=\"/team/GEN/all\"]')?.click(); await new Promise(r => setTimeout(r, 3000)); })()"
+  },
+  {
+   "id": "linear-app-board-dark",
+   "url": "https://linear.app/nathan-personal-01/team/GEN/all",
+   "scheme": "dark",
+   "private": [
+    "body"
+   ],
+   "settle": 10,
+   "explore": false,
+   "act": "(async () => { document.querySelector('#mainLayoutContainer a[href$=\"/team/GEN/all\"]')?.click(); await new Promise(r => setTimeout(r, 3000)); })()"
+  },
+  {
+   "id": "linear-app-inbox",
+   "url": "https://linear.app/nathan-personal-01/team/GEN/all",
+   "scheme": "light",
+   "private": [
+    "body"
+   ],
+   "settle": 10,
+   "act": "(async () => { document.querySelector('#mainLayoutContainer a[href$=\"/inbox\"]')?.click(); await new Promise(r => setTimeout(r, 3000)); })()"
+  },
+  {
+   "id": "linear-app-issue",
+   "url": "https://linear.app/nathan-personal-01/team/GEN/all",
+   "scheme": "light",
+   "private": [
+    "body"
+   ],
+   "settle": 10,
+   "act": "(async () => { document.querySelector('#mainLayoutContainer a[href$=\"/team/GEN/all\"]')?.click(); await new Promise(r => setTimeout(r, 3000)); document.querySelector('a[data-board-item]')?.click(); await new Promise(r => setTimeout(r, 2000)); })()"
+  },
+  {
+   "id": "linear-app-projects",
+   "url": "https://linear.app/nathan-personal-01/projects/all",
+   "scheme": "light",
+   "private": [
+    "body"
+   ],
+   "settle": 10,
+   "act": "(async () => { document.querySelector('#mainLayoutContainer a[href=\"/nathan-personal-01/projects/all\"]')?.click(); await new Promise(r => setTimeout(r, 3000)); })()"
+  },
+  {
+   "id": "linear-app-cmdk",
+   "url": "https://linear.app/nathan-personal-01/team/GEN/all",
+   "scheme": "light",
+   "private": [
+    "body"
+   ],
+   "settle": 10,
+   "explore": false,
+   "act": "(async () => { document.querySelector('#mainLayoutContainer a[href$=\"/team/GEN/all\"]')?.click(); await new Promise(r => setTimeout(r, 3000)); })()",
+   "keys": [
+    "Control+k"
    ]
   },
   {

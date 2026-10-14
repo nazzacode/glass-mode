@@ -38,6 +38,7 @@ def main(argv=None):
     g.add_argument("--content-first", action="store_true"); g.add_argument("--dark-only", action="store_true")
     g.add_argument("--agent", action="store_true"); g.add_argument("--rounds", type=int, default=4); g.add_argument("--force", action="store_true")
     d = sub.add_parser("discover"); d.add_argument("url"); d.add_argument("--act"); d.add_argument("--build", action="store_true")
+    d.add_argument("--scheme", choices=["dark", "light"], default="dark", help="the site's own theme (prefers-color-scheme)")
     n = sub.add_parser("new-site"); n.add_argument("name"); n.add_argument("url"); n.add_argument("--act")
     n.add_argument("--content-first", action="store_true"); n.add_argument("--dark-only", action="store_true")
     n.add_argument("--force", action="store_true"); n.add_argument("--build", action="store_true")
@@ -58,7 +59,7 @@ def main(argv=None):
         return pipeline.add(a.name, a.url, a.act, a.content_first, a.dark_only, a.agent, a.rounds, a.force)
     if a.cmd == "discover":
         from . import discover
-        discover.discover(xpi(a.build), a.url, a.act)
+        discover.discover(xpi(a.build), a.url, a.act, a.scheme)
     if a.cmd == "new-site":
         from . import discover
         discover.new_site(xpi(a.build), a.name, a.url, a.act, a.content_first, a.dark_only, a.force)

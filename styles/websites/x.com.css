@@ -20,6 +20,11 @@ body :is(div, section, header, nav, aside, main):is([style*="background-color: r
 /* menus, dropdowns, dialogs, hovercards, search typeahead */
 :is([role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"], [data-testid="HoverCard"], [data-testid="typeaheadDropdown"]) {
 	background-color: var(--g-popover) !important;
+}
+/* no blur on dialogs: backdrop-filter makes an element the containing block of its position:fixed descendants, and X's
+   dialogs (photo viewer, compose, modal wrappers) hold a fixed full-screen layer → it collapsed to 0 px tall = invisible
+   modal that still locks scroll and eats clicks */
+:is([role="menu"], [role="listbox"], [role="tooltip"], [data-testid="HoverCard"], [data-testid="typeaheadDropdown"]) {
 	backdrop-filter: var(--g-blur);
 }
 /* floating Grok / chat drawer buttons */

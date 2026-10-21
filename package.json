@@ -1,7 +1,7 @@
 {
-  "name": "transparent-zen",
+  "name": "transparent-web",
   "version": "1.0.0",
-  "description": "A browser extension for Zen Browser to inject custom styles to make your favorite websites transparent",
+  "description": "Transparent websites: frosted, liquid-glass panels over your desktop, with readable text.",
   "scripts": {
     "start": "vite",
     "build": "npm run build:extension && web-ext build --config web-ext-config.mjs",
@@ -19,7 +19,8 @@
     "test:unit": "node --test \"src/**/*.test.ts\""
   },
   "type": "module",
-  "author": "FrostyBiscuit",
+  "author": "nazzacode (fork of FrostyBiscuit's Transparent Zen)",
+  "contributors": ["FrostyBiscuit"],
   "license": "MIT",
   "engines": {
     "node": ">=22.15.0"

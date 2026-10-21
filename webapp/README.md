@@ -1,7 +1,7 @@
 # zen-webapp
 
 Turn websites into **web apps**: their own chromeless Zen Browser windows, with their own launcher entry, taskbar icon
-and window class. No sidebar, no URL bar, just the page. With Transparent Zen installed the page's liquid glass shows
+and window class. No sidebar, no URL bar, just the page. With Transparent Web installed the page's liquid glass shows
 straight through to your desktop.
 
 Web apps share your normal Zen profile: same logins, extensions and settings.

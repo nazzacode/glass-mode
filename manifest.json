@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Transparent Zen",
+  "name": "Transparent Web",
   "version": "1.0.0",
-  "description": "Websites as frosted glass over your desktop, with readable text. For Zen Browser.",
+  "description": "Transparent websites: frosted, liquid-glass panels over your desktop, with readable text.",
   "browser_specific_settings": {
     "gecko": {
       "id": "transparent-zen@nazzacode",
@@ -30,7 +30,7 @@
   ],
   "browser_action": {
     "default_popup": "dist/popup/popup.html",
-    "default_title": "Transparent Zen"
+    "default_title": "Transparent Web"
   },
   "options_ui": {
     "page": "dist/settings/settings.html",

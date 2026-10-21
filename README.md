@@ -1,6 +1,6 @@
-# Transparent Zen
+# Transparent Web
 
-A Zen Browser extension that turns websites into frosted glass over your desktop. Text stays readable.
+A browser extension that turns websites into frosted glass over your desktop. Text stays readable. Works in Zen Browser.
 
 A fork of FrostyBiscuit's [Transparent Zen](https://github.com/frostybiscuit/transparent-zen), rebuilt around one design system and a test lab.
 
@@ -20,7 +20,7 @@ Requirements: Zen Browser on Linux (Hyprland, KDE or GNOME) or Windows 11. macOS
 
 Transparent desktops stop at the browser. Every website paints a solid box over your wallpaper, and making pages simply see-through leaves text unreadable over a busy background.
 
-Transparent Zen gives each site frosted panels and menus. Text contrast is measured on every screen and menu, against the brightest and darkest wallpaper.
+Transparent Web gives each site frosted panels and menus. Text contrast is measured on every screen and menu, against the brightest and darkest wallpaper.
 
 It needs Zen because Zen has built-in window transparency, so your desktop can show through a web page. Chrome-based browsers can't do this. Firefox is untested.
 

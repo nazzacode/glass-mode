@@ -1,6 +1,6 @@
 # Liquid Glass site styles
 
-Websites rendered as translucent "liquid glass" over the blurred desktop (Zen + Hyprland blur), one shared design
+Transparent Web renders websites as translucent "liquid glass" over the blurred desktop (Zen + Hyprland blur), one shared design
 system for every site, verified by a headless test suite (`glasslab`).
 
 ## Layout

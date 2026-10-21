@@ -1,6 +1,6 @@
 {
   "name": "glass-mode",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Transparent websites: frosted, liquid-glass panels over your desktop, with readable text.",
   "scripts": {
     "start": "vite",

@@ -12,3 +12,6 @@ node_modules/
 dist/
 builds/
 __pycache__/
+
+# private launch kit (messages, WhatsApp groups)
+launch/

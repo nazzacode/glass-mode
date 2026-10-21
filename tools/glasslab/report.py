@@ -79,7 +79,8 @@ def main(run):
     screens = list(dict.fromkeys(r["screen"] for r in R))
     rows = []
     for r in R:
-        c = r["contrast"] + r["contrast"][-1:]
+        a = r.get("contrast_all", r["contrast"])   # every bound, darkest first (light glass: dark bg reported, not scored)
+        c = a + a[-1:]
         rows.append(f"<tr><td>{r['screen']}</td><td>{r['mode']}</td><td>{int(r['alpha']*100)}%</td><td>{r['texts']}</td>"
                     + cell(c[0], .9) + cell(c[1], .9) + cell(r['surface'], .9) + cell(r['text'], .85) + "</tr>")
     gal = []

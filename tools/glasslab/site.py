@@ -218,10 +218,9 @@ def update_readme(raw, block):
 # Nathan's brief for docs: no sales, tight docs, sidebar + feature list, one good shot first. Plain sentences; the
 # tests forbid em-dashes and sales words here.
 COPY = {
-    "title": "Transparent Web",
+    "title": "Glass Mode",
     "lead": "A browser extension that turns websites into frosted glass over your desktop. Text stays readable. Works in Zen Browser.",
-    "fork": "A fork of FrostyBiscuit's [Transparent Zen](https://github.com/frostybiscuit/transparent-zen), rebuilt "
-            "around one design system and a test lab.",
+    "fork": "Hand-tuned for {n} sites, with text contrast tested on every screen.",
     "features": [
         "Hand-tuned styles for {n} sites: {examples}.",
         "Other sites: automatic glass (beta).",
@@ -233,13 +232,13 @@ COPY = {
     "why": [
         "Transparent desktops stop at the browser. Every website paints a solid box over your wallpaper, and making "
         "pages simply see-through leaves text unreadable over a busy background.",
-        "Transparent Web gives each site frosted panels and menus. Text contrast is measured on every screen and menu, "
+        "Glass Mode gives each site frosted panels and menus. Text contrast is measured on every screen and menu, "
         "against the brightest and darkest wallpaper.",
         "It needs Zen because Zen has built-in window transparency, so your desktop can show through a web page. "
         "Chrome-based browsers can't do this. Firefox is untested.",
     ],
     "install": [
-        "Download [transparent-web.xpi]({repo}/releases/latest/download/transparent-web.xpi) and open it in Zen. "
+        "Download [glass-mode.xpi]({repo}/releases/latest/download/glass-mode.xpi) and open it in Zen. "
         "It is signed by Mozilla.",
         "In `about:config`, set `browser.tabs.allow_transparent_browser` to `true`, then the setting for your system:",
     ],
@@ -285,8 +284,8 @@ COPY = {
         "Sites without a style get the same layers, guessed from the page's layout.",
     ],
     "credits": [
-        "Fork of [Transparent Zen](https://github.com/frostybiscuit/transparent-zen) by FrostyBiscuit. Glass system, "
-        "test lab, automatic glass and web apps by nazzacode. MIT licence.",
+        "Glass Mode by nazzacode. Originally based on [Transparent Zen](https://github.com/frostybiscuit/transparent-zen) "
+        "by FrostyBiscuit. MIT licence.",
     ],
 }
 EXAMPLES = ["Gmail", "Google Calendar", "Spotify", "WhatsApp", "GitHub", "DuckDuckGo"]
@@ -353,7 +352,7 @@ def hero_shot(c):
 
 def overview(c):
     hero = hero_shot(c)
-    fig = f'<figure class="hero">{picture(hero, "Transparent Web")}</figure>' if hero else ""
+    fig = f'<figure class="hero">{picture(hero, "Glass Mode")}</figure>' if hero else ""
     feats = "".join(f"<li>{inline(fill(f, c))}</li>" for f in COPY["features"])
     names = c["names"]
     grid = "".join(f'<figure>{picture(s, view_name(s["screen"], names)[0])}<figcaption>{esc(view_name(s["screen"], names)[0])}'

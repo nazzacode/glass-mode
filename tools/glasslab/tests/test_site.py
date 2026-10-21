@@ -40,7 +40,7 @@ def by_name(rows):
 
 def test_repo_from_glass_ts_single_source():
     assert site.repo('export const REPO = "a/b"; // x') == "a/b"
-    assert site.repo() == "nazzacode/transparent-zen"
+    assert site.repo() == "nazzacode/glass-mode"
 
 
 def test_site_for_first_hit_wins():

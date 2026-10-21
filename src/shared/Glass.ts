@@ -1,7 +1,7 @@
 // glass control logic shared by popup, keyboard commands (background) and the in-page HUD. Pure → src/shared/Glass.test.ts
 export type GlassTheme = "auto" | "dark" | "light";
 
-export const REPO = "nazzacode/transparent-zen"; // issues, releases, docs — the one place to change on a rename
+export const REPO = "nazzacode/glass-mode"; // issues, releases, docs — the one place to change on a rename
 export const OPACITY = { min: 10, max: 90, step: 5, default: 45 } as const;
 
 const clamp = (v: number) => Math.min(OPACITY.max, Math.max(OPACITY.min, v));

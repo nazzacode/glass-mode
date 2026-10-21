@@ -238,7 +238,7 @@ const openSettingsPage = () => {
 <template>
   <div class="container" :style="primaryColor">
     <header id="extension-header">
-      <!-- <img class="logo" src="../assets/images/logo_48.png" alt="Transparent Web Logo"> -->
+      <!-- <img class="logo" src="../assets/images/logo_48.png" alt="Glass Mode Logo"> -->
       <h1 class="headline">{{manifest.name}}</h1>
       <span class="version">{{manifest.version}}</span>
 		</header>
@@ -352,4 +352,4 @@ const openSettingsPage = () => {
 			<a :href="`https://github.com/${REPO}`">GitHub Repository</a>
 		</footer>
   </div>
-</template>
+</template>

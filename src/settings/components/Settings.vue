@@ -353,7 +353,7 @@ const removeBackgroundImage = () => {
   <header :style="{ '--color-primary': getValueOrDefault('primaryColor') as string }">
     <div class="container">
       <div id="page-header">
-        <img class="logo" src="../../../assets/images/logo_48.png" alt="Transparent Web Logo">
+        <img class="logo" src="../../../assets/images/logo_48.png" alt="Glass Mode Logo">
         <h1 class="headline">{{manifest.name}}</h1>
         <span class="version">{{manifest.version}}</span>
       </div>
@@ -364,9 +364,8 @@ const removeBackgroundImage = () => {
       <div class="settings">
         <section v-if="outdatedVersion" class="info-banner">
           <h2 class="headline">New Version Available!</h2>
-          <p class="description">A new version of Transparent Web is available: <strong>{{ latestVersion }}</strong>. Please update to the latest version for the best experience.</p>
+          <p class="description">A new version of Glass Mode is available: <strong>{{ latestVersion }}</strong>. Please update to the latest version for the best experience.</p>
           <div class="button-wrapper">
-            <a class="button" href="https://addons.mozilla.org/en-US/firefox/addon/transparent-zen/">Mozilla Add-Ons</a>
             <a class="button" :href="`https://github.com/${REPO}/releases/latest`">GitHub Release</a>
           </div>
         </section>

@@ -90,7 +90,7 @@ def main(run):
                    + "".join(f'<figure><img src="{p}"><figcaption>{html.escape(k.replace(".45", " · slider 45%"))}</figcaption></figure>' for k, p in imgs)
                    + "</div></section>")
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Transparent Web: Liquid Glass Web Apps</title>
+<title>Glass Mode: Liquid Glass Web Apps</title>
 <style>
 :root{{--bg:#f5f5f7;--fg:#1c1c1e;--fg2:#55555c;--card:#fff;--line:rgba(0,0,0,.08);--ok:#248a3d;--bad:#b5000f;--acc:#007aff}}
 @media (prefers-color-scheme:dark){{:root{{--bg:#111114;--fg:#f2f2f5;--fg2:#a8a8b0;--card:#1c1c20;--line:rgba(255,255,255,.1);--ok:#5fe07f;--bad:#ff9e98;--acc:#0a84ff}}}}
@@ -109,9 +109,9 @@ figcaption{{font-size:12px;color:var(--fg2);margin-top:4px}} .shot{{margin:22px 
 @media (max-width:720px){{.row{{grid-template-columns:1fr}}}}
 </style></head><body><main>
 <h1>Liquid Glass web apps</h1>
-<p class="lead">Your most-used web apps on one shared glass system (Transparent Web, a Transparent Zen fork, + Zen web-app windows), tested for readability and sameness. Local report; screenshots show real accounts.</p>
+<p class="lead">Your most-used web apps on one shared glass system (Glass Mode, a Transparent Zen fork, + Zen web-app windows), tested for readability and sameness. Local report; screenshots show real accounts.</p>
 
-<div class="card"><b>Use it:</b> Transparent Web popup → <b>Glass</b>: Auto (follows desktop light/dark) · Dark · Light, and the <b>Glass opacity</b> slider (10–90%). Text-bearing surfaces have floors, so the slider never makes text unreadable. Web apps: launch from the menu (<code>webapp-*</code>) as Zen web-app windows.</div>
+<div class="card"><b>Use it:</b> Glass Mode popup → <b>Glass</b>: Auto (follows desktop light/dark) · Dark · Light, and the <b>Glass opacity</b> slider (10–90%). Text-bearing surfaces have floors, so the slider never makes text unreadable. Web apps: launch from the menu (<code>webapp-*</code>) as Zen web-app windows.</div>
 
 <h2>What's covered (ranked by your history)</h2>
 <div class="card"><table><tr><th>#</th><th>Site</th><th>Visits (all / 30 d)</th><th>Status</th></tr>

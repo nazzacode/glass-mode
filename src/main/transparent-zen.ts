@@ -46,7 +46,7 @@ class TransparentZen {
 				// every page listens, styled or not, on or off: the popup must reach a page to switch it back on
 				this.initBrowserEvents();
 				if (!contentScript) {
-					console.info("Website is not supported by Transparent Zen");
+					console.info("Website is not supported by Glass Mode");
 					this.webInspector = new WebInspector(this.transparentZenSettings);
 					// lab/test hook (glasslab): same as switching auto glass on for this page
 					document.addEventListener("tz-auto-glass", () => {
@@ -55,7 +55,7 @@ class TransparentZen {
 					});
 					this.removeLoadingScreen();
 				} else {
-					console.info("Website is supported by Transparent Zen");
+					console.info("Website is supported by Glass Mode");
 					this.siteStyle = contentScript;
 					this.supportedSite = new SupportedSite(this.removeLoadingScreen, this.initExtensionSettingsStyles.bind(this));
 					await this.supportedSite.initSupportedWebsite();

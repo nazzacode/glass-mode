@@ -96,7 +96,7 @@ th { font: 500 10.5px var(--f-mono); letter-spacing: .08em; text-transform: uppe
 
 @media (max-width: 760px) {
   .shell { grid-template-columns: 1fr }
-  nav { position: static; max-height: none }
+  nav { position: static; max-height: none; order: 2 }
   main { padding: 26px 18px }
   h1 { font-size: 28px }
 }

@@ -32,10 +32,10 @@ system for every site, verified by a headless test suite (`glasslab`).
 | token | tier | dark | light |
 |---|---|---|---|
 | `--g-window` | page backdrop | `s` | `s` |
-| `--g-frame` | app shell, sidebars, top bars (default `body`) | `.50 → .92` | `.75 → .92` |
-| `--g-content` | pane inside the frame (compensated) | total `.78 → .96` | total `.88 → .96` |
+| `--g-frame` | app shell, sidebars, top bars (default `body`) | `.50 → .92` | `.65 → .92` |
+| `--g-content` | pane inside the frame (compensated) | total `.78 → .96` | total `.80 → .96` |
 | `--g-content-abs` | content tier, absolute (content-first `--g-body`) | same total | same total |
-| `--g-popover` | menus, dialogs, tooltips (+ `--g-blur`) | `.85 → .96` | `.88 → .96` |
+| `--g-popover` | menus, dialogs, tooltips (+ `--g-blur`) | `.85 → .96` | `.80 → .96` |
 
 Tiers run linearly from their readability floor (slider 10 %) to their cap (90 %), so every slider step changes every
 tier. (Until 2026-10-12 they were `clamp(floor, s + offset, cap)`, which left light mode flat below ~65 %.)
@@ -99,8 +99,7 @@ real sites.
 - **Contrast**: every visible text run, APCA through its real paint stack (incl. covering pseudo-elements) over the
   darkest and brightest blurred-wallpaper patch (`wallpapers` bounds, p5/p95). Target: Lc 75 body · 60 labels and
   controls · 45 large text, relaxed to the site's **native** contrast ×0.9 where its own design is lower — glass may
-  never read worse than the original site. Pass ≥ 90 % of characters. Dark glass is gated on both bounds, light glass
-  on the brightest only (it suits bright wallpapers); its dark-wallpaper score is still reported, in parentheses.
+  never read worse than the original site. Pass ≥ 90 % of characters.
 - **Surface unity**: topmost painted surface on a 20×14 grid must be a `glass.css` tier colour. Pass ≥ 90 %.
 - **Text unity**: neutral (low-chroma) text must be a shared foreground. Pass ≥ 85 %.
 - **Exemptions** (reported, not scored): text on site data colours (calendar chips, labels), images/gradients, accent

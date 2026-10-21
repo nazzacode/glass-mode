@@ -108,7 +108,7 @@ async def measure(pg, key, layers, bounds, modes, alpha, shots):
     await pg.attach_styles()
     out = {}
     for mode, (runs, unity, a) in glass.items():
-        m = score(runs, native, unity.get("fgs", []), unity, mode)
+        m = score(runs, native, unity.get("fgs", []), unity)
         m["opacity"] = a
         m["over_content"] = any(l["over"] for l in layers)
         m["ok"] = layer_ok(m)

@@ -77,8 +77,10 @@
 }
 
 :root[data-tz-glass="light"] {
-	--g-floor-chrome: 0.45; /* light frame ≈ Zen sidebar glass (α ~.6 at default slider); was .75 = read solid live */
-	--g-floor-content: 0.55; /* was .88: live window α .90–.96 → white, slider spanned 8 points */
+	/* thinnest that stays readable over ANY wallpaper (incl. black) at the default slider: dark text on light glass over black
+	   needs α ≥ .84 for body (Lc75; .875 for fg-2), ≈ .77 for labels (Lc60). Below the default the slider trades readability for see-through. */
+	--g-floor-chrome: 0.65; /* @45% ≈ .77 (labels); was .75 → read solid live */
+	--g-floor-content: 0.8; /* @45% ≈ .87 (secondary body text, fg-2); was .88 → .92 at default = white */
 	--g-floor-popover: 0.8;
 	--g-rgb: 246, 246, 248;
 	--g-rgb-raised: 255, 255, 255;

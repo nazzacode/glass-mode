@@ -458,6 +458,8 @@ def render(c):
 {sidebar(c)}
 <main class="pane">{articles}</main>
 </div>
+<dialog id="lightbox" aria-label="Gallery"><img alt=""><p></p><button value="-1" aria-label="Previous">‹</button>
+<button value="1" aria-label="Next">›</button><button value="close" aria-label="Close">×</button></dialog>
 <script>
 // one article at a time (docs layout); #site-x deep links work, unknown hash → overview
 const show = () => {{ const id = location.hash.slice(1); const a = document.getElementById(id) || document.getElementById('overview');
@@ -465,6 +467,20 @@ const show = () => {{ const id = location.hash.slice(1); const a = document.getE
   document.querySelectorAll('nav a[href^="#"]').forEach(l => l.toggleAttribute('aria-current', l.getAttribute('href') === '#' + a.id));
   if (id) scrollTo(0, 0); }};
 addEventListener('hashchange', show); show();
+// gallery: click a shot → fullscreen; click image / › / → / swipe = next, ‹ / ← = previous; ×, Esc or backdrop closes
+const box = document.getElementById('lightbox'), big = box.querySelector('img'), cap = box.querySelector('p');
+let imgs = [], at = 0, x0 = null;
+const view = i => {{ at = (i + imgs.length) % imgs.length; const im = imgs[at];
+  big.src = im.currentSrc || im.src; big.alt = im.alt; cap.textContent = `${{im.alt}}  ·  ${{at + 1}} / ${{imgs.length}}`; }};
+document.querySelector('main').addEventListener('click', e => {{ const im = e.target.closest('figure img'); if (!im) return;
+  imgs = [...im.closest('article').querySelectorAll('figure img')]; view(imgs.indexOf(im)); box.showModal(); }});
+box.addEventListener('click', e => {{ const b = e.target.closest('button');
+  if (b) b.value === 'close' ? box.close() : view(at + +b.value); else if (e.target === big) view(at + 1); else box.close(); }});
+box.addEventListener('touchstart', e => {{ x0 = e.touches[0].clientX; }}, {{ passive: true }});
+box.addEventListener('touchend', e => {{ const dx = e.changedTouches[0].clientX - x0;
+  if (Math.abs(dx) > 40) {{ view(at + (dx < 0 ? 1 : -1)); e.preventDefault(); }} }});
+addEventListener('keydown', e => {{ if (!box.open) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') {{ view(at + 1); e.preventDefault(); }} else if (e.key === 'ArrowLeft') view(at - 1); }});
 </script>
 </body>
 </html>
@@ -490,7 +506,8 @@ def readme_md(c):
     strip = [shot(n, f"opacity {n[-2:]} %") for n in R["strip"]]
     gallery = [g for g in (shot(n, n.split("-")[0].split(".")[0].title()) for n in R["gallery"]) if g]
     bullets = lambda lines: "\n".join(f"- {fill(l, c)}" for l in lines)
-    md = [f"# {COPY['title']}", "", COPY["lead"], "", fill(COPY["fork"], c), "", shot(R["hero"], "Wikipedia as light glass"), "",
+    md = [f"# {COPY['title']}", "", COPY["lead"], "", fill(COPY["fork"], c), "",
+          f"Website, every site and test results: [{site_url}]({site_url})", "", shot(R["hero"], "Wikipedia as light glass"), "",
           bullets(COPY["features"]), "", COPY["requirements"], "",
           "## Why", "", md_lines(COPY["why"], c), "",
           "## Install", "", "\n".join(f"{i}. {fill(l, c)}" for i, l in enumerate(COPY["install"], 1)), "",

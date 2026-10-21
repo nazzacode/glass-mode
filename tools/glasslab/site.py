@@ -239,8 +239,8 @@ COPY = {
         "Chrome-based browsers can't do this. Firefox is untested.",
     ],
     "install": [
-        "Download `transparent-zen.xpi` from [Releases]({repo}/releases/latest) and open it in Zen. Until the signed "
-        "release, first set `xpinstall.signatures.required` to `false` in `about:config`.",
+        "Download [transparent-web.xpi]({repo}/releases/latest/download/transparent-web.xpi) and open it in Zen. "
+        "It is signed by Mozilla.",
         "In `about:config`, set `browser.tabs.allow_transparent_browser` to `true`, then the setting for your system:",
     ],
     "install_os": [

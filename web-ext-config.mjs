@@ -30,6 +30,7 @@ export default {
 		"metadata.json",
 		"vite.content.config.ts",
 		"dist/**/*.map",
+		"launch/", // launch drafts (posts, messages): never in the package
 	],
 	build: {
 		overwriteDest: true,

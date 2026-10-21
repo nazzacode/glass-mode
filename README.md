@@ -26,7 +26,7 @@ It needs Zen because Zen has built-in window transparency, so your desktop can s
 
 ## Install
 
-1. Download `transparent-zen.xpi` from [Releases](https://github.com/nazzacode/transparent-zen/releases/latest) and open it in Zen. Until the signed release, first set `xpinstall.signatures.required` to `false` in `about:config`.
+1. Download [transparent-web.xpi](https://github.com/nazzacode/transparent-zen/releases/latest/download/transparent-web.xpi) and open it in Zen. It is signed by Mozilla.
 2. In `about:config`, set `browser.tabs.allow_transparent_browser` to `true`, then the setting for your system:
 
 - Linux: `zen.widget.linux.transparency` = `true`. Your compositor does the blur: Hyprland out of the box, KDE with [kwin-effects-forceblur](https://github.com/taj-ny/kwin-effects-forceblur), GNOME with [Blur my Shell](https://extensions.gnome.org/extension/3193/blur-my-shell/).

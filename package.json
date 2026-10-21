@@ -1,6 +1,6 @@
 {
   "name": "transparent-web",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Transparent websites: frosted, liquid-glass panels over your desktop, with readable text.",
   "scripts": {
     "start": "vite",
@@ -20,7 +20,9 @@
   },
   "type": "module",
   "author": "nazzacode (fork of FrostyBiscuit's Transparent Zen)",
-  "contributors": ["FrostyBiscuit"],
+  "contributors": [
+    "FrostyBiscuit"
+  ],
   "license": "MIT",
   "engines": {
     "node": ">=22.15.0"

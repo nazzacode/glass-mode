@@ -4,8 +4,10 @@ Per screen × glass mode × slider alpha:
   - captures over pure black and pure white → exact per-pixel colour + alpha (CSP-proof), composited offline onto
     blurred wallpapers (backdrops) → contact sheets; `glass` = share of the window where the desktop shows through
   - text probe: every visible text run, APCA through its real paint stack over the backdrop bounds (darkest / brightest
-    blurred-wallpaper patch). Target per run: size floor (75 body · 60 labels/controls · 45 large), relaxed to the site's
-    own native contrast ×0.9 where the native design is already below it → glass never reads worse than the site.
+    blurred-wallpaper patch). Light glass is gated on the brightest only, dark glass on both (metrics.scored_bounds); the
+    ungated number is still reported (`contrast_all`; summary: in parentheses). Target per run: size floor (75 body ·
+    60 labels/controls · 45 large), relaxed to the site's own native contrast ×0.9 where the native design is already
+    below it → glass never reads worse than the site.
   - unity: surfaces must be glass.css tiers; neutral text must be a shared foreground.
 Then (default alpha, every mode) `explore` opens menus / dropdowns / dialogs / suggestions read-only and scores each layer
 the same way + opacity (explore.py). Exemptions (reported, not scored): text on site data colours / images / accent fills.
@@ -16,7 +18,7 @@ from pathlib import Path
 from PIL import Image
 
 from . import explore, lab
-from .metrics import alpha_map, composite, glass_share, rkey, score, verdict
+from .metrics import alpha_map, composite, glass_share, rkey, score, scored_bounds, verdict
 
 HERE = Path(__file__).parent
 ALPHAS = [0.1, 0.45, 0.9]          # popup slider extremes + default
@@ -66,7 +68,7 @@ async def measure_screen(pg, sc, out, bounds):
             white.save(out / "raw" / f"{key}.white.png")
             await pg.clear_backdrop()
             unity = await pg.probe("unity") or {}
-            m = score(await pg.probe("text", bounds, [0, 0, 0, 0]) or [], native, unity.get("fgs", []), unity)
+            m = score(await pg.probe("text", bounds, [0, 0, 0, 0]) or [], native, unity.get("fgs", []), unity, mode)
             m.update(key=key, screen=sc["id"], mode=mode, alpha=a, ok=verdict(m), glass=glass_share(alpha_map(black, white)))
             pg_rows.append(m)
             print(f"  {key:30s} contrast {min(m['contrast']):4.0%}  surface {m['surface']:4.0%}  text {m['text']:4.0%}"
@@ -134,10 +136,12 @@ def summary_md(results):
              "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for r in results:
         w = r["failing"][0] if r["failing"] else None
-        c = r["contrast"] + r["contrast"][-1:]
+        ca = r.get("contrast_all", r["contrast"])
+        c = ca + ca[-1:]
+        info = 0 not in scored_bounds(r["mode"], len(ca))   # dark-wallpaper bound measured, not gating → (parentheses)
         g = f"opacity {r['opacity']:.2f}" if "state" in r else f"{r.get('glass', 0):.0%}"
         lines.append(f"| {r['key'].split('.')[0]} | {r.get('state', '')} | {r['mode']} | {int(r['alpha'] * 100)} | "
-                     f"{r['texts']} | {c[0]:.0%} | {c[1]:.0%} | {r['surface']:.0%} | {r['text']:.0%} | {g} | {'✓' if r['ok'] else '✗'} | "
+                     f"{r['texts']} | {f'({c[0]:.0%})' if info else f'{c[0]:.0%}'} | {c[1]:.0%} | {r['surface']:.0%} | {r['text']:.0%} | {g} | {'✓' if r['ok'] else '✗'} | "
                      + (f"`{w['sel']}` Lc {min(w['lc'])} (target {w['target']})" if w else "") + " |")
     return "\n".join(lines) + "\n"
 

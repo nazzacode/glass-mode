@@ -38,6 +38,6 @@ def test_every_step_changes_every_tier(alphas, mode):
 @pytest.mark.parametrize("mode", ["dark", "light"])
 def test_floors_at_the_low_end_caps_at_the_high_end(alphas, mode):
     lo, hi = alphas[(mode, 0.1)], alphas[(mode, 0.9)]
-    floors = {"dark": [0.5, 0.78, 0.85], "light": [0.75, 0.88, 0.88]}[mode]
+    floors = {"dark": [0.5, 0.78, 0.85], "light": [0.45, 0.55, 0.8]}[mode]
     assert [round(x, 2) for x in lo] == floors
     assert [round(x, 2) for x in hi] == [0.92, 0.96, 0.96]

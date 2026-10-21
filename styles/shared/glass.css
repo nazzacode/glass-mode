@@ -77,9 +77,9 @@
 }
 
 :root[data-tz-glass="light"] {
-	--g-floor-chrome: 0.75; /* light glass over dark wallpaper (e.g. space) is the hard case → frosted */
-	--g-floor-content: 0.88;
-	--g-floor-popover: 0.88;
+	--g-floor-chrome: 0.45; /* light frame ≈ Zen sidebar glass (α ~.6 at default slider); was .75 = read solid live */
+	--g-floor-content: 0.55; /* was .88: live window α .90–.96 → white, slider spanned 8 points */
+	--g-floor-popover: 0.8;
 	--g-rgb: 246, 246, 248;
 	--g-rgb-raised: 255, 255, 255;
 	--g-fg: #1c1c1e;

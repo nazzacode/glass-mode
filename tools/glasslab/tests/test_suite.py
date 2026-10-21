@@ -24,6 +24,12 @@ def test_summary_lists_states_and_screens():
     assert md.count("✗") == 1
 
 
+def test_summary_marks_ungated_dark_wallpaper_contrast():
+    row = m(key="app.light.45", screen="app", mode="light", alpha=0.45, glass=0.8, contrast=[1.0], contrast_all=[0.4, 1.0])
+    md = suite.summary_md([row])
+    assert "| (40%) | 100% |" in md and "✓" in md
+
+
 def test_failures_include_states_at_default_alpha():
     rows = suite.state_rows(STATES, "app", 0.45)
     assert suite.failures(rows) == ["app~file-menu.dark.45"]

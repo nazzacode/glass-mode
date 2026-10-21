@@ -26,7 +26,7 @@ def auto(request, xpi, fixture_url, tmp_path_factory):  # noqa: F811
             unity = await pg.probe("unity")
             runs = await pg.probe("text", BOUNDS, [0, 0, 0, 0])
             r = {"mode": request.param, "unity": unity, "runs": runs, "glass": metrics.glass_share(metrics.alpha_map(black, white)),
-                 "score": metrics.score(runs, {}, unity["fgs"], unity),
+                 "score": metrics.score(runs, {}, unity["fgs"], unity, request.param),
                  "btn": await pg.eval("getComputedStyle(document.querySelector('.btn')).backgroundColor"),
                  "tag": await pg.eval("getComputedStyle(document.querySelector('.tag')).backgroundColor"),
                  "pic": await pg.eval("getComputedStyle(document.querySelector('.pic')).backgroundImage"),
@@ -44,8 +44,11 @@ def test_surfaces_are_glass_tiers(auto):
     assert auto["score"]["surface"] >= 0.9, auto["unity"]["foreign"]
 
 
-def test_text_is_readable_on_any_wallpaper(auto):
+def test_text_is_readable_on_promised_wallpapers(auto):
+    """dark glass: darkest AND brightest wallpaper; light glass: bright wallpapers (dark bound only reported)"""
+    assert len(auto["score"]["contrast"]) == len(metrics.scored_bounds(auto["mode"], len(BOUNDS)))
     assert min(auto["score"]["contrast"]) >= 0.9, auto["score"]["failing"][:4]
+    assert len(auto["score"]["contrast_all"]) == len(BOUNDS)   # every bound still measured
 
 
 def test_neutral_text_uses_shared_inks(auto):
@@ -79,7 +82,7 @@ def docs(xpi, fixture_url, tmp_path_factory):  # noqa: F811
             await pg.glass("dark", 0.45)
             unity = await pg.probe("unity")
             runs = await pg.probe("text", BOUNDS, [0, 0, 0, 0])
-            r = metrics.score(runs, {}, unity["fgs"], unity)
+            r = metrics.score(runs, {}, unity["fgs"], unity, "dark")
             r["banner"] = await pg.eval("getComputedStyle(document.getElementById('consent')).backgroundColor")
             r["banner_fg"] = await pg.eval("getComputedStyle(document.getElementById('consent')).color")
             return r

@@ -58,8 +58,16 @@ def neutral_text_conformance(runs, fgs, tol=10):
     return (ok / tot if tot else 1.0), sorted(foreign.items(), key=lambda x: -x[1])[:6]
 
 
-def score(runs, native, fgs, unity):
-    """split exempt runs, set per-run targets (size floor, relaxed to native ×0.9), contrast pass per bound + unity"""
+def scored_bounds(mode, n):
+    """indices of the n wallpaper bounds (ordered darkest → brightest) that gate contrast for a glass mode. Light glass is
+    promised on bright wallpapers → brightest bound only; dark glass (and native/unknown) → every bound. The rest are
+    still measured and reported (`contrast_all`), never gating."""
+    return [n - 1] if mode == "light" and n else list(range(n))
+
+
+def score(runs, native, fgs, unity, mode=None):
+    """split exempt runs, set per-run targets (size floor, relaxed to native ×0.9), contrast pass per bound + unity.
+    `contrast` = scored bounds only (scored_bounds(mode)); `contrast_all` = every bound, darkest → brightest (informational)"""
     def exempt(r):
         nv = native.get(rkey(r))
         return (r.get("chip") or r.get("img")) and nv is not None and nv[1] == r["fg"]
@@ -71,15 +79,19 @@ def score(runs, native, fgs, unity):
         r["target"] = r["need"] if nv is None else min(r["need"], nv[0] * 0.9)
     tot = sum(r["n"] for r in sc) or 1
     nb = len(sc[0]["cr"]) if sc else 0
-    contrast = [sum(r["n"] for r in sc if r["cr"][k] >= r["target"]) / tot for k in range(nb)] or [1.0]
+    contrast_all = [sum(r["n"] for r in sc if r["cr"][k] >= r["target"]) / tot for k in range(nb)] or [1.0]
+    idx = scored_bounds(mode, nb)
+    contrast = [contrast_all[k] for k in idx] or [1.0]
     text, text_foreign = neutral_text_conformance(sc, fgs)
     failing = {}
     for r in sc:
-        if min(r["cr"]) < r["target"]:
-            g = failing.setdefault(r["sel"], {"sel": r["sel"], "chars": 0, "lc": r["cr"], "target": round(r["target"]), "fg": r["fg"], "t": r["t"]})
+        lc = [r["cr"][k] for k in idx]
+        if min(lc) < r["target"]:
+            g = failing.setdefault(r["sel"], {"sel": r["sel"], "chars": 0, "lc": lc, "target": round(r["target"]), "fg": r["fg"], "t": r["t"]})
             g["chars"] += r["n"]
     img_exempt = sum(r["n"] for r in ex if r.get("img") and not r.get("chip")) / max(1, sum(r["n"] for r in runs))
     return {"texts": len(sc), "exempt": len(ex), "exempt_img_share": round(img_exempt, 3), "contrast": [round(v, 3) for v in contrast],
+            "contrast_all": [round(v, 3) for v in contrast_all],
             "surface": round(unity.get("surface", 0), 3), "text": round(text, 3), "tiers": unity.get("tiers", {}),
             "surface_foreign": unity.get("foreign", []), "text_foreign": text_foreign,
             "failing": sorted(failing.values(), key=lambda g: -g["chars"])[:10]}

@@ -49,6 +49,24 @@ def test_score_contrast_and_text_unity():
     assert not metrics.verdict(m)
 
 
+def test_scored_bounds_light_glass_gates_on_bright_wallpapers_only():
+    assert metrics.scored_bounds("light", 2) == [1]          # bounds are darkest → brightest
+    assert metrics.scored_bounds("dark", 2) == [0, 1]
+    assert metrics.scored_bounds(None, 2) == [0, 1]          # native / unknown: every bound
+    assert metrics.scored_bounds("light", 0) == []
+
+
+def test_score_light_reports_dark_wallpaper_without_gating():
+    fg = [[28, 28, 30]]
+    runs = [run("a", "rgb(28, 28, 30)", [20, 90])]             # dark text on thin light glass: fails over black, fine over bright
+    light = metrics.score(runs, {}, fg, {"surface": 1.0}, "light")
+    assert light["contrast"] == [1.0] and light["contrast_all"] == [0.0, 1.0]
+    assert not light["failing"] and metrics.verdict({**light, "exempt_img_share": 0})
+    dark = metrics.score(runs, {}, fg, {"surface": 1.0}, "dark")
+    assert dark["contrast"] == [0.0, 1.0] and dark["failing"][0]["lc"] == [20, 90]
+    assert not metrics.verdict(dark)
+
+
 def test_score_native_relaxation():
     # site's own design reads at Lc 40 → glass needs only 36 for that run
     r = run("a", "rgb(242, 242, 245)", [38, 38])

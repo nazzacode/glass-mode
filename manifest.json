@@ -10,7 +10,8 @@
         "required": [
           "none"
         ]
-      }
+      },
+      "update_url": "https://nazzacode.github.io/glass-mode/updates.json"
     }
   },
   "icons": {

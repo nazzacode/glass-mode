@@ -12,6 +12,7 @@
     "build:major": "node ./scripts/updateVersion.mjs major && npm run build",
     "watch": "web-ext run --config web-ext-config.mjs",
     "sign": "web-ext sign --config web-ext-config.mjs",
+    "release": "node ./scripts/release.mjs",
     "lint": "biome check && web-ext lint --config web-ext-config.mjs",
     "lint:fix": "biome check --write",
     "glass:test": "./glasslab test --compare",

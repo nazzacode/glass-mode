@@ -17,6 +17,24 @@ import "./transparent-zen.css";
 
 declare const browser: Browser;
 
+// sites on custom domains (a Substack publication at its own URL): no URL match → look for the platform's fingerprint
+// (`detect` selector) once <head> is parsed, i.e. when <body> appears. Unlisted pages wait only that long (hidden anyway).
+function detectSite(sites: Array<SupportedWebsite>): Promise<SupportedWebsite | undefined> {
+	const detectable = sites.filter((s) => s.detect);
+	const found = () => detectable.find((s) => document.querySelector(s.detect as string));
+	if (!detectable.length || document.body) return Promise.resolve(found());
+	return new Promise((resolve) => {
+		const done = () => {
+			observer.disconnect();
+			document.removeEventListener("DOMContentLoaded", done);
+			resolve(found());
+		};
+		const observer = new MutationObserver(() => (found() || document.body) && done());
+		observer.observe(document.documentElement, { childList: true, subtree: true });
+		document.addEventListener("DOMContentLoaded", done);
+	});
+}
+
 class TransparentZen {
 	private autoGlass = new AutoGlass();
 	private autoOn = false;
@@ -69,27 +87,14 @@ class TransparentZen {
 		});
 	}
 
-	private checkIfWebsiteAlreadySupported(): Promise<SupportedWebsite | false> {
-		const contentScriptsUrl = browser.runtime.getURL("data/ContentScripts.json");
-		return new Promise((resolve) => {
-			fetch(contentScriptsUrl).then(async (response) => {
-				if (response.ok) {
-					const data: ContentScripts = await response.json();
-					const currentUrl = window.location.href;
-					for (const script of data.supportedWebsites) {
-						for (const match of script.matches) {
-							const regex = new RegExp(match);
-							if (regex.test(currentUrl)) {
-								this.isSupportedWebsite = true;
-								resolve(script as SupportedWebsite);
-								break;
-							}
-						}
-					}
-				}
-				resolve(false);
-			});
-		});
+	private async checkIfWebsiteAlreadySupported(): Promise<SupportedWebsite | false> {
+		const response = await fetch(browser.runtime.getURL("data/ContentScripts.json"));
+		if (!response.ok) return false;
+		const { supportedWebsites: sites }: ContentScripts = await response.json();
+		const url = window.location.href;
+		const site = sites.find((s) => s.matches.some((m) => new RegExp(m).test(url))) ?? (await detectSite(sites));
+		this.isSupportedWebsite = !!site;
+		return site ?? false;
 	}
 
 	private applyCustomBackgrounds(): void {

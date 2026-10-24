@@ -88,6 +88,10 @@
    ]
   },
   {
+   "id": "substack-custom-domain",
+   "url": "https://www.astralcodexten.com/"
+  },
+  {
    "id": "youtube-home",
    "url": "https://www.youtube.com/",
    "private": [

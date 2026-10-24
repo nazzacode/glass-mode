@@ -19,6 +19,7 @@
 			"css": [
 				"./styles/websites/substack.css"
 			],
+			"detect": "link[href^='https://substackcdn.com']",
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/substack.com.ico"
 		},

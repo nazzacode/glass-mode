@@ -370,16 +370,61 @@ def rate(p):
     return f'<span class="{"ok" if p and p[0] == p[1] else "warn" if p else "dim"}">{frac(p)}</span>'
 
 
+def thumbs(s, c):
+    """card image per mode: beauty shot > default-state test tile > any tile; a missing mode borrows the other"""
+    mine = lambda xs: [x for x in xs if x["screen"] in s["screens"]]
+    shots_, tiles = mine(c["shots"]), mine(c["tiles"])
+    pick = lambda m: next((f"shots/{x[m]}" for x in shots_ if x[m]), None) or next(
+        (f"tests/{t['file']}" for t in sorted(tiles, key=lambda t: t["state"] is not None) if t["mode"] == m), None)
+    got = {m: pick(m) for m in MODES}
+    return {m: got[m] or next((v for v in got.values() if v), None) for m in MODES}
+
+
+def data_attrs(s):
+    return (f'data-name="{esc(s["name"].lower())}" data-host="{esc((s["host"] or "").lower())}" '
+            f'data-status="{esc(s["status"])}"')
+
+
+def card_html(s, c):
+    t = thumbs(s, c)
+    img = (f'<img src="{esc(t["dark"])}" data-dark="{esc(t["dark"])}" data-light="{esc(t["light"])}" alt="{esc(s["name"])}" '
+           f'width="960" height="600" loading="lazy" decoding="async">' if t["dark"] else '<div class="noimg">no screenshot yet</div>')
+    return (f'<figure class="card" {data_attrs(s)}>{img}<figcaption><a href="#site-{esc(s["id"])}"><span class="dot '
+            f'{DOT[s["status"]]}"></span>{esc(s["name"])}</a><small>{esc(verdict(s))}</small></figcaption></figure>')
+
+
+CHIPS = [("verified", "tested", True), ("pending", "pending", True), ("auto", "auto", False)]
+
+
+def seg(key, opts, label):
+    """button group; aria-pressed marks the chosen one (the script keeps it in sync)"""
+    return (f'<div class="seg" data-key="{key}" role="group" aria-label="{label}">'
+            + "".join(f'<button type="button" value="{v}" aria-pressed="{str(on).lower()}">{t}</button>' for v, t, on in opts)
+            + "</div>")
+
+
 def sites_page(c):
+    listed = [s for s in c["sites"] if s["screens"]]
+    n = {k: sum(s["status"] == k for s in listed) for k, _, _ in CHIPS}
+    chips = seg("status", [(k, f'<span class="dot {DOT[k]}"></span>{t} <span class="dim">{n[k]}</span>', on)
+                           for k, t, on in CHIPS if n[k]], "Status")
+    bar = (f'<div class="bar"><input type="search" id="q" placeholder="Search {len(listed)} sites" aria-label="Search sites" '
+           f'autocomplete="off">{chips}{seg("mode", [("dark", "Dark", True), ("light", "Light", False)], "Glass")}'
+           f'<select id="sort" aria-label="Sort"><option value="status">Status</option><option value="name">A to Z</option>'
+           f'<option value="shuffle">Shuffle</option></select>'
+           f'{seg("view", [("grid", "Grid", True), ("table", "Table", False)], "View")}</div>')
     rows = "".join(
-        f'<tr><td><a href="#site-{esc(s["id"])}">{esc(s["name"])}</a></td><td><span class="dot {DOT[s["status"]]}"></span>'
+        f'<tr {data_attrs(s)}><td><a href="#site-{esc(s["id"])}">{esc(s["name"])}</a></td><td><span class="dot {DOT[s["status"]]}"></span>'
         f'{esc(verdict(s))}</td><td>{len(s["screens"]) or "–"}</td><td>{s["states"] or "–"}</td>'
         f'<td>{rate(s["pass"].get("dark"))}</td><td>{rate(s["pass"].get("light"))}</td></tr>'
-        for s in c["sites"] if s["screens"])
-    return (f'<article id="sites"><h1>Sites</h1><p class="sub">Every styled site and what the lab checked at the default '
-            f'opacity ({c["opacity"]} %). Hidden UI counts the menus and dialogs it opened.</p>'
-            f'<div class="tbl"><table><thead><tr><th>Site</th><th>Status</th><th>Screens</th><th>Hidden UI</th><th>Dark</th>'
+        for s in listed)
+    return (f'<article id="sites" class="wide"><h1>Sites</h1><p class="sub">Every styled site and what the lab checked at the '
+            f'default opacity ({c["opacity"].get("default", A)} %). Click a picture to flip through them; click a name for its screens and menus.</p>'
+            f'{bar}<p class="count dim" aria-live="polite"></p>'
+            f'<div class="grid cards">{"".join(card_html(s, c) for s in listed)}</div>'
+            f'<div class="tbl" hidden><table><thead><tr><th>Site</th><th>Status</th><th>Screens</th><th>Hidden UI</th><th>Dark</th>'
             f'<th>Light</th></tr></thead><tbody>{rows}</tbody></table></div>'
+            f'<p class="empty" hidden>No site matches.</p>'
             f'<p><a href="{esc(issue_url("site-request", repo=c["repo"]))}">Request a site</a></p></article>')
 
 
@@ -398,7 +443,7 @@ def site_page(s, c):
     shots = [x for x in c["shots"] if x["screen"] in s["screens"]]
     tiles = [t for t in c["tiles"] if t["screen"] in s["screens"]]
     pd, pl = s["pass"].get("dark"), s["pass"].get("light")
-    return (f'<article id="site-{esc(s["id"])}"><span class="status"><span class="dot {DOT[s["status"]]}"></span>'
+    return (f'<article id="site-{esc(s["id"])}"><a class="back" href="#sites">All sites</a><span class="status"><span class="dot {DOT[s["status"]]}"></span>'
             f'{esc(verdict(s))}</span><h1>{esc(s["name"])}</h1><p class="sub">{esc(s["host"] or "")}. Passing at '
             f'default opacity: dark {frac(pd)}, light {frac(pl)}.'
             + (" Dark only." if s.get("forced") == "dark" else "") + "</p>"
@@ -417,14 +462,15 @@ def pre(text):
 
 
 def sidebar(c):
+    """topics + one Sites link; the site list itself lives in the gallery (it only grows)"""
     groups = "".join(f'<div class="group">{g}</div>' + "".join(f'<a href="#{i}">{t}</a>' for i, t in items) for g, items in GROUPS)
-    listed = [s for s in c["sites"] if s["screens"] and s["status"] != "auto"]   # auto benchmarks: in the table only
-    sites = '<div class="group"><a class="grouplink" href="#sites">Sites</a></div>' + "".join(
-        f'<a href="#site-{esc(s["id"])}"><span class="dot {DOT[s["status"]]}"></span>{esc(s["name"])}</a>' for s in listed)
+    n = sum(bool(s["screens"]) for s in c["sites"])
     return (f'<nav class="pane"><div class="brand"><b>{esc(COPY["title"])}</b><small>Glass for Zen Browser</small>'
             f'<small><a href="{gh(c["repo"])}">GitHub</a> · <a href="{gh(c["repo"], "/releases/latest")}">Download</a></small></div>'
-            f'{groups}{sites}<div class="legend"><span><span class="dot live"></span>tested</span>'
-            f'<span><span class="dot partial"></span>pending</span><span><span class="dot planned"></span>auto</span></div></nav>')
+            f'{groups}<div class="group">Sites</div><a href="#sites">All sites <span class="dim">{n}</span></a></nav>')
+
+
+SCRIPT = (HERE / "site.js").read_text()
 
 
 def render(c):
@@ -460,27 +506,7 @@ def render(c):
 <dialog id="lightbox" aria-label="Gallery"><img alt=""><p></p><button value="-1" aria-label="Previous">‹</button>
 <button value="1" aria-label="Next">›</button><button value="close" aria-label="Close">×</button></dialog>
 <script>
-// one article at a time (docs layout); #site-x deep links work, unknown hash → overview
-const show = () => {{ const id = location.hash.slice(1); const a = document.getElementById(id) || document.getElementById('overview');
-  document.querySelectorAll('article').forEach(x => x.classList.toggle('on', x === a));
-  document.querySelectorAll('nav a[href^="#"]').forEach(l => l.toggleAttribute('aria-current', l.getAttribute('href') === '#' + a.id));
-  if (id) scrollTo(0, 0); }};
-addEventListener('hashchange', show); show();
-// gallery: click a shot → fullscreen; click image / › / → / swipe = next, ‹ / ← = previous; ×, Esc or backdrop closes
-const box = document.getElementById('lightbox'), big = box.querySelector('img'), cap = box.querySelector('p');
-let imgs = [], at = 0, x0 = null;
-const view = i => {{ at = (i + imgs.length) % imgs.length; const im = imgs[at];
-  big.src = im.currentSrc || im.src; big.alt = im.alt; cap.textContent = `${{im.alt}}  ·  ${{at + 1}} / ${{imgs.length}}`; }};
-document.querySelector('main').addEventListener('click', e => {{ const im = e.target.closest('figure img'); if (!im) return;
-  imgs = [...im.closest('article').querySelectorAll('figure img')]; view(imgs.indexOf(im)); box.showModal(); }});
-box.addEventListener('click', e => {{ const b = e.target.closest('button');
-  if (b) b.value === 'close' ? box.close() : view(at + +b.value); else if (e.target === big) view(at + 1); else box.close(); }});
-box.addEventListener('touchstart', e => {{ x0 = e.touches[0].clientX; }}, {{ passive: true }});
-box.addEventListener('touchend', e => {{ const dx = e.changedTouches[0].clientX - x0;
-  if (Math.abs(dx) > 40) {{ view(at + (dx < 0 ? 1 : -1)); e.preventDefault(); }} }});
-addEventListener('keydown', e => {{ if (!box.open) return;
-  if (e.key === 'ArrowRight' || e.key === ' ') {{ view(at + 1); e.preventDefault(); }} else if (e.key === 'ArrowLeft') view(at - 1); }});
-</script>
+{SCRIPT}</script>
 </body>
 </html>
 """

@@ -232,3 +232,30 @@ def test_status_comes_from_the_numbers():
     assert site.verdict(some) == "8 of 18 checks fail"
     assert site.verdict(none) == "not tested yet"
     assert site.verdict({"status": "auto", "pass": {"dark": (2, 2)}}) == "auto glass, passes"
+
+
+def test_sidebar_has_no_site_list(html):
+    """the site list grows without bound → it lives in the gallery; the sidebar keeps one Sites link"""
+    nav = html[html.index("<nav"):html.index("</nav>")]
+    assert 'href="#sites"' in nav and "#site-" not in nav
+
+
+def test_gallery_cards_filterable_with_mode_thumbs(html):
+    art = html[html.index('<article id="sites"'):html.index("</article>", html.index('<article id="sites"'))]
+    assert art.count('class="card"') == 5                            # every site with screens, auto included
+    assert 'data-status="auto"' in art and 'data-host="mail.example.com"' in art
+    assert 'data-dark="shots/mail-inbox.dark.webp" data-light="shots/mail-inbox.light.webp"' in art
+    assert 'data-dark="shots/tube-home.dark.webp" data-light="shots/tube-home.dark.webp"' in art   # dark-only borrows
+    assert 'class="noimg"' in art                                    # no shot, no tile → placeholder
+    assert 'aria-pressed="false">' in art and 'value="auto" aria-pressed="false"' in art  # auto off by default
+    assert '<div class="tbl" hidden>' in art and 'href="#site-mail-pro"' in art
+
+
+def test_thumbs_prefer_shot_then_default_state_tile():
+    s = {"screens": ["a-x"]}
+    c = {"shots": [], "tiles": [{"screen": "a-x", "mode": "dark", "state": "menu", "file": "a-x~m.dark.webp"},
+                                {"screen": "a-x", "mode": "dark", "state": None, "file": "a-x.dark.webp"}]}
+    assert site.thumbs(s, c) == {"dark": "tests/a-x.dark.webp", "light": "tests/a-x.dark.webp"}
+    c["shots"] = [{"screen": "a-x", "dark": None, "light": "a-x.light.webp"}]
+    assert site.thumbs(s, c) == {"dark": "tests/a-x.dark.webp", "light": "shots/a-x.light.webp"}
+    assert site.thumbs({"screens": []}, c) == {"dark": None, "light": None}

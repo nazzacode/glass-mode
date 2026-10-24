@@ -1,0 +1,13 @@
+{
+  "addons": {
+    "transparent-zen@nazzacode": {
+      "updates": [
+        {
+          "version": "1.0.4",
+          "update_link": "https://github.com/nazzacode/glass-mode/releases/download/v1.0.4/glass-mode.xpi",
+          "update_hash": "sha256:215d843435cb1ef54a22a167202ec7aaa424faf2119ac028e7110f1b511284ce"
+        }
+      ]
+    }
+  }
+}

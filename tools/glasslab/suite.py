@@ -15,7 +15,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from . import explore, lab
+from . import explore, lab, replay
 from .metrics import alpha_map, composite, glass_share, rkey, score, verdict
 
 HERE = Path(__file__).parent
@@ -41,7 +41,8 @@ def backdrops():
 
 def load_screens(filt=""):
     data = json.loads((HERE / "screens.json").read_text())
-    return [s for s in data["screens"] if re.search(filt, s["id"])]
+    have = lambda s: not s.get("replay") or (replay.STORE / s["replay"] / "index.json").exists()  # capture is per machine
+    return [s for s in data["screens"] if re.search(filt, s["id"]) and have(s)]
 
 
 def state_rows(states, screen, alpha):
@@ -53,6 +54,9 @@ def state_rows(states, screen, alpha):
 
 async def measure_screen(pg, sc, out, bounds):
     pg_rows = []
+    wall = await pg.wall()
+    if wall:
+        print(f"  WALL: bot check or block page, not the site. Rows fail; try ./glasslab replay HOST", flush=True)
     await pg.detach_styles()
     (await pg.shot()).save(out / "shots" / f"{sc['id']}.native.png")
     native = {rkey(r): (min(r["cr"]), r["fg"]) for r in (await pg.probe("text", bounds, [0, 0, 0, 0]) or [])}
@@ -67,10 +71,14 @@ async def measure_screen(pg, sc, out, bounds):
             await pg.clear_backdrop()
             unity = await pg.probe("unity") or {}
             m = score(await pg.probe("text", bounds, [0, 0, 0, 0]) or [], native, unity.get("fgs", []), unity)
-            m.update(key=key, screen=sc["id"], mode=mode, alpha=a, ok=verdict(m), glass=glass_share(alpha_map(black, white)))
+            m.update(key=key, screen=sc["id"], mode=mode, alpha=a, ok=verdict(m) and not wall, wall=wall, glass=glass_share(alpha_map(black, white)))
             pg_rows.append(m)
             print(f"  {key:30s} contrast {min(m['contrast']):4.0%}  surface {m['surface']:4.0%}  text {m['text']:4.0%}"
                   f"  glass {m['glass']:4.0%}  {'ok' if m['ok'] else 'FAIL'}", flush=True)
+    if not wall and await pg.wall():  # a challenge can arrive after the page first looked fine
+        print("  WALL: appeared while measuring. Rows fail", flush=True)
+        for m in pg_rows:
+            m.update(ok=False, wall=True)
     return pg_rows
 
 
@@ -81,9 +89,9 @@ async def run_screens(xpi, out, screens, bounds, do_explore=True):
     return results
 
 
-async def run_session(xpi, out, screens, bounds, do_explore, scheme):
+async def visit_screens(xpi, out, screens, bounds, do_explore, scheme, prefs):
     results = []
-    async with lab.session(xpi, out / f"zen-{scheme}.log", scheme=scheme) as pg:
+    async with lab.session(xpi, out / f"zen-{scheme}.log", scheme=scheme, extra_prefs=prefs) as pg:
         # `test_logged_out` screens (public pages whose site you're also logged in to) run last: their cookies go
         for sc in sorted(screens, key=lambda s: bool(s.get("test_logged_out"))):
             print(f"· {sc['id']}", flush=True)
@@ -94,11 +102,20 @@ async def run_session(xpi, out, screens, bounds, do_explore, scheme):
             if sc.get("auto"):  # site without a style → measure auto glass (same switch as the popup toggle)
                 await pg.eval(AUTO)
                 await asyncio.sleep(1.5)
-            results += await measure_screen(pg, sc, out, bounds)
-            if do_explore and sc.get("explore", True):
+            rows = await measure_screen(pg, sc, out, bounds)
+            results += rows
+            if do_explore and sc.get("explore", True) and not sc.get("replay") and not rows[0]["wall"]:
                 states = await explore.explore(pg, bounds, sc["id"], sc.get("modes", MODES), DEFAULT_ALPHA, out / "raw",
                                                settle=sc.get("settle", 7), private=bool(sc.get("private")))
                 results += state_rows(states, sc["id"], DEFAULT_ALPHA)
+    return results
+
+
+async def run_session(xpi, out, screens, bounds, do_explore, scheme):
+    results = []
+    hosts = {sc["replay"] for sc in screens if sc.get("replay")}
+    with replay.serving(hosts) as prefs:
+        results += await visit_screens(xpi, out, screens, bounds, do_explore, scheme, prefs)
     return results
 
 
@@ -165,7 +182,7 @@ def compare(results, baseline, explored=True):
     now_all = baseline_numbers(results)
     regs = []
     for k, now in now_all.items():
-        was = baseline.get(k)
+        was = baseline.get(k) if not k.endswith(".10") else None  # below the default = the user's trade: reported, not graded
         for m in METRICS if was else ():
             if now[m] < was[m] - REGRESSION:
                 regs.append(f"{k} {m} {was[m]:.0%} → {now[m]:.0%}")

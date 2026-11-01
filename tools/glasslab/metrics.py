@@ -9,6 +9,16 @@ LAYER_ALPHA = 0.8       # menus/dialogs/suggestions: below this the page behind 
 CLEAR = 0.97            # a pixel counts as glass (desktop shows through) below this alpha
 
 
+# bot checks and block pages: what was measured isn't the site. A pass here would ship a style for a page nobody saw
+WALL_TITLE = re.compile(r"^(just a moment|attention required|access denied|verify you are human|are you a robot|pardon our interruption)", re.I)
+WALL_TEXT = re.compile(r"performing security verification|verifying you are human|checking your browser|verify you are human", re.I)
+
+
+def is_wall(title, marker=False, text=""):
+    """page title, whether a wall's own element is present (lab.WALL_MARKERS), start of the page text"""
+    return bool(marker or WALL_TITLE.search((title or "").strip()) or WALL_TEXT.search(text or ""))
+
+
 def alpha_map(black, white):
     """exact per-pixel alpha from the page captured over pure black and pure white: α = 1 − (W − B)/255"""
     B = np.asarray(black.convert("RGB"), dtype=np.float32)

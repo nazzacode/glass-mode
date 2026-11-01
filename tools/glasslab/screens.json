@@ -522,6 +522,22 @@
     1.0,
     0.5
    ]
+  },
+  {
+   "id": "powerthesaurus-synonyms",
+   "url": "http://www.powerthesaurus.org/title/synonyms",
+   "replay": "www.powerthesaurus.org"
+  },
+  {
+   "id": "powerthesaurus-site-light",
+   "url": "http://www.powerthesaurus.org/title/synonyms",
+   "replay": "www.powerthesaurus.org",
+   "act": "document.body.removeAttribute('data-theme')"
+  },
+  {
+   "id": "powerthesaurus-home",
+   "url": "http://www.powerthesaurus.org/",
+   "replay": "www.powerthesaurus.org"
   }
  ]
 }

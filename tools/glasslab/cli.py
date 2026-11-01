@@ -10,6 +10,7 @@
   ./glasslab shots [FILTER] [--out DIR] [--modes dark,light] [--all]  showcase shots; --all: test tiles, every screen + hidden UI
   ./glasslab shots --sweep SCREEN [--modes dark]                      opacity 10→90 % animation (launch GIF)
   ./glasslab shots --strip SCREEN [--modes dark]                      the same screen at 10 / 45 / 90 % (README)
+  ./glasslab replay HOST                                              real pages from your Zen cache, for sites that wall the lab
   ./glasslab site [--run RUN]                                         public site (site/index.html) + README sites table
 """
 import argparse, subprocess, sys
@@ -49,8 +50,14 @@ def main(argv=None):
     s.add_argument("--modes", default="dark,light"); s.add_argument("--build", action="store_true")
     s.add_argument("--all", action="store_true")
     p = sub.add_parser("site"); p.add_argument("--run"); p.add_argument("--out")
+    rp = sub.add_parser("replay"); rp.add_argument("host")
     a = ap.parse_args(argv)
 
+    if a.cmd == "replay":
+        from . import replay
+        pages = replay.capture(a.host)
+        print(f"{len(pages)} pages in {replay.STORE / a.host}:", *pages, sep="\n  ")
+        return 0
     if a.cmd == "test":
         from . import suite
         return suite.main(xpi(a.build), a.filter, a.out, a.save_baseline, a.compare, not a.no_explore)

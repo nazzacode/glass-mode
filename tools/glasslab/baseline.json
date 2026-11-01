@@ -3503,6 +3503,114 @@
   "text": 1.0,
   "ok": true
  },
+ "powerthesaurus-home.dark.10": {
+  "contrast": 0.0,
+  "surface": 0.996,
+  "text": 0.893,
+  "ok": false
+ },
+ "powerthesaurus-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 0.893,
+  "ok": true
+ },
+ "powerthesaurus-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 0.893,
+  "ok": true
+ },
+ "powerthesaurus-home.light.10": {
+  "contrast": 0.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": false
+ },
+ "powerthesaurus-home.light.45": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "powerthesaurus-home.light.90": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "powerthesaurus-site-light.dark.10": {
+  "contrast": 0.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "powerthesaurus-site-light.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "powerthesaurus-site-light.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "powerthesaurus-site-light.light.10": {
+  "contrast": 0.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "powerthesaurus-site-light.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "powerthesaurus-site-light.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "powerthesaurus-synonyms.dark.10": {
+  "contrast": 0.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "powerthesaurus-synonyms.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "powerthesaurus-synonyms.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "powerthesaurus-synonyms.light.10": {
+  "contrast": 0.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "powerthesaurus-synonyms.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "powerthesaurus-synonyms.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
  "reader-doc.dark.10": {
   "contrast": 1.0,
   "surface": 1,

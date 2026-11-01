@@ -1,0 +1,54 @@
+@import url("../shared/glass.css");
+
+/* Power Thesaurus. Clean token system, redefined per theme on body[data-theme=dark], plain :root otherwise → the map on body covers both themes.
+   primary1 = page, primary2 = cards, inputs and menus, primary3 = fixed top bar + home hero, secondary = rows and rules.
+   Page stays on the frame tier, cards on content: same hierarchy as the site, and it reads as glass rather than a slab. */
+
+:root > body:not(#tz-glass) {
+	--color-primary1: transparent;
+	--color-primary2: var(--g-content);
+	--color-primary3: var(--g-frame);
+	--color-secondary1: var(--g-line-strong);
+	--color-secondary2: var(--g-fill);
+	--color-text1: var(--g-fg);
+	--color-text2: var(--g-fg-2);
+	--color-text3: var(--g-fg-2);
+	--color-tips: var(--g-fg-2);
+	--color-icons: var(--g-fg-2);
+	--color-icons-items-accent: var(--g-blue);
+	--color-text-icons-accent: var(--g-on-accent);
+	--color-accent: var(--g-accent);
+	--color-accent-hover: var(--g-blue);
+	--color-positive: var(--g-green);
+	--color-negative: var(--g-red);
+	--color-attention: var(--g-orange);
+	--color-backdrop: var(--g-scrim);
+	--color-overlay11: var(--g-fill);
+	--color-overlay12: var(--g-fill-hover);
+	--color-overlay21: var(--g-fill);
+	--color-overlay22: var(--g-fill-hover);
+	--color-overlay31: var(--g-fill);
+	--color-overlay32: var(--g-fill-hover);
+	--color-abbreviation: var(--g-fill-selected);
+	--color-vote-percentage: var(--g-fill-selected);
+	--pt-layout-box-shadow: none;
+}
+
+/* fixed top bar: the word list scrolls under it */
+#header {
+	backdrop-filter: var(--g-blur);
+}
+
+/* white on the brand fill, which glass replaced: logo (hard-coded SVG) and hero tagline */
+:root[data-tz-glass="light"] :is(#header a[aria-label] svg, header > svg) [fill="#fff"] {
+	fill: var(--g-fg);
+}
+:root[data-tz-glass="light"] header > h1 {
+	color: var(--g-fg-2);
+}
+
+/* floating layers paint primary2 too → give them the popover tier. Hidden UI: not measured by replay */
+:is([role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"], [data-floating-ui-portal] > *) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+}

@@ -6,12 +6,13 @@
      [data-tz-glass]    dark | light (popup: auto follows the desktop theme)
    Site files only MAP their own tokens/regions onto the tiers below; they never invent alphas or colours.
 
-   tier      role (Apple)                                   alpha (s = slider)
+   tier      role (Apple)                                   alpha at slider 10 % → 45 % (default) → 90 %
    window    page backdrop, gaps between panes              s
-   frame     sidebars, top bars, nav rails (glass layer)    .50 → .92   light .75 → .92
-   content   lists, reading panes, grids (content layer)    .78 → .96   light .88 → .96
-   popover   menus, dialogs, tooltips ("thicker" glass)     .85 → .96   light .88 → .96  + blur
-   (floor at slider 10 %, cap at 90 %, linear in between: every slider step changes every tier)
+   frame     sidebars, top bars, nav rails (glass layer)    .12 → .68 → .92   light .12 → .77 → .92
+   content   lists, reading panes, grids (content layer)    .20 → .86 → .96   light .20 → .87 → .96
+   popover   menus, dialogs, tooltips ("thicker" glass)     .60 → .90 → .96   light .60 → .87 → .96  + blur
+   --g-floor-* = the readable value AT THE DEFAULT. Above it the slider adds opacity; below it the user trades
+   readability for clarity (their call, not graded). Linear on each side: every step changes every tier.
    rows / controls: fixed overlay fills (no slider); text: solid colours only, never low-alpha text on glass.
 
    Stacking (typical app = frame + pane): body carries the FRAME tint (--g-frame = chrome tier, absolute), panes sit on
@@ -25,18 +26,19 @@
 	--g-s: var(--tz-glass-alpha, 0.45);
 
 	--g-a-window: var(--g-s);
-	/* slider position 0..1 (10 % → 0, 90 % → 1). Each tier runs linearly from its readability floor to its cap, so every
-	   step changes every tier (the old clamp(floor, s + x, cap) sat flat on the floor below ~65 % in light mode) */
-	--g-t: clamp(0, calc((var(--g-s) - 0.1) / 0.8), 1);
-	--g-a-chrome: calc(var(--g-floor-chrome) + (0.92 - var(--g-floor-chrome)) * var(--g-t));
-	--g-a-content: calc(var(--g-floor-content) + (0.96 - var(--g-floor-content)) * var(--g-t));
-	--g-a-popover: calc(var(--g-floor-popover) + (0.96 - var(--g-floor-popover)) * var(--g-t));
+	/* two-sided slider. lo: 10 % → default, min → floor. hi: default → 90 %, floor → cap. Floors = readable at the default
+	   (was one line from 10 % to 90 %: 18 points of travel on content, so the slider looked dead) */
+	--g-t-lo: clamp(0, calc((var(--g-s) - 0.1) / 0.35), 1);
+	--g-t-hi: clamp(0, calc((var(--g-s) - 0.45) / 0.45), 1);
+	--g-a-chrome: calc(0.12 + (var(--g-floor-chrome) - 0.12) * var(--g-t-lo) + (0.92 - var(--g-floor-chrome)) * var(--g-t-hi));
+	--g-a-content: calc(0.2 + (var(--g-floor-content) - 0.2) * var(--g-t-lo) + (0.96 - var(--g-floor-content)) * var(--g-t-hi));
+	--g-a-popover: calc(0.6 + (var(--g-floor-popover) - 0.6) * var(--g-t-lo) + (0.96 - var(--g-floor-popover)) * var(--g-t-hi));
 	--g-a-content-on: max(0, calc((var(--g-a-content) - var(--g-a-chrome)) / (1 - var(--g-a-chrome))));
 
 	/* dark (default) */
-	--g-floor-chrome: 0.5; /* labels on thin glass stay Lc60 at slider 10% over bright wallpaper */
-	--g-floor-content: 0.78; /* Apple keeps content near-solid; .78 = long secondary text readable over p95 wallpaper (glasslab) */
-	--g-floor-popover: 0.85;
+	--g-floor-chrome: 0.684; /* labels stay Lc60 over bright wallpaper at the default */
+	--g-floor-content: 0.859; /* Apple keeps content near-solid; long secondary text readable over p95 wallpaper (glasslab) */
+	--g-floor-popover: 0.898;
 	--g-rgb: 22, 22, 26; /* base tint: neutral, faintly cool (DMS Apple greys) */
 	--g-rgb-raised: 38, 38, 44; /* popovers, cards */
 	--g-fg: #f2f2f5;
@@ -79,9 +81,9 @@
 :root[data-tz-glass="light"] {
 	/* thinnest that stays readable over ANY wallpaper (incl. black) at the default slider: dark text on light glass over black
 	   needs α ≥ .84 for body (Lc75; .875 for fg-2), ≈ .77 for labels (Lc60). Below the default the slider trades readability for see-through. */
-	--g-floor-chrome: 0.65; /* @45% ≈ .77 (labels); was .75 → read solid live */
-	--g-floor-content: 0.8; /* @45% ≈ .87 (secondary body text, fg-2); was .88 → .92 at default = white */
-	--g-floor-popover: 0.8;
+	--g-floor-chrome: 0.768; /* labels; .86 read solid live */
+	--g-floor-content: 0.87; /* secondary body text, fg-2; .92 = white */
+	--g-floor-popover: 0.87;
 	--g-rgb: 246, 246, 248;
 	--g-rgb-raised: 255, 255, 255;
 	--g-fg: #1c1c1e;

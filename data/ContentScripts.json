@@ -280,6 +280,17 @@
 			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/translate.google.com.ico"
+		},
+		{
+			"name": "Power Thesaurus",
+			"matches": [
+				"^https?://(www\\.)?powerthesaurus\\.org/"
+			],
+			"css": [
+				"./styles/websites/powerthesaurus.org.css"
+			],
+			"run_at": "document_start",
+			"favicon": "https://icons.duckduckgo.com/ip3/powerthesaurus.org.ico"
 		}
 	]
 }

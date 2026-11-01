@@ -11,6 +11,8 @@ from pathlib import Path
 import websockets
 from PIL import Image
 
+from .metrics import is_wall
+
 APP = "app.zen_browser.zen"
 SANDBOX = Path.home() / ".var/app" / APP
 PORT = int(os.environ.get("GLASSLAB_PORT", 9333))  # one lab per port → parallel runs: GLASSLAB_PORT=9334 ./glasslab …
@@ -22,6 +24,7 @@ PROBES = Path(__file__).parent / "probes"
 KEY = {"Escape": "\uE00C", "Backspace": "\uE003", "Control": "\uE009", "Tab": "\uE004", "Enter": "\uE007",  # WebDriver key values
        "Shift": "\uE008", "Alt": "\uE00A", "ArrowUp": "\uE013", "ArrowDown": "\uE015"}
 MODIFIERS = {KEY["Control"], KEY["Shift"], KEY["Alt"]}
+WALL_MARKERS = ".ray-id, #challenge-form, #cf-wrapper, iframe[src*='captcha-delivery.com']"
 PREFS = {
     "xpinstall.signatures.required": False,
     "extensions.autoDisableScopes": 0,
@@ -48,17 +51,19 @@ def live_profile():
 
 def command():
     common = ["--headless", "--no-remote", "--profile", str(LAB), f"--remote-debugging-port={PORT}"]
+    if os.environ.get("GLASSLAB_SYSTEM"):  # script access to extension pages (popup test)
+        common.append("-remote-allow-system-access")
     if BROWSER == "zen":
         return ["flatpak", "run", "--command=/app/zen/zen", APP, *common]
     return [os.environ.get("GLASSLAB_FIREFOX", "firefox"), *common]
 
 
-def setup(xpi, scheme="dark"):
+def setup(xpi, scheme="dark", extra_prefs=None):
     shutil.rmtree(LAB, ignore_errors=True)
     (LAB / "extensions").mkdir(parents=True)
     if xpi and BROWSER == "zen":  # None → plain browser (fixture pages carry their own style); firefox: BiDi install
         shutil.copy(xpi, LAB / "extensions" / f"{EXT_ID}.xpi")
-    prefs = {**PREFS, "ui.systemUsesDarkTheme": int(scheme == "dark")}  # the SITE's theme (prefers-color-scheme), not glass mode
+    prefs = {**PREFS, "ui.systemUsesDarkTheme": int(scheme == "dark"), **(extra_prefs or {})}  # the SITE's theme (prefers-color-scheme), not glass mode
     (LAB / "user.js").write_text("".join(f'user_pref("{k}", {json.dumps(v)});\n' for k, v in prefs.items()))
     live = live_profile()
     if live is None:
@@ -166,6 +171,11 @@ class Page:
             await self.eval(act)
             await asyncio.sleep(4)
 
+    async def wall(self):
+        """is this a bot check / block page rather than the site? (metrics.is_wall)"""
+        got = await self.eval(f"JSON.stringify([document.title, !!document.querySelector({json.dumps(WALL_MARKERS)}), (document.body?.innerText ?? '').slice(0, 1000)])")
+        return is_wall(*json.loads(got))
+
     async def open(self, sc):
         """a screens.json screen: navigate, `act` (JS), `keys` (real keypresses: apps that ignore synthetic events),
         `after` (JS once the keys are done)"""
@@ -210,11 +220,11 @@ class Page:
 
 
 @contextlib.asynccontextmanager
-async def session(xpi, log_path, viewport=(1400, 1000), scheme="dark"):
+async def session(xpi, log_path, viewport=(1400, 1000), scheme="dark", extra_prefs=None):
     """start the headless browser with a fresh lab profile → Page; always cleaned up. scheme = the sites' own theme"""
     kill()
     time.sleep(1)
-    setup(xpi, scheme)
+    setup(xpi, scheme, extra_prefs)
     proc = subprocess.Popen(command(), stdout=open(log_path, "w"), stderr=subprocess.STDOUT)
     try:
         for _ in range(60):

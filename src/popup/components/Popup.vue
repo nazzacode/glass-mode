@@ -106,6 +106,8 @@ onMounted(() => {
 });
 
 const changeSetting = (event: Event) => {
+	const changed = event.target as HTMLInputElement;
+	if (changed.name === "glass-opacity") sendMessageToAllTabs({ action: "changeGlassOpacity", value: Number(changed.value) }); // live while dragging; only the save below waits
 	if (inputDebounce) {
 		clearTimeout(inputDebounce);
 	}
@@ -133,9 +135,6 @@ const changeSetting = (event: Event) => {
 					extensionSettings.value.glassThemeV2 = true;
 				}
 				sendMessageToAllTabs({ action: "changeGlassTheme", value: input.value });
-				break;
-			case "glass-opacity":
-				sendMessageToAllTabs({ action: "changeGlassOpacity", value: Number(input.value) });
 				break;
 		}
 
@@ -270,7 +269,7 @@ const openSettingsPage = () => {
 					<div class="setting">
 						<span class="label">Glass opacity</span>
 						<div class="value">
-							<input type="range" min="10" max="90" name="glass-opacity" v-model.number="extensionSettings.glassOpacity" @input="changeSetting">
+							<input type="range" min="10" max="90" step="5" name="glass-opacity" v-model.number="extensionSettings.glassOpacity" @input="changeSetting">
 							<span class="range-value">{{ extensionSettings.glassOpacity ?? DEFAULT_SETTINGS.glassOpacity }}%</span>
 						</div>
 					</div>

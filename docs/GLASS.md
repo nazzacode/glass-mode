@@ -32,13 +32,13 @@ system for every site, verified by a headless test suite (`glasslab`).
 | token | tier | dark | light |
 |---|---|---|---|
 | `--g-window` | page backdrop | `s` | `s` |
-| `--g-frame` | app shell, sidebars, top bars (default `body`) | `.50 → .92` | `.65 → .92` |
-| `--g-content` | pane inside the frame (compensated) | total `.78 → .96` | total `.80 → .96` |
+| `--g-frame` | app shell, sidebars, top bars (default `body`) | `.12 → .68 → .92` | `.12 → .77 → .92` |
+| `--g-content` | pane inside the frame (compensated) | total `.20 → .86 → .96` | total `.20 → .87 → .96` |
 | `--g-content-abs` | content tier, absolute (content-first `--g-body`) | same total | same total |
-| `--g-popover` | menus, dialogs, tooltips (+ `--g-blur`) | `.85 → .96` | `.80 → .96` |
+| `--g-popover` | menus, dialogs, tooltips (+ `--g-blur`) | `.60 → .90 → .96` | `.60 → .87 → .96` |
 
-Tiers run linearly from their readability floor (slider 10 %) to their cap (90 %), so every slider step changes every
-tier. (Until 2026-10-12 they were `clamp(floor, s + offset, cap)`, which left light mode flat below ~65 %.)
+Values are slider 10 % → 45 % (default) → 90 %, linear on each side, so every step changes every tier. `--g-floor-*` = the
+readable value at the default. Below the default the user trades readability for clarity: reported, not graded.
 | `--g-fill` / `-hover` / `-selected` | rows, controls | white .05 / .07, accent .24 | white frost .55 / .72, accent .10 |
 | `--g-paper` | user content with own colours | `rgba(250,250,252,.97)` | same |
 | `--g-fg` / `-2` / `-3` | text | `#f2f2f5 / #dfdfe3 / #a8a8b0` | `#1c1c1e / #333338 / #55555c` |
@@ -116,6 +116,10 @@ real sites.
   `<screen>~<state>.<mode>.45`.
 - **Glass share**: share of the window where the desktop shows through (catches "styled but still opaque").
 - `--no-explore` skips hidden UI; screens with `"auto": true` measure auto glass on sites without a style (benchmark).
+
+- **Walls**: a bot check or block page (`metrics.is_wall`) fails every row; it isn't the site.
+- **Replay**: `./glasslab replay HOST` copies real pages from your Zen HTTP cache (local, never commit); a screen with
+  `"replay": "<host>"` loads them through a local proxy, no request to the site, scripts stripped: surfaces only, no hidden UI.
 
 Exit code ≠ 0 on any failure at the default slider or any regression (`--compare`). Extremes are reported.
 

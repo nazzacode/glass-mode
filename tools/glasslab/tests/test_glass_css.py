@@ -1,5 +1,5 @@
-"""glass.css slider maths: every tier must respond to the slider over its whole range (the old clamp(floor, s+x, cap)
-left light mode flat below ~65 %: the one control did nothing), floors hold at the low end, caps at the high end."""
+"""glass.css slider maths: every tier must respond to the slider over its whole range and visibly so; the default
+keeps the readable floors, the low end is clear (the user's trade), caps at the high end."""
 import asyncio, json
 
 import pytest
@@ -36,8 +36,9 @@ def test_every_step_changes_every_tier(alphas, mode):
 
 
 @pytest.mark.parametrize("mode", ["dark", "light"])
-def test_floors_at_the_low_end_caps_at_the_high_end(alphas, mode):
-    lo, hi = alphas[(mode, 0.1)], alphas[(mode, 0.9)]
-    floors = {"dark": [0.5, 0.78, 0.85], "light": [0.65, 0.8, 0.8]}[mode]
-    assert [round(x, 2) for x in lo] == floors
+def test_clear_at_the_low_end_readable_at_the_default_caps_at_the_high_end(alphas, mode):
+    lo, mid, hi = alphas[(mode, 0.1)], alphas[(mode, 0.45)], alphas[(mode, 0.9)]
+    floors = {"dark": [0.68, 0.86, 0.9], "light": [0.77, 0.87, 0.87]}[mode]
+    assert [round(x, 2) for x in lo] == [0.12, 0.2, 0.6]
+    assert [round(x, 2) for x in mid] == floors
     assert [round(x, 2) for x in hi] == [0.92, 0.96, 0.96]

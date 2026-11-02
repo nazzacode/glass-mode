@@ -1,0 +1,34 @@
+<!doctype html><html class="site-root"><head><meta charset="utf-8"><title>freeze fixture</title>
+<meta http-equiv="Content-Security-Policy" content="img-src * data: blob:; style-src * 'unsafe-inline'; script-src 'unsafe-inline' http:">
+<style id="static">body { margin: 0; background: #223; color: #eee; font: 16px sans-serif }</style>
+<style id="cssinjs"></style>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("cssinjs").sheet.insertRule("#injected { color: rgb(1, 2, 3); }");
+  const adopted = new CSSStyleSheet(); adopted.replaceSync("#adopted { color: rgb(4, 5, 6); }");
+  document.adoptedStyleSheets = [adopted];
+  const open = document.getElementById("shadow-open").attachShadow({ mode: "open" });
+  open.innerHTML = '<style>p { color: rgb(7, 8, 9); }</style><p id="inside">in shadow</p>';
+  const closed = document.getElementById("shadow-closed").attachShadow({ mode: "closed" });
+  closed.innerHTML = '<p id="inclosed">closed</p>';
+  document.getElementById("field").value = "typed text";
+  document.getElementById("pw").value = "hunter2";
+  document.getElementById("tick").checked = true;
+  const c = document.getElementById("cv"); c.getContext("2d").fillRect(0, 0, 10, 10);
+  document.getElementById("modal").showModal();
+  document.getElementById("pop").showPopover();
+  document.getElementById("scroller").scrollTop = 40;
+  document.documentElement.classList.add("tz-initialized");
+  document.documentElement.dataset.tzGlass = "dark";
+  document.documentElement.style.setProperty("--tz-glass-alpha", "0.3");
+  document.getElementById("marked").dataset.tzTier = "content";
+  window.ranScript = true;
+});
+</script></head><body>
+<link rel="stylesheet" data-tz-file="./styles/x.css" href="data:text/css,">
+<p id="injected" onclick="alert(1)">injected</p><p id="adopted">adopted</p><div id="shadow-open"></div><div id="shadow-closed"></div>
+<div id="marked" data-tz-tier="x">marked</div><input id="field"><input id="pw" type="password"><input id="tick" type="checkbox"><canvas id="cv" width="10" height="10"></canvas>
+<div id="scroller" style="height:50px;overflow:auto"><div style="height:500px">tall</div></div>
+<iframe id="same" srcdoc="<!doctype html><p id=inframe>framed</p>"></iframe>
+<dialog id="modal"><p>a modal</p></dialog><div id="pop" popover>a popover</div>
+</body></html>

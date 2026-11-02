@@ -6,7 +6,6 @@ import { Codemirror } from "vue-codemirror";
 import type { Browser } from "webextension-polyfill-ts";
 import { DEFAULT_SETTINGS } from "../../shared/Constants";
 import { REPO, glassOff, issueUrl, withSiteOff } from "../../shared/Glass";
-import { getValidColorOrFallback } from "../../shared/Helper";
 import { getActivePageDomain, sendMessageToActiveTabs, sendMessageToAllTabs, sendMessageToDomainTabs } from "../../shared/MessageHelper";
 import { getContentScripts, loadSettings, saveSettings } from "../../shared/StorageHelper";
 import type { SupportedWebsite } from "../../types/ContentScripts";
@@ -21,7 +20,6 @@ const manifest: Manifest = browser.runtime.getManifest();
 
 const extensionSettings = ref<ExtensionSettings["transparentZenSettings"] | null>(null);
 const supportedWebsites = ref<Array<SupportedWebsite>>([]);
-const showAllWebsites = ref(false);
 const currentDomain = ref<string>();
 const currentUrl = ref<string>();
 // is the active page covered by a site style? → feedback button reports a bug, else requests the site
@@ -58,15 +56,13 @@ const status = computed(() => {
 	if (style) return s.disabledWebsites.some((w) => w.name === style.name) ? `${style.name} style is switched off in the list below.` : `Glass: ${style.name} style.`;
 	const listed = s.blacklistedDomains.includes(host.value);
 	if (s.enableTransparency && (s.enableWhitelist ? listed : !listed)) return "Glass: auto (beta).";
-	return "No glass style for this site, so it stays opaque. Try auto glass below, or request it.";
+	return "No style for this site yet, so it stays opaque.";
 });
 const domainDisabled = ref(false);
 const siteSpecificSettings = ref<SiteSpecificSetting>({ domain: "", enabled: false, customStyles: "", backgroundSelectors: [] });
 
-const primaryColor = computed(() => {
-	const value = getValidColorOrFallback(extensionSettings.value?.primaryColor, DEFAULT_SETTINGS.primaryColor);
-	return `--color-primary: ${value};`;
-});
+const MODES = [{ value: "auto", label: "Auto" }, { value: "dark", label: "Dark" }, { value: "light", label: "Light" }];
+const isStyleOff = (website: SupportedWebsite) => !!extensionSettings.value?.disabledWebsites.some((site) => site.name === website.name);
 const sortedWebsites = computed(() => {
 	return supportedWebsites.value?.sort((a, b) => a.name.localeCompare(b.name)) ?? [];
 });
@@ -108,6 +104,7 @@ onMounted(() => {
 const changeSetting = (event: Event) => {
 	const changed = event.target as HTMLInputElement;
 	if (changed.name === "glass-opacity") sendMessageToAllTabs({ action: "changeGlassOpacity", value: Number(changed.value) }); // live while dragging; only the save below waits
+	if (changed.name === "glass-theme") sendMessageToAllTabs({ action: "changeGlassTheme", value: changed.value });
 	if (inputDebounce) {
 		clearTimeout(inputDebounce);
 	}
@@ -134,7 +131,6 @@ const changeSetting = (event: Event) => {
 					extensionSettings.value.glassTheme = input.value as "auto" | "dark" | "light";
 					extensionSettings.value.glassThemeV2 = true;
 				}
-				sendMessageToAllTabs({ action: "changeGlassTheme", value: input.value });
 				break;
 		}
 
@@ -235,120 +231,77 @@ const openSettingsPage = () => {
 </script>
 
 <template>
-  <div class="container" :style="primaryColor">
-    <header id="extension-header">
-      <!-- <img class="logo" src="../assets/images/logo_48.png" alt="Glass Mode Logo"> -->
-      <h1 class="headline">{{manifest.name}}</h1>
-      <span class="version">{{manifest.version}}</span>
-		</header>
-    <main id="extension-body" v-if="extensionSettings">
-      <section>
-				<div id="power">
-					<div class="switch">
-						<span>Glass</span>
-						<button type="button" class="toggle" role="switch" :aria-checked="glassOn" :class="{active: glassOn}" @click="setGlass(!glassOn)"></button>
-					</div>
-					<div class="switch" v-if="host" :class="{disabled: !glassOn}">
-						<span>On {{ host }}</span>
-						<button type="button" class="toggle" role="switch" :aria-checked="siteOn" :class="{active: siteOn}" :disabled="!glassOn" @click="setSite(!siteOn)"></button>
-					</div>
-					<p class="status">{{ status }}</p>
-				</div>
-				<h2 class="headline">Settings</h2>
-				<form id="extension-settings">
-					<div class="setting">
-						<span class="label">Glass</span>
-						<div class="value">
-							<select name="glass-theme" :value="extensionSettings.glassThemeV2 ? extensionSettings.glassTheme : 'auto'" @input="changeSetting">
-								<option value="auto">Auto (follow desktop)</option>
-								<option value="dark">Dark</option>
-								<option value="light">Light</option>
-							</select>
-						</div>
-					</div>
-					<div class="setting">
-						<span class="label">Glass opacity</span>
-						<div class="value">
-							<input type="range" min="10" max="90" step="5" name="glass-opacity" v-model.number="extensionSettings.glassOpacity" @input="changeSetting">
-							<span class="range-value">{{ extensionSettings.glassOpacity ?? DEFAULT_SETTINGS.glassOpacity }}%</span>
-						</div>
-					</div>
-					<p class="hint">Any window, incl. web apps: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd> opacity, <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> mode</p>
-					<div class="button-wrapper" v-if="currentUrl?.startsWith('http')">
-						<button type="button" class="feedback" @click="openIssue">{{ currentSupported ? "Report a glass problem on this site" : "Request glass for this site" }}</button>
-					</div>
-					<label class="setting">
-						<input type="checkbox" name="enable-transparency" v-model="extensionSettings.enableTransparency" @input="changeSetting">
-						<span class="custom-checkbox"></span>
-						Auto glass on sites without a style (beta)
-					</label>
-					<div class="settings-group" data-depends-on="enable-transparency" v-show="extensionSettings.enableTransparency">
-						<label class="setting">
-							<input type="checkbox" name="enable-whitelist" v-model="extensionSettings.enableWhitelist" @input="changeSetting">
-							<span class="custom-checkbox"></span>
-							Only on sites I switch on
-						</label>
-						<label class="setting">
-							<input type="checkbox" name="blacklist-domain" :checked="domainDisabled" @input="changeSetting">
-							<span class="custom-checkbox"></span>
-							<template v-if="extensionSettings.enableWhitelist">
-								Enable for this domain
-							</template>
-							<template v-else>
-								Disable for this domain
-							</template>
-						</label>
-					</div>
-					<label class="setting">
-						<input type="checkbox" name="site-specific-settings" :checked="siteSpecificSettings.enabled" @input="changeSetting">
-						<span class="custom-checkbox"></span>
-						Add site specific settings
-					</label>
-					<div class="settings-group" v-show="siteSpecificSettings.enabled">
-						<div class="setting">
-							<button @click="enableWebInspector()">
-								Hide additional background elements
-								<img class="icon" src="../../../assets/icons/html.svg" alt="" role="presentation">
-							</button>
-						</div>
-						<div class="setting">
-							<label>Custom Styles</label>
-							<Codemirror
-								v-model="siteSpecificSettings.customStyles"
-								:indentWithTab="true"
-								:tabSize="2"
-								:extensions="[css(), oneDark]"
-								@change="saveCustomStyles"
-							/>
-						</div>
-					</div>
-				</form>
-				<div class="button-wrapper">
-					<button @click="openSettingsPage">
-						Show all settings
-						<img class="icon" src="../../../assets/icons/arrow-right.svg" alt="" role="presentation">
-					</button>
-				</div>
-			</section>
-      <section id="supported-websites">
-        <h2 class="headline">Officially Supported Websites:</h2>
-        <ul data-content="supported-sites" :class="{open: showAllWebsites}">
-          <li v-for="website in sortedWebsites" :key="website.name">
-            <span class="website-name">
-							<img class="website-favicon" :src="website.favicon" alt="" role="presentation">
-							{{ website.name }}
-						</span>
-            <button type="button" class="toggle" :class="{active: extensionSettings.disabledWebsites.findIndex((site) => site.name === website.name) === -1}" @click="toggleSupportedWebsite(website)"></button>
-          </li>
-        </ul>
-        <div class="button-wrapper" v-if="!showAllWebsites">
-          <button class="show-all" type="button" data-target="supported-sites" @click="showAllWebsites = true">Show all</button>
-        </div>
-      </section>
-    </main>
-		<footer id="extension-footer">
-			<p>Open source. Add a site in one command (<code>./glasslab add</code>) — every style is tested on every screen and menu.</p>
-			<a :href="`https://github.com/${REPO}`">GitHub Repository</a>
-		</footer>
+  <div class="popup" v-if="extensionSettings">
+    <header>
+      <h1>{{ manifest.name }}</h1>
+      <button type="button" class="toggle" role="switch" aria-label="Glass everywhere" :aria-checked="glassOn" :class="{active: glassOn}" @click="setGlass(!glassOn)"></button>
+    </header>
+    <p class="status">{{ status }}</p>
+
+    <section class="card" :class="{disabled: !glassOn}">
+      <label class="row" for="glass-opacity"><span>Opacity</span><output>{{ extensionSettings.glassOpacity ?? DEFAULT_SETTINGS.glassOpacity }}%</output></label>
+      <input id="glass-opacity" type="range" min="10" max="90" step="5" name="glass-opacity" v-model.number="extensionSettings.glassOpacity" @input="changeSetting">
+      <fieldset class="segments">
+        <legend>Mode</legend>
+        <label v-for="m in MODES" :key="m.value">
+          <input type="radio" name="glass-theme" :value="m.value" :checked="(extensionSettings.glassThemeV2 ? extensionSettings.glassTheme : 'auto') === m.value" @input="changeSetting">
+          <span>{{ m.label }}</span>
+        </label>
+      </fieldset>
+      <div class="row" v-if="host && (siteStyle || extensionSettings.enableTransparency)">
+        <span class="host">On {{ host }}</span>
+        <button type="button" class="toggle" role="switch" :aria-label="`Glass on ${host}`" :aria-checked="siteOn" :class="{active: siteOn}" :disabled="!glassOn" @click="setSite(!siteOn)"></button>
+      </div>
+    </section>
+
+    <button type="button" class="action" v-if="currentUrl?.startsWith('http')" @click="openIssue">{{ currentSupported ? "Report a problem on this site" : "Request this site" }}</button>
+
+    <details>
+      <summary>More</summary>
+      <form class="more">
+        <label class="check">
+          <input type="checkbox" name="enable-transparency" v-model="extensionSettings.enableTransparency" @input="changeSetting">
+          Auto glass on sites without a style (beta)
+        </label>
+        <template v-if="extensionSettings.enableTransparency">
+          <label class="check nested">
+            <input type="checkbox" name="enable-whitelist" v-model="extensionSettings.enableWhitelist" @input="changeSetting">
+            Only on sites I switch on
+          </label>
+          <label class="check nested">
+            <input type="checkbox" name="blacklist-domain" :checked="domainDisabled" @input="changeSetting">
+            {{ extensionSettings.enableWhitelist ? "Enable for this site" : "Disable for this site" }}
+          </label>
+        </template>
+        <label class="check">
+          <input type="checkbox" name="site-specific-settings" :checked="siteSpecificSettings.enabled" @input="changeSetting">
+          Custom settings for this site
+        </label>
+        <template v-if="siteSpecificSettings.enabled">
+          <button type="button" class="link" @click="enableWebInspector()">Pick backgrounds to hide</button>
+          <label class="sub">Custom styles</label>
+          <Codemirror
+            v-model="siteSpecificSettings.customStyles"
+            :indentWithTab="true"
+            :tabSize="2"
+            :extensions="[css(), oneDark]"
+            @change="saveCustomStyles"
+          />
+        </template>
+      </form>
+      <p class="hint">In any window: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd> <kbd>↓</kbd> opacity, <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> mode</p>
+      <h2>Site styles</h2>
+      <ul class="sites">
+        <li v-for="website in sortedWebsites" :key="website.name" class="row">
+          <span class="site"><img :src="website.favicon" alt="" role="presentation">{{ website.name }}</span>
+          <button type="button" class="toggle" role="switch" :aria-label="website.name" :aria-checked="!isStyleOff(website)" :class="{active: !isStyleOff(website)}" @click="toggleSupportedWebsite(website)"></button>
+        </li>
+      </ul>
+      <footer>
+        <button type="button" class="link" @click="openSettingsPage">All settings</button>
+        <a :href="`https://github.com/${REPO}`">GitHub</a>
+        <span class="version">{{ manifest.version }}</span>
+      </footer>
+    </details>
   </div>
 </template>

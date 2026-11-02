@@ -126,6 +126,15 @@ Exit code ≠ 0 on any failure at the default slider or any regression (`--compa
 Debugging a failing state: `python3 -m tools.glasslab.inspect_layer URL "label regex" [dark|light]` dumps the layer's
 element chain with computed paint; `--gradients URL` and `--ancestry URL SELECTOR` find hard-coded fades and scopes.
 
+## Corpus and A vs B (the lab score is a floor; taste decides)
+Numbers miss what makes a page feel wrong, and the lab rarely sees real panels. So: freeze real pages, render variants, vote.
+Everything here is local (`~/.cache/glasslab`) and holds private page text: never commit, publish or send it anywhere.
+- **Recorder** (`tools/glasslab/recorder`, `./glasslab corpus install`): separate dev extension, never in the public build. In daily use `Alt+Shift+R` freezes the page as it is, panels open; `Alt+Shift+D` or the toolbar button waits 3 s for menus that close on input. Files land in `~/Downloads/glass-corpus`; `./glasslab corpus import` stores them. BiDi keys never reach browser-level commands, so the lab tests the save path and the registered shortcuts, not the keypress.
+- **Seed**: `./glasslab corpus seed [FILTER]` walks screens.json logged in and freezes each page + the hidden UI the explorer opens.
+- **Frozen page**: no scripts, no network; CSSOM rules (CSS-in-JS included), shadow DOM (closed too), form values (never passwords), scroll, focus, modal + popover state, video stills. Glass Mode's own marks are dropped, so any build applies on replay. Lost: cross-origin iframes (box stays, `data-gl-lost`), `:hover`-only state unless the delay is used.
+- **Fidelity**: `./glasslab corpus check [FILTER]` scores frozen against live pixels. Replay is http through a proxy (https-only site patterns opened by `http_xpi`, lab only).
+- **Vote**: edit `tools/glasslab/questions.json` (question + CSS variants), `./glasslab vote build`, `./glasslab vote` (http://127.0.0.1:8765, blind, sides shuffled), `./glasslab vote results`. "Both bad" + note = the bug list. Backdrops: `GLASSLAB_BACKDROPS=~/.cache/glasslab/vote-walls ./glasslab wallpapers DIR`.
+
 ## Auto glass (sites without a style)
 
 `src/main/modules/autoglass/`: `classify.ts` (pure, `npm run test:unit`) decides, `engine.ts` measures and marks

@@ -1,0 +1,74 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Glass A vs B</title><style>
+:root { color-scheme: dark; --fg: #f2f2f5; --dim: #a8a8b0; --line: rgba(255,255,255,.14); --fill: rgba(255,255,255,.06) }
+* { box-sizing: border-box }
+body { margin: 0; height: 100vh; display: flex; flex-direction: column; background: #101014; color: var(--fg); font: 15px/1.4 system-ui, sans-serif }
+header, footer { display: flex; align-items: center; gap: 12px; padding: 10px 16px }
+header h1 { font-size: 17px; font-weight: 600; margin: 0; flex: 1 }
+#where, #count { color: var(--dim) }
+main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 8px }
+main button { all: unset; cursor: pointer; display: flex; align-items: center; justify-content: center; min-height: 0; border-radius: 8px; outline: 2px solid transparent }
+main button:hover, main button:focus-visible { outline-color: #0a84ff }
+main img { max-width: 100%; max-height: 100%; border-radius: 8px; display: block }
+#big { position: fixed; inset: 0; background: #000; display: none; align-items: center; justify-content: center }
+#big img { max-width: 100%; max-height: 100% }
+footer button { font: inherit; color: var(--fg); background: var(--fill); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer }
+kbd { font: 12px ui-monospace, monospace; color: var(--dim) }
+#note { flex: 1; font: inherit; color: var(--fg); background: var(--fill); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; display: none }
+@media (max-width: 700px) { main { grid-template-columns: 1fr } }
+</style></head><body>
+<header><h1 id="ask">Loading</h1><span id="where"></span><span id="count"></span></header>
+<main><button id="l" aria-label="Pick left"><img alt="Left variant"></button><button id="r" aria-label="Pick right"><img alt="Right variant"></button></main>
+<footer>
+ <button id="same">Same <kbd>↓</kbd></button><button id="bad">Both bad <kbd>↑</kbd></button><button id="undo">Undo <kbd>u</kbd></button>
+ <input id="note" placeholder="What's wrong? Enter to save" aria-label="What's wrong with both">
+ <span id="hint" style="color:var(--dim);flex:1;text-align:right">Pick with click or <kbd>←</kbd> <kbd>→</kbd>. Hold <kbd>space</kbd> for full size; move the mouse across to flip.</span>
+</footer>
+<div id="big"><img alt="Full size"></div>
+<script>
+const $ = (id) => document.getElementById(id);
+let pair = null, mouseX = 0;
+const src = (p, side) => `/r/${p.q}.${p.capture}.${p.mode}.${p.wall}.${p[side]}.webp`;
+async function load() {
+  const { pair: p, done, total } = await (await fetch("/next")).json();
+  pair = p;
+  $("count").textContent = `${done} voted, ${total} pairs`;
+  if (!p) { $("ask").textContent = "No pairs yet: run ./glasslab vote build"; return; }
+  $("ask").textContent = p.ask;
+  $("where").textContent = `${p.host}${p.state ? ` · ${p.state}` : ""} · ${p.mode} glass · ${p.wall} wallpaper`;
+  document.querySelector("#l img").src = src(p, "left");
+  document.querySelector("#r img").src = src(p, "right");
+}
+async function vote(pick, note) {
+  if (!pair) return;
+  await fetch("/vote", { method: "POST", body: JSON.stringify({ ...pair, pick, note }) });
+  load();
+}
+function askNote() {
+  $("note").style.display = "block"; $("hint").style.display = "none"; $("note").focus();
+}
+$("note").addEventListener("keydown", (e) => {
+  e.stopPropagation();
+  if (e.key === "Escape") { $("note").value = ""; closeNote(); }
+  if (e.key === "Enter") { const n = $("note").value; $("note").value = ""; closeNote(); vote("bad", n); }
+});
+function closeNote() { $("note").style.display = "none"; $("hint").style.display = ""; }
+const undo = async () => { await fetch("/undo", { method: "POST", body: "{}" }); load(); };
+$("l").onclick = () => vote(pair.left);
+$("r").onclick = () => vote(pair.right);
+$("same").onclick = () => vote("same");
+$("bad").onclick = askNote;
+$("undo").onclick = undo;
+const flip = () => { document.querySelector("#big img").src = src(pair, mouseX < innerWidth / 2 ? "left" : "right"); };
+addEventListener("mousemove", (e) => { mouseX = e.clientX; if ($("big").style.display === "flex") flip(); });
+addEventListener("keydown", (e) => {
+  if (e.key === " " && pair) { e.preventDefault(); flip(); $("big").style.display = "flex"; }
+  if (e.repeat) return;
+  if (e.key === "ArrowLeft") vote(pair.left);
+  if (e.key === "ArrowRight") vote(pair.right);
+  if (e.key === "ArrowDown") vote("same");
+  if (e.key === "ArrowUp") { e.preventDefault(); askNote(); }
+  if (e.key === "u") undo();
+});
+addEventListener("keyup", (e) => { if (e.key === " ") $("big").style.display = "none"; });
+load();
+</script></body></html>

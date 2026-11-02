@@ -58,11 +58,13 @@ def command():
     return [os.environ.get("GLASSLAB_FIREFOX", "firefox"), *common]
 
 
-def setup(xpi, scheme="dark", extra_prefs=None):
+def setup(xpi, scheme="dark", extra_prefs=None, also=()):
     shutil.rmtree(LAB, ignore_errors=True)
     (LAB / "extensions").mkdir(parents=True)
     if xpi and BROWSER == "zen":  # None → plain browser (fixture pages carry their own style); firefox: BiDi install
         shutil.copy(xpi, LAB / "extensions" / f"{EXT_ID}.xpi")
+    for ext_id, path in also if BROWSER == "zen" else ():
+        shutil.copy(path, LAB / "extensions" / f"{ext_id}.xpi")
     prefs = {**PREFS, "ui.systemUsesDarkTheme": int(scheme == "dark"), **(extra_prefs or {})}  # the SITE's theme (prefers-color-scheme), not glass mode
     (LAB / "user.js").write_text("".join(f'user_pref("{k}", {json.dumps(v)});\n' for k, v in prefs.items()))
     live = live_profile()
@@ -220,11 +222,11 @@ class Page:
 
 
 @contextlib.asynccontextmanager
-async def session(xpi, log_path, viewport=(1400, 1000), scheme="dark", extra_prefs=None):
-    """start the headless browser with a fresh lab profile → Page; always cleaned up. scheme = the sites' own theme"""
+async def session(xpi, log_path, viewport=(1400, 1000), scheme="dark", extra_prefs=None, also=()):
+    """start the headless browser with a fresh lab profile → Page; always cleaned up. scheme = the sites' own theme; also = [(id, xpi)]: more extensions"""
     kill()
     time.sleep(1)
-    setup(xpi, scheme, extra_prefs)
+    setup(xpi, scheme, extra_prefs, also)
     proc = subprocess.Popen(command(), stdout=open(log_path, "w"), stderr=subprocess.STDOUT)
     try:
         for _ in range(60):
@@ -239,6 +241,8 @@ async def session(xpi, log_path, viewport=(1400, 1000), scheme="dark", extra_pre
         await b.call("session.new", capabilities={})
         if xpi and BROWSER != "zen":
             await b.call("webExtension.install", extensionData={"type": "archivePath", "path": str(Path(xpi).resolve())})
+        for _, path in also if BROWSER != "zen" else ():
+            await b.call("webExtension.install", extensionData={"type": "archivePath", "path": str(Path(path).resolve())})
         ctx = (await b.call("browsingContext.getTree"))["contexts"][0]["context"]
         if BROWSER != "zen":  # Firefox's first context needs -remote-allow-system-access to resize → use a fresh tab
             ctx = (await b.call("browsingContext.create", type="tab"))["context"]

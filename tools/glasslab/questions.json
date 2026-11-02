@@ -1,0 +1,14 @@
+{"questions": [
+ {"id": "thickness", "ask": "Which would you leave on all day?", "only": "pages", "modes": ["dark", "light"],
+  "variants": {
+   "shipped": "",
+   "middle": ":root[data-tz-glass] { --g-floor-chrome: .54 !important; --g-floor-content: .70 !important } :root[data-tz-glass=light] { --g-floor-chrome: .70 !important; --g-floor-content: .81 !important }",
+   "thin": ":root[data-tz-glass] { --g-floor-chrome: .393 !important; --g-floor-content: .55 !important } :root[data-tz-glass=light] { --g-floor-chrome: .639 !important; --g-floor-content: .761 !important }"
+  }},
+ {"id": "panels", "ask": "Which menu or panel feels right?", "only": "panels", "modes": ["dark"],
+  "variants": {
+   "shipped": "",
+   "lighter": ":root[data-tz-glass] { --g-floor-popover: .78 !important }",
+   "lightest": ":root[data-tz-glass] { --g-floor-popover: .66 !important }"
+  }}
+]}

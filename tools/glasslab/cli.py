@@ -11,6 +11,8 @@
   ./glasslab shots --sweep SCREEN [--modes dark]                      opacity 10→90 % animation (launch GIF)
   ./glasslab shots --strip SCREEN [--modes dark]                      the same screen at 10 / 45 / 90 % (README)
   ./glasslab replay HOST                                              real pages from your Zen cache, for sites that wall the lab
+  ./glasslab corpus import|seed|check|list|install [FILTER]           frozen real pages, panels open (recorder: Alt+Shift+R). Local only
+  ./glasslab vote [build [FILTER]|results]                            A vs B on frozen pages, localhost, blind (votes in ~/.cache/glasslab/vote)
   ./glasslab site [--run RUN]                                         public site (site/index.html) + README sites table
 """
 import argparse, subprocess, sys
@@ -51,12 +53,41 @@ def main(argv=None):
     s.add_argument("--all", action="store_true")
     p = sub.add_parser("site"); p.add_argument("--run"); p.add_argument("--out")
     rp = sub.add_parser("replay"); rp.add_argument("host")
+    co = sub.add_parser("corpus"); co.add_argument("action", choices=["import", "seed", "check", "list", "install"]); co.add_argument("filter", nargs="?", default="")
+    co.add_argument("--build", action="store_true")
+    vo = sub.add_parser("vote"); vo.add_argument("action", nargs="?", choices=["serve", "build", "results"], default="serve"); vo.add_argument("filter", nargs="?", default="")
+    vo.add_argument("--build", action="store_true")
     a = ap.parse_args(argv)
 
     if a.cmd == "replay":
         from . import replay
         pages = replay.capture(a.host)
         print(f"{len(pages)} pages in {replay.STORE / a.host}:", *pages, sep="\n  ")
+        return 0
+    if a.cmd == "corpus":
+        from . import corpus
+        if a.action == "install":
+            print(f"recorder → {corpus.install_recorder()} (active from Zen's next start)")
+        if a.action == "import":
+            print(f"imported {len(corpus.import_inbox())}")
+        if a.action == "seed":
+            print(f"seeded {len(corpus.seed(xpi(a.build), a.filter))}")
+        if a.action == "check":
+            rows = corpus.check(xpi(a.build), a.filter)
+            print(f"{sum(r['drift'] < 0.05 for r in rows)}/{len(rows)} within 5 % of live")
+        if a.action == "list":
+            for m in corpus.captures(a.filter):
+                print(f"{m['id']:44s} {m['source']:8s} {m.get('drift', -1):6.1%}  {m['url'][:60]}  {m.get('state', '')[:30]}")
+        return 0
+    if a.cmd == "vote":
+        from . import vote
+        if a.action == "serve":
+            vote.serve()
+        if a.action == "build":
+            print(f"{len(vote.build(xpi(a.build), a.filter))} pairs")
+        if a.action == "results":
+            import json
+            print(json.dumps(vote.results(), indent=1))
         return 0
     if a.cmd == "test":
         from . import suite

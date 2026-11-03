@@ -81,9 +81,25 @@ body,
 	--text-success: var(--g-green) !important;
 }
 
-/* hard-coded (no token drives it) */
+/* hard-coded (no token drives it); sidebars sit on the body frame tint */
 #inbox-sidebar {
 	background-color: transparent !important;
+}
+
+/* library list carries the text: content tier on the frame (was bare frame) */
+[class*="_listRoot_"] {
+	background-color: var(--g-content) !important;
+}
+
+/* layers that float OVER content (doc header, left nav sliding over the article): the body frame isn't under them, the
+   article is → absolute content tier + blur, so text passing beneath is frosted, never sharp behind their labels.
+   Was: header .55 compensated, no blur; floating nav clear (glasslab bleed probe) */
+[class*="_adaptiveHeader_"],
+nav[class*="_inboxNav_"][class*="_leftSidebarHidden_"],
+[class*="_sidebar_"][style*="position: fixed"],
+[class*="_sidebar_"][class*="_floating"] {
+	background-color: var(--g-content-abs) !important;
+	backdrop-filter: var(--g-blur) !important;
 }
 
 /* side panels carry long text (document info, TOC, notebook) → content tier, as Apple densifies large text sidebars */

@@ -5,6 +5,7 @@ import { panelMode, togglePanel } from "./modules/Panel";
 
 type GlassReply = { theme: GlassTheme; opacity: number; text: string; enabled: boolean; siteOff: boolean };
 import { glassKey } from "./modules/GlassKeys";
+import { startFrost } from "./modules/Frost";
 import { mark, unmark } from "./modules/RootMarks";
 import type { Browser } from "webextension-polyfill-ts";
 import type { ContentScripts, SupportedWebsite } from "../types/ContentScripts";
@@ -51,6 +52,7 @@ class TransparentZen {
 		this.applyGlass(); // synchronous first pass (auto → prefers-color-scheme) → no dark flash on a light desktop
 		this.initLoadingScreen();
 		this.initGlassKeys();
+		startFrost();
 		// biome-ignore format: readability
 		this.checkIfWebsiteAlreadySupported().then(contentScript => {
 			browser.storage.local.get("transparentZenSettings").then(async (settings) => {

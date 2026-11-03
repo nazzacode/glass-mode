@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"><title>frost fixture</title>
+<link rel="stylesheet" href="app.glass.css">
+<style>
+body { margin: 0; font: 16px sans-serif; color: #eee; }
+#bar { position: fixed; top: 0; left: 200px; right: 0; height: 50px; background: transparent; }
+#side { position: fixed; top: 0; left: 0; width: 200px; bottom: 0; background: transparent; }
+#blurred { position: fixed; bottom: 0; left: 200px; right: 0; height: 40px; backdrop-filter: blur(10px); }
+main { margin-left: 200px; padding: 60px 20px; }
+p { margin: 0; line-height: 18px; } /* dense: every sample point lands on text */
+</style></head><body>
+<div id="bar">Header</div><nav id="side">Sidebar</nav><div id="blurred">Blurred bar</div>
+<ul id="menu" role="listbox" style="position:absolute;top:120px;left:300px;width:300px;margin:0;background:transparent"><li>Suggestion one</li><li>Suggestion two</li><li>Suggestion three</li></ul>
+<main id="text"></main>
+<script>document.getElementById("text").innerHTML = Array.from({ length: 200 }, (_, i) => `<p>Line ${i} of page text that scrolls under the header.</p>`).join("");</script>
+</body></html>

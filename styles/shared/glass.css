@@ -1,4 +1,4 @@
-/* nathanOS glass — the one source of truth for every site style (styles/websites/*.css @import this).
+/* Yotland glass — the one source of truth for every site style (styles/websites/*.css @import this).
    Model: Apple Liquid Glass tiers, adapted to a desktop where the compositor blur behind the window is fixed
    (no adaptive tinting like Apple's) → every text-bearing tier has a readability floor.
    Inputs (set by the content script on :root):
@@ -44,7 +44,7 @@
 	--g-fg: #f2f2f5;
 	--g-fg-2: #dfdfe3; /* secondary: bright enough for 11px labels at the content floor (APCA Lc60 over p95 wallpaper) */
 	--g-fg-3: #a8a8b0;
-	--g-accent: #0a84ff; /* DMS nathanos-theme dark primary */
+	--g-accent: #0a84ff; /* DMS yotland-theme dark primary */
 	/* status text (Apple accessible system colours: readable as small text on glass) */
 	--g-red: #ff9e98; /* lighter than Apple's #ff6961: 14px status text over bright wallpaper (glasslab) */
 	--g-orange: #ffc266;
@@ -89,7 +89,7 @@
 	--g-fg: #1c1c1e;
 	--g-fg-2: #333338;
 	--g-fg-3: #55555c;
-	--g-accent: #007aff; /* DMS nathanos-theme light primary */
+	--g-accent: #007aff; /* DMS yotland-theme light primary */
 	--g-red: #b5000f;
 	--g-orange: #a32a00;
 	--g-green: #1d7032;
@@ -134,6 +134,16 @@
 }
 :root.tz-initialized:not(#tz-glass) body {
 	background: var(--g-body, var(--g-frame)) !important;
+}
+
+/* see-through layers (content script: modules/Frost.ts marks them): bars the page scrolls under → content tier + blur;
+   popups (menus, listboxes, dialogs) over the page → popover tier + blur. Never sharp text behind their labels */
+:root[data-tz-glass] [data-tz-frost] {
+	background-color: var(--g-content-abs) !important;
+	backdrop-filter: var(--g-blur) !important;
+}
+:root[data-tz-glass] [data-tz-frost="popup"] {
+	background-color: var(--g-popover) !important;
 }
 
 /* no helper classes on purpose: site files map regions with selectors, e.g.  [role="main"] { background: var(--g-content) !important; } */

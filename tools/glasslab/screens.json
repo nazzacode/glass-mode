@@ -538,6 +538,26 @@
    "id": "powerthesaurus-home",
    "url": "http://www.powerthesaurus.org/",
    "replay": "www.powerthesaurus.org"
+  },
+  {
+   "id": "works-in-progress-article",
+   "url": "https://worksinprogress.co/issue/the-forgotten-formula-for-lovable-cities/",
+   "act": "document.getElementById('CybotCookiebotDialog')?.remove();document.getElementById('CybotCookiebotGpcToast')?.remove();scrollTo(0,1500)",
+   "showcase": true
+  },
+  {
+   "id": "works-in-progress-home",
+   "url": "https://worksinprogress.co/",
+   "act": "document.getElementById('CybotCookiebotDialog')?.remove();document.getElementById('CybotCookiebotGpcToast')?.remove()"
+  },
+  {
+   "id": "works-in-progress-menu",
+   "url": "https://worksinprogress.co/issue/the-forgotten-formula-for-lovable-cities/",
+   "act": "document.getElementById('CybotCookiebotDialog')?.remove();document.getElementById('CybotCookiebotGpcToast')?.remove();document.querySelector('.site-header__menu-button')?.click()"
+  },
+  {
+   "id": "works-in-progress-cookies",
+   "url": "https://worksinprogress.co/issue/the-forgotten-formula-for-lovable-cities/"
   }
  ]
 }

@@ -2,6 +2,17 @@
 
 Installed copies update themselves within a day (about:addons → Check for Updates: now).
 
+## 1.0.7
+
+**Works in Progress.** The magazine's articles read on glass: the page sits on the reading tint, the header frosts as
+the article scrolls under it, and the slide-out menu, cookie dialog and "Get the print magazine" card are frosted
+panels. The newsletter and magazine boxes are cards, the yellow buttons stay yellow, and the line-art masthead and
+icons turn white on dark glass. Photos keep their colours.
+
+| Dark | Light |
+|---|---|
+| ![Works in Progress, dark glass](docs/changelog/1.0.7-wip/works-in-progress-article.dark.jpg) | ![Works in Progress, light glass](docs/changelog/1.0.7-wip/works-in-progress-article.light.jpg) |
+
 ## 1.0.6
 
 **No more sharp text behind bars and menus.** A header, toolbar or side panel that the page scrolls under now turns to

@@ -291,6 +291,17 @@
 			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/powerthesaurus.org.ico"
+		},
+		{
+			"name": "Works in Progress",
+			"matches": [
+				"^https?://(www\\.)?worksinprogress\\.co/"
+			],
+			"css": [
+				"./styles/websites/worksinprogress.co.css"
+			],
+			"run_at": "document_start",
+			"favicon": "https://icons.duckduckgo.com/ip3/worksinprogress.co.ico"
 		}
 	]
 }

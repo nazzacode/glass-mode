@@ -1,0 +1,107 @@
+@import url("../shared/glass.css");
+
+/* Works in Progress (magazine, WordPress). Token-less: every surface is hard-coded cream rgb(255, 247, 244), lines and
+   text near-black. Content-first like Wikipedia: long reading → the page sits on the content tier, the sticky header
+   frosts over it, the slide-out menu and the floating print-magazine card are popovers, the in-article newsletter and
+   magazine boxes are cards. Brand yellow buttons keep their colour and dark label. Photos keep their colours; the
+   site's black line art (masthead, icons) inverts on dark glass. */
+
+:root {
+	--g-body: var(--g-content-abs);
+}
+
+/* neutralise the cream: page, header, article grid, related, footer, menu */
+body :where(div, section, header, nav, aside, main, footer, article, ul, li, form, figure, a, span) {
+	background-color: transparent !important;
+}
+
+/* sticky header: the article scrolls under it */
+.site-header {
+	background-color: var(--g-content-abs) !important;
+	backdrop-filter: var(--g-blur);
+}
+/* backdrop-filter makes the header the containing block of its fixed menu: open menu clipped to the 115 px bar.
+   Menu open → header unblurred (beats Frost's [data-tz-frost]) */
+:root[data-tz-glass] body.nav-menu-open .site-header {
+	backdrop-filter: none !important;
+}
+
+/* slide-out menu (fixed, translateX) + selection share tooltip + cookie dialog */
+.site-nav,
+.single-article__content-share-snippet,
+#CybotCookiebotDialog,
+#CybotCookiebotGpcToast,
+:is([role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"]) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+}
+
+/* floating "Get the print magazine" card */
+a.magazine-cta-sticky {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow);
+}
+
+/* boxes inside the article */
+.newsletter-signup__inner,
+a.magazine-cta-inline {
+	background-color: var(--g-card) !important;
+}
+.newsletter-signup__input {
+	background-color: var(--g-fill) !important;
+	color: var(--g-fg) !important;
+}
+.newsletter-signup__input::placeholder {
+	color: var(--g-fg-3) !important;
+}
+
+/* rules: the site draws everything with 1px black lines */
+body * {
+	border-color: var(--g-line-strong) !important;
+}
+.article-header__head-separator {
+	background-color: var(--g-line-strong) !important;
+}
+
+/* text */
+body,
+body :where(:not(.newsletter-signup__button, .magazine-cta-inline__button, .magazine-cta-inline__button *, .magazine-cta-sticky__button, .magazine-cta-sticky__button *, [id^="CybotCookiebot"] button, [id^="CybotCookiebot"] button *)) {
+	color: var(--g-fg) !important;
+}
+
+/* brand yellow buttons: keep yellow, keep the dark label */
+:is(.newsletter-signup__button, .magazine-cta-inline__button, .magazine-cta-sticky__button) {
+	background-color: var(--color--politics) !important;
+}
+:is(.newsletter-signup__button, .magazine-cta-inline__button, .magazine-cta-sticky__button),
+:is(.magazine-cta-inline__button, .magazine-cta-sticky__button) * {
+	color: #121212 !important;
+}
+
+/* Subscribe (black fill, cream label) → accent */
+a.site-header__links-subscribe {
+	background-color: var(--g-accent) !important;
+	color: var(--g-on-accent) !important;
+}
+
+/* hamburger bars are black spans */
+.site-header__menu-button span {
+	background-color: var(--g-fg) !important;
+}
+
+/* black line art (masthead portrait + wordmark, icons, paper plane) on dark glass */
+:root[data-tz-glass="dark"] .global-wrapper svg,
+:root[data-tz-glass="dark"] .magazine-cta-sticky__close svg {
+	filter: invert(1);
+}
+
+/* cookie dialog buttons: black / cream fills → accent / fill */
+#CybotCookiebotDialog button {
+	background-color: var(--g-fill) !important;
+	color: var(--g-fg) !important;
+}
+#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll {
+	background-color: var(--g-accent) !important;
+	color: var(--g-on-accent) !important;
+}

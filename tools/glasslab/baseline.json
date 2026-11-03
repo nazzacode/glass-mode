@@ -4457,6 +4457,174 @@
   "text": 1.0,
   "ok": true
  },
+ "works-in-progress-article.dark.10": {
+  "contrast": 0.078,
+  "surface": 0.992,
+  "text": 0.983,
+  "ok": false
+ },
+ "works-in-progress-article.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.992,
+  "text": 0.983,
+  "ok": true
+ },
+ "works-in-progress-article.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.992,
+  "text": 0.983,
+  "ok": true
+ },
+ "works-in-progress-article.light.10": {
+  "contrast": 0.017,
+  "surface": 0.992,
+  "text": 0.983,
+  "ok": false
+ },
+ "works-in-progress-article.light.45": {
+  "contrast": 1.0,
+  "surface": 0.992,
+  "text": 0.983,
+  "ok": true
+ },
+ "works-in-progress-article.light.90": {
+  "contrast": 1.0,
+  "surface": 0.992,
+  "text": 0.983,
+  "ok": true
+ },
+ "works-in-progress-cookies.dark.10": {
+  "contrast": 0.948,
+  "surface": 0.988,
+  "text": 0.969,
+  "ok": true
+ },
+ "works-in-progress-cookies.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.988,
+  "text": 0.969,
+  "ok": true
+ },
+ "works-in-progress-cookies.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.988,
+  "text": 0.969,
+  "ok": true
+ },
+ "works-in-progress-cookies.light.10": {
+  "contrast": 0.164,
+  "surface": 0.988,
+  "text": 0.969,
+  "ok": false
+ },
+ "works-in-progress-cookies.light.45": {
+  "contrast": 1.0,
+  "surface": 0.988,
+  "text": 0.969,
+  "ok": true
+ },
+ "works-in-progress-cookies.light.90": {
+  "contrast": 1.0,
+  "surface": 0.988,
+  "text": 0.969,
+  "ok": true
+ },
+ "works-in-progress-home.dark.10": {
+  "contrast": 0.107,
+  "surface": 0.989,
+  "text": 0.977,
+  "ok": false
+ },
+ "works-in-progress-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.989,
+  "text": 0.977,
+  "ok": true
+ },
+ "works-in-progress-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.989,
+  "text": 0.977,
+  "ok": true
+ },
+ "works-in-progress-home.light.10": {
+  "contrast": 0.107,
+  "surface": 0.989,
+  "text": 0.977,
+  "ok": false
+ },
+ "works-in-progress-home.light.45": {
+  "contrast": 1.0,
+  "surface": 0.989,
+  "text": 0.977,
+  "ok": true
+ },
+ "works-in-progress-home.light.90": {
+  "contrast": 1.0,
+  "surface": 0.989,
+  "text": 0.977,
+  "ok": true
+ },
+ "works-in-progress-home~issues-2b98.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "works-in-progress-home~issues-2b98.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "works-in-progress-home~topics-fc95.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "works-in-progress-home~topics-fc95.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "works-in-progress-menu.dark.10": {
+  "contrast": 0.942,
+  "surface": 0.993,
+  "text": 0.965,
+  "ok": true
+ },
+ "works-in-progress-menu.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 0.965,
+  "ok": true
+ },
+ "works-in-progress-menu.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 0.965,
+  "ok": true
+ },
+ "works-in-progress-menu.light.10": {
+  "contrast": 0.314,
+  "surface": 0.993,
+  "text": 0.965,
+  "ok": false
+ },
+ "works-in-progress-menu.light.45": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 0.965,
+  "ok": true
+ },
+ "works-in-progress-menu.light.90": {
+  "contrast": 1.0,
+  "surface": 0.993,
+  "text": 0.965,
+  "ok": true
+ },
  "x-home.dark.10": {
   "contrast": 1.0,
   "surface": 1,

@@ -187,3 +187,4 @@ private screens — `"private": [selectors]` — scrambled in-page first, iframe
 - SPAs that assign `html.className` (Discord) wipe the extension's root classes: `src/main/modules/RootMarks.ts` re-adds them.
 - Content scripts are classic scripts: a shared chunk import kills them (and the background, unless it's a module) —
   `tests/test_build.py` guards it.
+- `backdrop-filter` on a bar makes it the containing block of its `position: fixed` children: a slide-out menu inside the header gets clipped to the bar (Works in Progress). Frost's `[data-tz-frost]` does the same; drop the bar's blur while the menu is open.

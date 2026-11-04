@@ -1,0 +1,51 @@
+@import url("../shared/glass.css");
+
+/* Glass Mode's own site (nazzacode.github.io/glass-mode). It fakes glass: own wallpaper image under two blurred panes.
+   With the extension on, the real desktop shows instead: wallpaper off, body = frame, sidebar sits on the frame,
+   the article pane = content. Tokens are redefined per theme (:root, prefers-color-scheme, [data-theme]) → same scope. */
+
+:root,
+:root[data-theme],
+:root:not([data-theme="light"]) {
+	--bg: transparent !important;
+	--wall: none !important;
+	--fg: var(--g-fg) !important;
+	--muted: var(--g-fg-2) !important;
+	--faint: var(--g-fg-3) !important;
+	--line: var(--g-line) !important;
+	--accent: var(--g-blue) !important;
+	--sel: var(--g-fill-hover) !important;
+	--pane: var(--g-fill-selected) !important; /* only pressed toggles use it once the panes are mapped below */
+	--rim: var(--g-line) !important;
+	--sheen: transparent !important;
+	--live: var(--g-green) !important;
+	--partial: var(--g-orange) !important;
+	--bad: var(--g-red) !important;
+}
+
+body {
+	background-image: none !important;
+}
+
+/* sidebar: part of the frame, no slab of its own */
+nav.pane {
+	background: transparent !important;
+	border-color: transparent !important;
+	box-shadow: none !important;
+	backdrop-filter: none !important;
+}
+
+/* the article */
+main.pane {
+	background: var(--g-content) !important;
+	border-color: var(--g-line) !important;
+	border-radius: var(--g-radius-pane);
+	box-shadow: var(--g-highlight) !important;
+	backdrop-filter: none !important;
+}
+
+.bar input,
+.bar select,
+.seg {
+	background: var(--g-fill) !important;
+}

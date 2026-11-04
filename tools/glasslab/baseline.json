@@ -1,4 +1,76 @@
 {
+ "annas-archive-account.dark.10": {
+  "contrast": 0.314,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": false
+ },
+ "annas-archive-account.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "annas-archive-account.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "annas-archive-account.light.10": {
+  "contrast": 0.314,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": false
+ },
+ "annas-archive-account.light.45": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "annas-archive-account.light.90": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "annas-archive-home.dark.10": {
+  "contrast": 0.047,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": false
+ },
+ "annas-archive-home.dark.45": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "annas-archive-home.dark.90": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "annas-archive-home.light.10": {
+  "contrast": 0.048,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": false
+ },
+ "annas-archive-home.light.45": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
+ "annas-archive-home.light.90": {
+  "contrast": 1.0,
+  "surface": 0.996,
+  "text": 1.0,
+  "ok": true
+ },
  "auto-arstechnica.dark.10": {
   "contrast": 0.981,
   "surface": 0.996,
@@ -2334,6 +2406,78 @@
   "ok": true
  },
  "github-repo~sponsor-frostybiscuit-transparen-fec8.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "glass-mode-site-overview.dark.10": {
+  "contrast": 0.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "glass-mode-site-overview.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "glass-mode-site-overview.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "glass-mode-site-overview.light.10": {
+  "contrast": 0.009,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "glass-mode-site-overview.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "glass-mode-site-overview.light.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "glass-mode-site-sites.dark.10": {
+  "contrast": 0.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "glass-mode-site-sites.dark.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "glass-mode-site-sites.dark.90": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "glass-mode-site-sites.light.10": {
+  "contrast": 0.052,
+  "surface": 1,
+  "text": 1.0,
+  "ok": false
+ },
+ "glass-mode-site-sites.light.45": {
+  "contrast": 1.0,
+  "surface": 1,
+  "text": 1.0,
+  "ok": true
+ },
+ "glass-mode-site-sites.light.90": {
   "contrast": 1.0,
   "surface": 1,
   "text": 1.0,

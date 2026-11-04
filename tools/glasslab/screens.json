@@ -558,6 +558,26 @@
   {
    "id": "works-in-progress-cookies",
    "url": "https://worksinprogress.co/issue/the-forgotten-formula-for-lovable-cities/"
+  },
+  {
+   "id": "glass-mode-site-overview",
+   "url": "https://nazzacode.github.io/glass-mode/"
+  },
+  {
+   "id": "glass-mode-site-sites",
+   "url": "https://nazzacode.github.io/glass-mode/#sites",
+   "showcase": true
+  },
+  {
+   "id": "annas-archive-home",
+   "url": "http://annas-archive.pk/",
+   "replay": "annas-archive.pk",
+   "showcase": true
+  },
+  {
+   "id": "annas-archive-account",
+   "url": "http://annas-archive.pk/account",
+   "replay": "annas-archive.pk"
   }
  ]
 }

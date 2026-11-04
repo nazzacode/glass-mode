@@ -1,0 +1,57 @@
+@import url("../shared/glass.css");
+
+/* Anna's Archive (every mirror domain: .li .pk .gl .org …). Tailwind, no tokens: surfaces are utility classes and inline
+   `background: #f2f2f2`. Page grey → frame, white blocks → fills, black-alpha chips → fills, yellow notice → card.
+   Built from real pages in the Zen cache (`./glasslab replay annas-archive.pk`): the lab gets a bot wall. */
+
+/* text-dense everywhere (header, sidebar, lists): content-first, like Wikipedia */
+:root {
+	--g-body: var(--g-content-abs);
+}
+
+/* neutralise containers → re-tier → text */
+body :where(div, section, header, nav, aside, main, footer, ul, li, table, tbody, tr, td, form):where(:not([role="button"], [role="progressbar"], [role="switch"], [style*="background"])) {
+	background-color: transparent !important;
+}
+body.bg-\[\#f2f2f2\],
+[style*="background: #f2f2f2"] {
+	background: transparent !important;
+}
+:is([role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"]) {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+}
+body,
+body :where(:not([style*="color"], button, button *, [role="button"], [role="button"] *)) {
+	color: var(--g-fg) !important;
+}
+
+
+/* white blocks (blog rows, inputs, cards) and black-alpha chips → fills; selected nav row → selection */
+:is(.bg-white, .bg-black\/5, .bg-black\/6\.7, input, select, textarea) {
+	background-color: var(--g-fill) !important;
+}
+:is(.bg-gray-300, .hover\:bg-gray-300:hover, .hover\:bg-\[\#999\]:hover) {
+	background-color: var(--g-fill-hover) !important;
+}
+.bg-\[\#777\] {
+	background-color: var(--g-accent) !important; /* grey "Log in" button, white label */
+}
+/* "high-risk payment processor" notice */
+.bg-yellow-100 {
+	background-color: var(--g-card) !important;
+	box-shadow: inset 3px 0 0 var(--g-orange);
+}
+
+/* secondary text */
+body :where(.text-gray-500, .text-black\/64, .text-\[\#555\], .text-\[\#777\]) {
+	color: var(--g-fg-2) !important;
+}
+.text-red-500 {
+	color: var(--g-red) !important;
+}
+/* white labels on the coloured stats bar and blue buttons keep their colour */
+:is(.text-white, .text-\[\#fff\]),
+:is(.text-white, .text-\[\#fff\]) * {
+	color: #fff !important;
+}

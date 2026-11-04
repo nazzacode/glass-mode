@@ -302,6 +302,28 @@
 			],
 			"run_at": "document_start",
 			"favicon": "https://icons.duckduckgo.com/ip3/worksinprogress.co.ico"
+		},
+		{
+			"name": "Glass Mode",
+			"matches": [
+				"^https?://nazzacode\\.github\\.io/glass-mode/"
+			],
+			"css": [
+				"./styles/websites/glass-mode-site.css"
+			],
+			"run_at": "document_start",
+			"favicon": "https://icons.duckduckgo.com/ip3/github.io.ico"
+		},
+		{
+			"name": "Anna's Archive",
+			"matches": [
+				"^https?://(www\\.)?annas-archive\\.[a-z]+/"
+			],
+			"css": [
+				"./styles/websites/annas-archive.css"
+			],
+			"run_at": "document_start",
+			"favicon": "https://icons.duckduckgo.com/ip3/annas-archive.li.ico"
 		}
 	]
 }

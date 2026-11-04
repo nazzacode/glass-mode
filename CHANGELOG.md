@@ -2,6 +2,20 @@
 
 Installed copies update themselves within a day (about:addons → Check for Updates: now).
 
+## 1.0.8
+
+**Anna's Archive**, on every mirror domain (.li, .pk, .gl, .org…). The page reads on glass end to end: header,
+sidebar and cards, with the blog list and inputs as frosted rows. The coloured library bar and blue buttons keep their
+colours, and the payment notice is a card with an orange edge. Search result pages aren't styled from real pages yet:
+the lab only gets Anna's bot wall, so this was built from the pages in your browser cache.
+
+![Anna's Archive, dark glass](docs/changelog/1.0.8/annas-archive-home.dark.jpg)
+
+**Glass Mode's own website goes clear.** It used to draw a wallpaper picture behind fake glass. With the extension on,
+your real desktop shows through instead: the sidebar sits on the frame and the article on the reading pane.
+
+![The Glass Mode site, dark glass](docs/changelog/1.0.8/glass-mode-site-sites.dark.jpg)
+
 ## 1.0.7
 
 **Works in Progress.** The magazine's articles read on glass: the page sits on the reading tint, the header frosts as

@@ -232,3 +232,20 @@ body.is-bootstrapped :is([data-focus-trap-active], [role="dialog"], [role="menu"
 body.is-bootstrapped [data-focus-trap-active] :where(div, ul) {
 	background-color: transparent;
 }
+/* modals (new issue …): focus trap = full-viewport wrapper → [scrim, role=dialog (full viewport) → 0×0 anchor → box].
+   The rule above tinted + blurred both full-screen layers → whole window solid, box under two veils. Wrappers clear,
+   the box is the popover, scrim lighter (Cmd+K's focus trap is the box itself: no dialog child, untouched) */
+body.is-bootstrapped [data-focus-trap-active]:has(> [role="dialog"]),
+body.is-bootstrapped [data-focus-trap-active] > [role="dialog"] {
+	background-color: transparent !important;
+	backdrop-filter: none !important;
+	box-shadow: none !important;
+}
+body.is-bootstrapped [data-focus-trap-active]:has(> [role="dialog"]) {
+	--sx-1qdowq0: rgb(0 0 0 / 0.15) !important;
+}
+body.is-bootstrapped [data-focus-trap-active] > [role="dialog"] > div > div {
+	background-color: var(--g-popover) !important;
+	backdrop-filter: var(--g-blur);
+	box-shadow: var(--g-shadow), var(--g-highlight) !important;
+}

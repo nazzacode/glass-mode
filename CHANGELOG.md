@@ -2,6 +2,11 @@
 
 Installed copies update themselves within a day (about:addons → Check for Updates: now).
 
+## 1.0.10
+
+**Linear: the new-issue window stays glass.** Opening "New issue" frosted the whole window over and put the box under
+two veils, so everything went solid. Now only the box is frosted glass, and the board behind it just dims slightly.
+
 ## 1.0.9
 
 **Linear: no more black boxes on boards.** Board and project cards were the thick "raised" tint stacked on the reading

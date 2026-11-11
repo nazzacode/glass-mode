@@ -2,6 +2,12 @@
 
 Installed copies update themselves within a day (about:addons → Check for Updates: now).
 
+## 1.0.9
+
+**Linear: no more black boxes on boards.** Board and project cards were the thick "raised" tint stacked on the reading
+pane, which over a bright wallpaper read as near-black slabs. They're now frosted fills with a hairline edge, so the
+board stays one sheet of glass and the cards sit on it.
+
 ## 1.0.8
 
 **Anna's Archive**, on every mirror domain (.li, .pk, .gl, .org…). The page reads on glass end to end: header,

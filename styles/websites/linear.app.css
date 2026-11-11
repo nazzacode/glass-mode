@@ -214,9 +214,11 @@ body.is-bootstrapped [data-restore-scroll-view="board-container"] [style*="--x-b
 body.is-bootstrapped [data-restore-scroll-view="board-container"] [style*="linear-gradient"]::after {
 	background-image: linear-gradient(var(--g-fill), transparent) !important;
 }
+/* cards = a fill + hairline, not --g-card: the raised .5 tint stacked on the content pane read as black slabs over a
+   bright wallpaper (projects board, 2026-11-11) */
 body.is-bootstrapped a[data-board-item] {
-	background-color: var(--g-card) !important;
-	box-shadow: var(--g-highlight) !important;
+	background-color: var(--g-fill) !important;
+	box-shadow: inset 0 0 0 1px var(--g-line), var(--g-highlight) !important;
 }
 body.is-bootstrapped a[data-board-item]:hover {
 	background-color: var(--g-fill-hover) !important;

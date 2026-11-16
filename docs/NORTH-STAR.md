@@ -9,7 +9,8 @@ both glass modes, over any wallpaper. Nathan turns it on, says "perfect", never 
 
 1. **No leftover slabs.** Every big surface is a glass tier (`--g-*`). A Linear/Gmail panel colour that survives the
    remap (inline styles, JS-computed colours, gradients) is a fail, not an exemption. Only chip-sized data colours
-   (labels, avatars, event chips) are exempt.
+   (labels, avatars, event chips) are exempt. One foreign element covering ≥ 2 % of the window fails the page, however
+   good the average (a black box in an otherwise glass page is what people see).
 2. **Text reads.** Every text run meets APCA targets over the darkest and brightest wallpaper, never worse than the
    site's own native contrast.
 3. **Layers over content are blurred or solid.** A popup, menu, modal or sticky bar with page content under it is
@@ -29,7 +30,7 @@ both glass modes, over any wallpaper. Nathan turns it on, says "perfect", never 
 | agent improves the CSS against the lab report | `glasslab add --agent` | works on listed screens |
 | **logged-in lab** (cookies + site storage from Nathan's Zen) | `lab.setup` | 2026-11-16 |
 | **crawl** the app's own nav, measure every page + opened layer | `glasslab crawl` | 2026-11-16 |
-| checks 1–5 on every page/state | `suite` / `explore` / probes | 1, 3, 4 tightened 2026-11-16 |
+| checks 1–5 on every page/state | `suite` / `explore` / probes | slab rule, blurred-or-solid, veil, animation settle: 2026-11-16 |
 | A/B taste votes | `glasslab vote` | built, 0 votes |
 | release + self-update | `npm run release` | works |
 | in-browser "add this site" button → runs the above | — | not started |

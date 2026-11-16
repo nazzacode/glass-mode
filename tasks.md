@@ -1,7 +1,7 @@
 # Glass Mode tasks
 
 Claims board for agent sessions. Goal + bar: [docs/NORTH-STAR.md](docs/NORTH-STAR.md). Lab + style rules:
-[docs/GLASS.md](docs/GLASS.md). Linear (GEN-143 children) = Nathan's high-level view only; detail lives here.
+[docs/GLASS.md](docs/GLASS.md). Linear GEN-213 (under GEN-207 "proof of work") = Nathan's high-level view; GEN-162 = stage 2. Detail lives here.
 Claim: `[/]` + `@<session> <date>`. Done → `[x]`, drop tag. Claims > 2 days with no branch/session = stale, take over.
 Private notes (browsing-history site list, launch kit): `launch/` (gitignored, local).
 

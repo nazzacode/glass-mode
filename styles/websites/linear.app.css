@@ -221,6 +221,12 @@ body.is-bootstrapped [data-grouping] {
 	background: var(--g-fill) !important;
 	backdrop-filter: var(--g-blur);
 }
+/* composers (Agent "Ask Linear…", Loops, comment boxes): inline JS colour `--x-backgroundColor: lch(…)` from the theme →
+   no var to remap, near-black slab on glass (crawl 2026-11-16). The new-issue box has no inline colour → untouched */
+body.is-bootstrapped [data-editor-drop-surface][style*="--x-backgroundColor"] {
+	background-color: var(--g-fill) !important;
+	box-shadow: inset 0 0 0 1px var(--g-line), var(--g-highlight) !important;
+}
 /* cards = a fill + hairline, not --g-card: the raised .5 tint stacked on the content pane read as black slabs over a
    bright wallpaper (projects board, 2026-11-11) */
 body.is-bootstrapped a[data-board-item] {

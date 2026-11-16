@@ -2,6 +2,11 @@
 
 Installed copies update themselves within a day (about:addons → Check for Updates: now).
 
+## 1.0.12
+
+**Linear: no black boxes around the message boxes.** The "Ask Linear…" box on the Agent page, Loops and comment
+boxes were painted dark by Linear's theme and skipped the glass. They're frosted fields now.
+
 ## 1.0.11
 
 **Linear: no more dark bars across boards.** Swimlane headers ("No assignee", project lanes) were painted by Linear

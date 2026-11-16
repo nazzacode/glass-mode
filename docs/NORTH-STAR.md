@@ -1,6 +1,7 @@
 # North star
 
-**One click: paste a site → out comes a beautiful glass version of the WHOLE app, verified, shipped.**
+**Stage 1: one click: paste a site → out comes a beautiful glass version of the WHOLE app, verified, shipped.**
+**Stage 2: no list at all: switch it on, every site goes glass live, fast enough nobody notices.**
 
 Not the home page. Every page a user reaches and every layer they open (menus, modals, lanes, drawers, toasts), in
 both glass modes, over any wallpaper. Nathan turns it on, says "perfect", never turns it off.
@@ -41,3 +42,26 @@ both glass modes, over any wallpaper. Nathan turns it on, says "perfect", never 
 - Bot-walled sites (Cloudflare) can't be crawled headless → recorder captures from real use (`glasslab corpus`).
 - Agent loop (`add --agent`) only sees listed screens → feed it crawl results.
 - No in-browser button yet; today "one click" = one command.
+
+## Stage 2: any site, live (no list)
+
+Engine exists: `src/main/modules/autoglass/` (classify surfaces → tiers, runtime). Off by default. Lab: passes on 6
+document sites (MDN, Python docs, Lobsters, Stack Overflow, Ars, BBC: `auto-*` screens); never measured on apps.
+Design + prior art: [research/auto-glass-algorithm.md](research/auto-glass-algorithm.md) (Dark Reader's sheet rewrite +
+a surface/role pass + text-by-rank).
+
+Hard parts, hardest first:
+1. **Role, not colour.** The same `#fff` is page, pane, card and menu. Tier = role → geometry, flow, top layer, ARIA.
+   Wrong guess = a slab or a see-through menu. Documents are easy; apps (Linear, Gmail) are where it breaks.
+2. **Colours that bypass CSS.** JS-computed inline styles (Linear lanes, composers), canvas, SVG, images with baked
+   backgrounds. A stylesheet rewrite never sees them → needs a mutation pass on inline `style`.
+3. **Hidden UI.** Menus/modals don't exist until opened; live engine must classify each new top-layer/portal root as it
+   appears, within a frame, without flashing opaque first.
+4. **Text over an unknown wallpaper.** Contrast floors are calibrated; chromatic text needs a per-colour OKLCH solve.
+5. **Speed.** Budget ≤ 2 ms/frame, no full re-walks on mutation (upstream's per-element walk was the slow path).
+   Sheet-level rewrite = work once per stylesheet, not per element.
+6. **Trust.** One broken site = user switches it off everywhere. Needs a per-site kill switch + "fix this box" picker.
+
+Path: (a) crawl + checks (stage 1) also run with auto glass on every covered site → auto vs hand-written score gap per
+site = the engine's to-do list; (b) close the gap on apps; (c) A/B auto vs opaque on uncovered sites; (d) default on
+when it wins. Hand-written site files shrink to thin overrides on top of auto.

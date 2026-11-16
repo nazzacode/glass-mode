@@ -18,7 +18,12 @@
   // does the layer cover text that was already on screen? (menus over content need popover opacity; a drawer over clear glass doesn't)
   const textual = all.filter(e => seen.has(e) && [...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim()) && onScreen(e));
   const hits = (a, b) => a.left < b.right - 2 && b.left < a.right - 2 && a.top < b.bottom - 2 && b.top < a.bottom - 2;
-  const over = p => { const r = p.getBoundingClientRect(); return textual.some(t => !t.contains(p) && !p.contains(t) && hits(t.getBoundingClientRect(), r)); };
+  // really beneath: the overlap's centre hit-tests to the text (bounding boxes alone count text an overflow clip already hid —
+  // Linear's docked details panel cuts the board at its edge, nothing runs under it)
+  const under = (t, r) => { const a = t.getBoundingClientRect(); if (!hits(a, r)) return false;
+    const x = (Math.max(a.left, r.left) + Math.min(a.right, r.right)) / 2, y = (Math.max(a.top, r.top) + Math.min(a.bottom, r.bottom)) / 2;
+    return x >= 0 && y >= 0 && x < W && y < H && document.elementsFromPoint(x, y).some(e => e === t || t.contains(e)); };
+  const over = p => { const r = p.getBoundingClientRect(); return textual.some(t => !t.contains(p) && !p.contains(t) && under(t, r)); };
   // frosted: the panel or an ancestor up to the layer root blurs what's beneath (headless pixels never show blur → style)
   const blurred = (p, root) => { for (let x = p; x; x = x.parentElement) { if (getComputedStyle(x).backdropFilter !== 'none') return true; if (x === root) break; } return false; };
   // veil: a full-viewport element in the layer that frosts or tints the whole window (modal wrapper / focus trap
@@ -27,8 +32,9 @@
     && (getComputedStyle(x).backdropFilter !== 'none' || (rgba(getComputedStyle(x).backgroundColor) || [0, 0, 0, 0])[3] * (+getComputedStyle(x).opacity) > 0.45));
   let inside = null; try { inside = trigger && document.querySelector(trigger); } catch (_) {}
   const roots = [...fresh].filter(e => !fresh.has(e.parentElement) && floats(e) && !(inside && inside.contains(e)))
-    .map(e => ({ sel: path(e), label: label(e), rect: rectOf(e), panel: rectOf(panel(e)), over: over(panel(e)), blur: blurred(panel(e), e), veil: veil(e) }))
-    .filter(l => l.rect[2] * l.rect[3] >= 1200)
+    .map(e => ({ sel: path(e), label: label(e), rect: rectOf(e), panel: rectOf(panel(e)), over: over(panel(e)), blur: blurred(panel(e), e), veil: veil(e),
+      shows: paints(panel(e)) || !!e.innerText?.trim() || [e, ...e.querySelectorAll('*')].some(x => getComputedStyle(x).backdropFilter !== 'none') }))
+    .filter(l => l.rect[2] * l.rect[3] >= 1200 && l.shows)
     .sort((a, b) => b.rect[2] * b.rect[3] - a.rect[2] * a.rect[3]);
   return JSON.stringify(roots.slice(0, 6));
 })

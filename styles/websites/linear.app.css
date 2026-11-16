@@ -214,6 +214,13 @@ body.is-bootstrapped [data-restore-scroll-view="board-container"] [style*="--x-b
 body.is-bootstrapped [data-restore-scroll-view="board-container"] [style*="linear-gradient"]::after {
 	background-image: linear-gradient(var(--g-fill), transparent) !important;
 }
+/* swimlane / group header rows ("No assignee 91", project lanes): Linear writes an inline literal
+   `background: linear-gradient(<lane tint>, <panel>), <panel>` from the theme → no var to remap, stayed a solid
+   Linear-theme band (dark bars on glass, 2026-11-16). Sticky over the lanes → fill + blur */
+body.is-bootstrapped [data-grouping] {
+	background: var(--g-fill) !important;
+	backdrop-filter: var(--g-blur);
+}
 /* cards = a fill + hairline, not --g-card: the raised .5 tint stacked on the content pane read as black slabs over a
    bright wallpaper (projects board, 2026-11-11) */
 body.is-bootstrapped a[data-board-item] {

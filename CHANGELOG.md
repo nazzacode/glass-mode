@@ -2,6 +2,11 @@
 
 Installed copies update themselves within a day (about:addons → Check for Updates: now).
 
+## 1.0.11
+
+**Linear: no more dark bars across boards.** Swimlane headers ("No assignee", project lanes) were painted by Linear
+with fixed colours that skipped the glass, so they stayed solid theme-coloured bands. They're frosted glass now.
+
 ## 1.0.10
 
 **Linear: the new-issue window stays glass.** Opening "New issue" frosted the whole window over and put the box under

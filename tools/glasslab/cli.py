@@ -37,6 +37,10 @@ def main(argv=None):
     t = sub.add_parser("test"); t.add_argument("filter", nargs="?", default="")
     t.add_argument("--save-baseline", action="store_true"); t.add_argument("--compare", action="store_true")
     t.add_argument("--build", action="store_true"); t.add_argument("--out"); t.add_argument("--no-explore", action="store_true")
+    cr = sub.add_parser("crawl", help="whole app: follow its nav, check every page + opened layer (docs/NORTH-STAR.md)")
+    cr.add_argument("name"); cr.add_argument("url"); cr.add_argument("--pages", type=int, default=15); cr.add_argument("--depth", type=int, default=2)
+    cr.add_argument("--scheme", choices=["dark", "light"], default="dark"); cr.add_argument("--no-explore", action="store_true")
+    cr.add_argument("--settle", type=int, default=7); cr.add_argument("--out"); cr.add_argument("--build", action="store_true")
     g = sub.add_parser("add"); g.add_argument("name"); g.add_argument("url"); g.add_argument("--act")
     g.add_argument("--content-first", action="store_true"); g.add_argument("--dark-only", action="store_true")
     g.add_argument("--agent", action="store_true"); g.add_argument("--rounds", type=int, default=4); g.add_argument("--force", action="store_true")
@@ -92,6 +96,9 @@ def main(argv=None):
     if a.cmd == "test":
         from . import suite
         return suite.main(xpi(a.build), a.filter, a.out, a.save_baseline, a.compare, not a.no_explore)
+    if a.cmd == "crawl":
+        from . import crawl
+        return crawl.main(xpi(a.build), a.name, a.url, a.pages, a.depth, a.scheme, not a.no_explore, a.settle, a.out)
     if a.cmd == "add":
         from . import pipeline
         return pipeline.add(a.name, a.url, a.act, a.content_first, a.dark_only, a.agent, a.rounds, a.force)

@@ -69,3 +69,18 @@ def test_layer_over_empty_glass_may_be_thin():
     m = {"surface": 0.95, "opacity": 0.6, "contrast": [1.0, 1.0], "text": 1.0, "exempt_img_share": 0}
     assert metrics.layer_ok({**m, "over_content": False})
     assert not metrics.layer_ok({**m, "over_content": True})
+
+
+def test_layer_over_content_blurred_or_solid():
+    # popups over page text: frosted (blur from style) may be thinner; unblurred must be solid enough on its own
+    m = {"surface": 0.95, "opacity": 0.6, "contrast": [1.0, 1.0], "text": 1.0, "exempt_img_share": 0, "over_content": True}
+    assert metrics.layer_ok({**m, "blur": True})
+    assert not metrics.layer_ok({**m, "blur": False})
+    assert not metrics.layer_ok({**m, "blur": True, "opacity": 0.3})   # blur can't save a near-clear tint
+
+
+def test_layer_veil_fails_even_when_opaque():
+    # Linear 1.0.9: modal wrapper frosted the whole window → reads "solid", page gone. Opaque, still a fail
+    m = {"surface": 0.95, "opacity": 0.95, "contrast": [1.0, 1.0], "text": 1.0, "exempt_img_share": 0, "over_content": True}
+    assert metrics.layer_ok(m)
+    assert not metrics.layer_ok({**m, "veil": True})

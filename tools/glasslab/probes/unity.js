@@ -26,8 +26,11 @@
       if (e.tagName === 'IFRAME') { unmeasured++; break; }   // cross-origin frames: can't see in → not a fail, not a pass
       if (/^(IMG|VIDEO|CANVAS|SVG|PICTURE)$/.test(e.tagName) || (cs.backgroundImage !== 'none' && !cs.backgroundImage.includes('gradient'))) break;
       const c = P(cs.backgroundColor); if (!c || c[3] * opacity(e) < .15) continue;  // thin overlays (state layers) aren't surfaces
-      // site data colour (event chip, label) set inline — exempt; not keyword/var values (background: inherit wrappers)
-      if (/background(-color)?\s*:(?!\s*(inherit|initial|unset|transparent|none|var\())/i.test(e.getAttribute('style') || '')) break;
+      // site data colour (event chip, label, avatar) set inline — exempt when chip-sized; not keyword/var values (background:
+      // inherit wrappers). Big inline surfaces are JS-painted panels (Linear lane headers, 615×35) → judged like any other
+      const er = e.getBoundingClientRect();
+      if (/background(-color)?\s*:(?!\s*(inherit|initial|unset|transparent|none|var\())/i.test(e.getAttribute('style') || '')
+          && er.width * er.height < 6000 && er.width < 260) break;
       const t = tiers.find(([, v]) => near(c, v));
       if (t) { ok++; tally[t[0]] = (tally[t[0]] || 0) + 1; }
       else { bad++; const k = (c[3] < 1 ? `rgba(${c.join(', ')})` : css(c)) + ' ' + e.tagName.toLowerCase() + (e.getAttribute('role') ? `[role=${e.getAttribute('role')}]` : '')

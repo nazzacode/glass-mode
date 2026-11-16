@@ -19,9 +19,15 @@
   const textual = all.filter(e => seen.has(e) && [...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim()) && onScreen(e));
   const hits = (a, b) => a.left < b.right - 2 && b.left < a.right - 2 && a.top < b.bottom - 2 && b.top < a.bottom - 2;
   const over = p => { const r = p.getBoundingClientRect(); return textual.some(t => !t.contains(p) && !p.contains(t) && hits(t.getBoundingClientRect(), r)); };
+  // frosted: the panel or an ancestor up to the layer root blurs what's beneath (headless pixels never show blur → style)
+  const blurred = (p, root) => { for (let x = p; x; x = x.parentElement) { if (getComputedStyle(x).backdropFilter !== 'none') return true; if (x === root) break; } return false; };
+  // veil: a full-viewport element in the layer that frosts or tints the whole window (modal wrapper / focus trap
+  // styled as a panel → everything goes solid). A light scrim (Apple .35) is fine
+  const veil = e => [e, ...e.querySelectorAll('*')].some(x => area(x) >= 0.8 * W * H
+    && (getComputedStyle(x).backdropFilter !== 'none' || (rgba(getComputedStyle(x).backgroundColor) || [0, 0, 0, 0])[3] * (+getComputedStyle(x).opacity) > 0.45));
   let inside = null; try { inside = trigger && document.querySelector(trigger); } catch (_) {}
   const roots = [...fresh].filter(e => !fresh.has(e.parentElement) && floats(e) && !(inside && inside.contains(e)))
-    .map(e => ({ sel: path(e), label: label(e), rect: rectOf(e), panel: rectOf(panel(e)), over: over(panel(e)) }))
+    .map(e => ({ sel: path(e), label: label(e), rect: rectOf(e), panel: rectOf(panel(e)), over: over(panel(e)), blur: blurred(panel(e), e), veil: veil(e) }))
     .filter(l => l.rect[2] * l.rect[3] >= 1200)
     .sort((a, b) => b.rect[2] * b.rect[3] - a.rect[2] * a.rect[3]);
   return JSON.stringify(roots.slice(0, 6));

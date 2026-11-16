@@ -52,7 +52,7 @@ def state_rows(states, screen, alpha):
             for s in states for mode, m in s["modes"].items()]
 
 
-async def measure_screen(pg, sc, out, bounds):
+async def measure_screen(pg, sc, out, bounds, alphas=ALPHAS):
     pg_rows = []
     wall = await pg.wall()
     if wall:
@@ -62,7 +62,7 @@ async def measure_screen(pg, sc, out, bounds):
     native = {rkey(r): (min(r["cr"]), r["fg"]) for r in (await pg.probe("text", bounds, [0, 0, 0, 0]) or [])}
     await pg.attach_styles()
     for mode in sc.get("modes", MODES):
-        for a in ALPHAS:
+        for a in alphas:
             await pg.glass(mode, a)
             key = f"{sc['id']}.{mode}.{int(a * 100)}"
             black, white = await pg.shot("#000"), await pg.shot("#fff")

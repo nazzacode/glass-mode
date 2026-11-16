@@ -3,6 +3,8 @@
 Glass Mode renders websites as translucent "liquid glass" over the blurred desktop (Zen + Hyprland blur), one shared design
 system for every site, verified by a headless test suite (`glasslab`).
 
+Where this is going and what "verified" means: [NORTH-STAR.md](NORTH-STAR.md). Whole-app check: `./glasslab crawl NAME URL`.
+
 ## Layout
 
 | path | role |

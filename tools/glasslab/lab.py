@@ -79,7 +79,25 @@ def setup(xpi, scheme="dark", extra_prefs=None, also=()):
         db = sqlite3.connect(LAB / "cookies.sqlite")
         db.execute("pragma wal_checkpoint(truncate)")
         db.close()
+    site_storage(live)
     extra_logins()
+
+
+STORAGE_CACHE = SANDBOX / "glasslab-storage"  # next to LAB: same filesystem → hardlinks
+
+
+def site_storage(live):
+    """SPAs keep the session in IndexedDB/localStorage, not cookies (Linear: cookie-only lab = login page on every app
+    screen). Delta-sync the live profile's site storage into a cache (minus extension data, Cache API, big offline
+    blobs), then hardlink it into the fresh lab profile → logged in, seconds per run."""
+    src = live / "storage/default"
+    if not src.exists() or not shutil.which("rsync"):
+        return
+    STORAGE_CACHE.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["rsync", "-a", "--delete", "--max-size=50M", "--exclude=moz-extension*", "--exclude=/*/cache/",
+                    f"{src}/", f"{STORAGE_CACHE}/"], check=False)
+    (LAB / "storage").mkdir(exist_ok=True)
+    subprocess.run(["cp", "-al", str(STORAGE_CACHE), str(LAB / "storage/default")], check=False)
 
 
 def extra_logins():

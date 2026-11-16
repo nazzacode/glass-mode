@@ -5,6 +5,7 @@ import numpy as np
 from PIL import Image
 
 TARGETS = {"contrast": 0.9, "surface": 0.9, "text": 0.85, "exempt_max": 0.1}
+BLUR_ALPHA = 0.5        # frosted layer: blur hides the shapes beneath, the tint only has to carry contrast
 LAYER_ALPHA = 0.8       # menus/dialogs/suggestions: below this the page behind bleeds through their text (popover tier ≥ .85)
 CLEAR = 0.97            # a pixel counts as glass (desktop shows through) below this alpha
 
@@ -101,6 +102,8 @@ def verdict(m):
 
 
 def layer_ok(m):
-    """hidden-UI layer (menu, dialog, suggestions): screen verdict + opaque enough that the page doesn't bleed through —
-    where there is page beneath (over_content); a drawer over clear glass is frame glass and may be thin"""
-    return verdict(m) and (m["opacity"] >= LAYER_ALPHA or not m.get("over_content", True))
+    """hidden-UI layer (menu, dialog, suggestions): screen verdict, never a veil over the whole window, and — where there
+    is page beneath (over_content) — blurred or solid: frosted (backdrop-filter, judged from style: headless pixels show no
+    blur) at ≥ BLUR_ALPHA, else opaque ≥ LAYER_ALPHA. A drawer over clear glass is frame glass and may be thin."""
+    covered = m["opacity"] >= LAYER_ALPHA or (m.get("blur") and m["opacity"] >= BLUR_ALPHA) or not m.get("over_content", True)
+    return verdict(m) and covered and not m.get("veil")

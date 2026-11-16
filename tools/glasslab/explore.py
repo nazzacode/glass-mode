@@ -111,6 +111,8 @@ async def measure(pg, key, layers, bounds, modes, alpha, shots):
         m = score(runs, native, unity.get("fgs", []), unity)
         m["opacity"] = a
         m["over_content"] = any(l["over"] for l in layers)
+        m["blur"] = all(l.get("blur") for l in layers if l["over"]) if m["over_content"] else any(l.get("blur") for l in layers)
+        m["veil"] = any(l.get("veil") for l in layers)
         m["ok"] = layer_ok(m)
         out[mode] = m
     return out
@@ -140,7 +142,7 @@ async def explore(pg, bounds, screen="page", modes=("dark", "light"), alpha=0.45
         modes_m = await measure(pg, key, layers, bounds, modes, alpha, shots)
         s = {"key": key, "trigger": t, "layers": layers, "modes": modes_m, "ok": all(m["ok"] for m in modes_m.values())}
         print(f"  ↳ {s['key']:38s} " + "  ".join(f"{md} surface {m['surface']:4.0%} opacity {m['opacity']:.2f}"
-              f"{'' if m['over_content'] else ' (clear)'} contrast {min(m['contrast']):4.0%}" for md, m in modes_m.items())
+              f"{'' if m['over_content'] else ' (clear)'}{' blur' if m.get('blur') else ''}{' VEIL' if m.get('veil') else ''} contrast {min(m['contrast']):4.0%}" for md, m in modes_m.items())
               + f"  {'ok' if s['ok'] else 'FAIL'}", flush=True)
         return s
     return await visit(pg, screen, one, settle=settle, max_triggers=max_triggers, private=private)

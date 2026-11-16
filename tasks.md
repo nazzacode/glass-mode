@@ -33,8 +33,21 @@ Private notes (browsing-history site list, launch kit): `launch/` (gitignored, l
 - [ ] Popup redesign in glass tokens (GEN-163 follow-up), in-browser "add this site" button
 - [ ] Week-long bar (GEN-164) → launch (GEN-76)
 
-## Lab backlog (strict suite 2026-11-16)
-(filled from the run)
+## Lab backlog (strict suite 2026-11-16: 62/497 default rows fail; run `./glasslab test FILTER`)
+Look at each render first: the slab rule is new, a hit may be an image/brand area that should be exempt.
+- [ ] chatgpt: style not applying at all (surface 0 %, 96 % slab) — site changed or logged-out shell
+- [ ] claude.ai: Cloudflare wall in lab (GEN-112) → replay/corpus
+- [ ] gcal week/month/event: one hidden layer at surface 46 %, text 50 %
+- [ ] spotify home: 19 % slab (dark); artist: OneTrust cookie banner 33 % slab
+- [ ] ddg home search suggestions: 20 % slab, contrast 0 % (light)
+- [ ] gdrive my-drive/recent: 6–8 % slab (+ contrast 81 % light)
+- [ ] notion careers/what's new: 5–9 % slab
+- [ ] substack home: text 77 %, contrast 76 % light (feed-dependent)
+- [ ] linear issue page: contrast 16 % light
+- [ ] gemini: hidden layer contrast 78 %
+- [ ] x profile 5 % slab · discord login 2 % slab · youtube music menu see-through .68 (unblurred)
+- [ ] autoglass: bbc 6 % slab + contrast 82 % light; mdn `<details>` 4 % slab, code-example layers 83 %; onthemarket contrast 88 %
+- [ ] slider extremes (α .10/.90) fail widely (gcal, gmail, reader, claude, substack): user's trade below default, review after taste votes
 
 ## Done (recent)
 - [x] 2026-11-16 crawl, logged-in lab (site storage), slab rule, blurred-or-solid, veil, animation settle

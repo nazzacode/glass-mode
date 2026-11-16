@@ -39,6 +39,10 @@ def backdrops():
     return DEFAULT_BOUNDS, {"synthetic-day": Image.eval(sky, lambda v: 120 + v // 3), "synthetic-night": Image.eval(sky, lambda v: v // 6)}
 
 
+def slab_note(m):
+    return f"  SLAB {m['slab']:.0%} {m.get('slab_el') or ''}"[:90] if m.get("slab", 0) >= 0.02 else ""
+
+
 def load_screens(filt=""):
     data = json.loads((HERE / "screens.json").read_text())
     have = lambda s: not s.get("replay") or (replay.STORE / s["replay"] / "index.json").exists()  # capture is per machine
@@ -74,7 +78,7 @@ async def measure_screen(pg, sc, out, bounds, alphas=ALPHAS):
             m.update(key=key, screen=sc["id"], mode=mode, alpha=a, ok=verdict(m) and not wall, wall=wall, glass=glass_share(alpha_map(black, white)))
             pg_rows.append(m)
             print(f"  {key:30s} contrast {min(m['contrast']):4.0%}  surface {m['surface']:4.0%}  text {m['text']:4.0%}"
-                  f"  glass {m['glass']:4.0%}  {'ok' if m['ok'] else 'FAIL'}", flush=True)
+                  f"  glass {m['glass']:4.0%}{slab_note(m)}  {'ok' if m['ok'] else 'FAIL'}", flush=True)
     if not wall and await pg.wall():  # a challenge can arrive after the page first looked fine
         print("  WALL: appeared while measuring. Rows fail", flush=True)
         for m in pg_rows:

@@ -227,6 +227,14 @@ class Page:
         await self.eval(f"document.documentElement.dataset.tzGlass='{mode}';"
                         f"document.documentElement.style.setProperty('--tz-glass-alpha','{alpha}')")
         await asyncio.sleep(0.4)
+        await self.settle()
+
+    async def settle(self, limit=2.0):
+        """wait out running CSS/WAAPI animations (modal fade-ins: Linear's new-project dialog measured at α .25 mid-fade)"""
+        t = time.monotonic()
+        while time.monotonic() - t < limit and await self.eval(
+                "document.getAnimations().some(a => a.playState === 'running' && isFinite(a.effect?.getTiming?.().iterations ?? 1))"):
+            await asyncio.sleep(0.15)
 
     async def detach_styles(self):
         """native render: remove the extension's stylesheets (headless → <link data-tz-file>), remember them"""

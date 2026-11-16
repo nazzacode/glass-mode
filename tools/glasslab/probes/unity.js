@@ -11,7 +11,7 @@
   probe.remove();
   // tier colours are exact computed values → tight match (#fff must not pass as paper rgba(250,250,252,.97))
   const near = (a, b, tc = 3, ta = .015) => Math.abs(a[0]-b[0]) <= tc && Math.abs(a[1]-b[1]) <= tc && Math.abs(a[2]-b[2]) <= tc && Math.abs(a[3]-b[3]) <= ta;
-  const tally = {}, foreign = new Map(); let ok = 0, bad = 0, unmeasured = 0;
+  const tally = {}, foreign = new Map(), slabs = new Set(); let ok = 0, bad = 0, unmeasured = 0;
   const grids = scopes && scopes.length
     ? scopes.map(s => document.querySelector(s)).filter(Boolean).map(root => [root, root.getBoundingClientRect(), 8, 6])
     : [[null, { left: 0, top: 0, width: W, height: H }, 20, 14]];
@@ -33,12 +33,17 @@
           && er.width * er.height < 6000 && er.width < 260) break;
       const t = tiers.find(([, v]) => near(c, v));
       if (t) { ok++; tally[t[0]] = (tally[t[0]] || 0) + 1; }
-      else { bad++; const k = (c[3] < 1 ? `rgba(${c.join(', ')})` : css(c)) + ' ' + e.tagName.toLowerCase() + (e.getAttribute('role') ? `[role=${e.getAttribute('role')}]` : '')
+      else { bad++; slabs.add(e); const k = (c[3] < 1 ? `rgba(${c.join(', ')})` : css(c)) + ' ' + e.tagName.toLowerCase() + (e.getAttribute('role') ? `[role=${e.getAttribute('role')}]` : '')
         + [...e.classList].slice(0, 2).map(x => '.' + x).join(''); foreign.set(k, (foreign.get(k) || 0) + 1); }
       break;
     }
   }
   // nothing measurable (iframe-only layer) → n/a counts as pass; reported as unmeasured
+  // slab: the biggest single foreign element (viewport share, clipped). One big leftover panel fails the page even
+  // when the grid average passes (Linear's Agent composer: 93 % surface, a black box in the middle)
+  const vis = e => { const r = e.getBoundingClientRect(); return Math.max(0, Math.min(r.right, W) - Math.max(r.left, 0)) * Math.max(0, Math.min(r.bottom, H) - Math.max(r.top, 0)) / (W * H); };
+  const big = [...slabs].map(e => [vis(e), e]).sort((a, b) => b[0] - a[0])[0];
   return JSON.stringify({ surface: ok + bad ? ok / (ok + bad) : 1, unmeasured, tiers: tally,
+    slab: big ? +big[0].toFixed(4) : 0, slab_el: big ? path(big[1]) : null,
     foreign: [...foreign].sort((a, b) => b[1] - a[1]).slice(0, 6), fgs: fgs.map(f => f && f.slice(0, 3)) });
 })

@@ -4,7 +4,7 @@ import re
 import numpy as np
 from PIL import Image
 
-TARGETS = {"contrast": 0.9, "surface": 0.9, "text": 0.85, "exempt_max": 0.1}
+TARGETS = {"contrast": 0.9, "surface": 0.9, "text": 0.85, "exempt_max": 0.1, "slab_max": 0.02}
 BLUR_ALPHA = 0.5        # frosted layer: blur hides the shapes beneath, the tint only has to carry contrast
 LAYER_ALPHA = 0.8       # menus/dialogs/suggestions: below this the page behind bleeds through their text (popover tier ≥ .85)
 CLEAR = 0.97            # a pixel counts as glass (desktop shows through) below this alpha
@@ -91,14 +91,15 @@ def score(runs, native, fgs, unity):
             g["chars"] += r["n"]
     img_exempt = sum(r["n"] for r in ex if r.get("img") and not r.get("chip")) / max(1, sum(r["n"] for r in runs))
     return {"texts": len(sc), "exempt": len(ex), "exempt_img_share": round(img_exempt, 3), "contrast": [round(v, 3) for v in contrast],
-            "surface": round(unity.get("surface", 0), 3), "text": round(text, 3), "tiers": unity.get("tiers", {}),
+            "surface": round(unity.get("surface", 0), 3), "slab": unity.get("slab", 0), "slab_el": unity.get("slab_el"),
+            "text": round(text, 3), "tiers": unity.get("tiers", {}),
             "surface_foreign": unity.get("foreign", []), "text_foreign": text_foreign,
             "failing": sorted(failing.values(), key=lambda g: -g["chars"])[:10]}
 
 
 def verdict(m):
     return (min(m["contrast"]) >= TARGETS["contrast"] and m["surface"] >= TARGETS["surface"]
-            and m["text"] >= TARGETS["text"] and m["exempt_img_share"] <= TARGETS["exempt_max"])
+            and m["text"] >= TARGETS["text"] and m["exempt_img_share"] <= TARGETS["exempt_max"] and m.get("slab", 0) < TARGETS["slab_max"])
 
 
 def layer_ok(m):

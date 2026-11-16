@@ -84,3 +84,10 @@ def test_layer_veil_fails_even_when_opaque():
     m = {"surface": 0.95, "opacity": 0.95, "contrast": [1.0, 1.0], "text": 1.0, "exempt_img_share": 0, "over_content": True}
     assert metrics.layer_ok(m)
     assert not metrics.layer_ok({**m, "veil": True})
+
+
+def test_one_big_slab_fails_a_page_that_averages_fine():
+    # Linear Agent page: 93 % surface passed, the composer was a black box in the middle
+    m = {"surface": 0.93, "contrast": [1.0, 1.0], "text": 1.0, "exempt_img_share": 0, "slab": 0.04}
+    assert not metrics.verdict(m)
+    assert metrics.verdict({**m, "slab": 0.005})   # chip-sized leftovers don't sink a page

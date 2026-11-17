@@ -12,6 +12,9 @@ Private notes (browsing-history site list, launch kit): `launch/` (gitignored, l
 - [ ] Feed crawl results into `glasslab add --agent` (agent only sees listed screens today)
 - [ ] `glasslab add`: register at END of ContentScripts.json, CRLF (today: top, LF; fixed by hand each time)
 
+- [ ] Lab: mismatched pairs — dark glass over BRIGHT wallpaper (+ light over dark), at Nathan's thin local floors too; Gmail was unreadable live 2026-11-17 (desktop said dark, wallpaper pastel) and no row covered it
+- [ ] Desktop (nixos/Yotland, not this repo): DMS light toggle left gsettings color-scheme at prefer-dark → every site's auto glass wrong; make the toggle sync it
+
 ## Sites to add (Zen history, 6 weeks, by visits; flat-hunt sites ignored)
 - [ ] GOV.UK design system (universal credit 34 + all gov.uk services: one style, hundreds of sites)
 - [ ] accounts.google.com sign-in/consent (209, short pages)

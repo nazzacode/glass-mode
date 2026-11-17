@@ -6,7 +6,7 @@ Claim: `[/]` + `@<session> <date>`. Done → `[x]`, drop tag. Claims > 2 days wi
 Private notes (browsing-history site list, launch kit): `launch/` (gitignored, local).
 
 ## Now
-- [ ] Fix every fail from the strict full-suite run (2026-11-16) — see "Lab backlog" below
+- [/] Fix every fail from the strict full-suite run (2026-11-16) — see "Lab backlog" below @glass-backlog 2026-11-17
 - [ ] Crawl every covered site (`./glasslab crawl NAME URL`), fix leftover-surface tables; add crawl entry URLs to screens.json
 - [ ] Crawl: open non-link item views (issue peek, row expanders, settings tabs) — biggest remaining blind spot
 - [ ] Feed crawl results into `glasslab add --agent` (agent only sees listed screens today)

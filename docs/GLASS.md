@@ -43,6 +43,7 @@ Values are slider 10 % → 45 % (default) → 90 %, linear on each side, so ever
 readable value at the default. Below the default the user trades readability for clarity: reported, not graded.
 | `--g-fill` / `-hover` / `-selected` | rows, controls | white .05 / .07, accent .24 | white frost .55 / .72, accent .10 |
 | `--g-paper` | user content with own colours | `rgba(250,250,252,.97)` | same |
+| `--g-inverse` | content the site designed dark (white-on-dark cards, video tiles) | `rgba(30,31,33,.9)` | same |
 | `--g-fg` / `-2` / `-3` | text | `#f2f2f5 / #dfdfe3 / #a8a8b0` | `#1c1c1e / #333338 / #55555c` |
 
 Also `--g-line(-strong)`, `--g-accent`, `--g-red/orange/green/blue/purple`, `--g-scrim`, `--g-shadow`, `--g-highlight`,

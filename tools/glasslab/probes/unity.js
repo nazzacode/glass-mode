@@ -6,7 +6,7 @@
   // !important: sites force colours with "body * { … !important }" — the reference must still read the tokens
   const tok = v => { probe.style.setProperty('background-color', `var(${v})`, 'important'); return P(getComputedStyle(probe).backgroundColor); };
   const tiers = ['--g-frame', '--g-window', '--g-content', '--g-content-abs', '--g-popover', '--g-card', '--g-fill', '--g-fill-hover',
-    '--g-fill-selected', '--g-paper', '--g-scrim'].map(t => [t, tok(t)]).filter(x => x[1]);
+    '--g-fill-selected', '--g-paper', '--g-inverse', '--g-scrim'].map(t => [t, tok(t)]).filter(x => x[1]);
   const fgs = ['--g-fg', '--g-fg-2', '--g-fg-3'].map(t => { probe.style.setProperty('color', `var(${t})`, 'important'); return P(getComputedStyle(probe).color); });
   probe.remove();
   // tier colours are exact computed values → tight match (#fff must not pass as paper rgba(250,250,252,.97))

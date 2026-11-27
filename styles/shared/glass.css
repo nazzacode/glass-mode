@@ -76,6 +76,9 @@
 	/* paper: USER content that carries its own colours (HTML email, documents) → light sheet in both modes (Apple Mail) */
 	--g-paper: rgba(250, 250, 252, 0.97);
 	--g-paper-fg: #1f1f1f;
+	/* inverse: content the site designed DARK in its light theme (white-on-dark cards, video tiles) → dark sheet in both modes
+	   (remapping it to frost leaves its white text on white: Substack feed cards, 2026-11-27) */
+	--g-inverse: rgba(30, 31, 33, 0.9);
 }
 
 :root[data-tz-glass="light"] {

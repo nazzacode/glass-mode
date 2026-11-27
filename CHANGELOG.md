@@ -2,6 +2,12 @@
 
 Installed copies update themselves within a day (about:addons → Check for Updates: now).
 
+## 1.0.13
+
+**Substack: the writer app reads again.** In the post editor, Preview, Settings, Version history, Info, Edit LaTeX and
+the author chip were blank white pills: their grey stayed while the label turned white. They're frosted buttons now.
+In the feed, quote and article cards Substack draws dark had gone light with white text on top; they stay dark now.
+
 ## 1.0.12
 
 **Linear: no black boxes around the message boxes.** The "Ask Linear…" box on the Agent page, Loops and comment

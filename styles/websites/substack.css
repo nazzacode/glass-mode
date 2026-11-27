@@ -84,3 +84,21 @@
 :is([class^="backdrop-"], [class*=" backdrop-"]) {
 	background: var(--g-scrim) !important;
 }
+
+/* pencraft secondary buttons + chips (editor Preview, Settings, Version history, Info, Edit LaTeX, author chip): fill
+   hard-coded in hashed CSS-module classes (no token: causal test on 916 vars changed nothing) → light pill kept its
+   #f0f0f0 while glass made the label white = white on white (writer app, 2026-11-27). Prefix match, space-anchored */
+.pencraft:is([class*=" priority_secondary-"], [class*=" chip-"]) {
+	background-color: var(--g-fill) !important;
+	color: var(--g-fg) !important;
+}
+.pencraft:is([class*=" priority_secondary-"], [class*=" chip-"]):hover {
+	background-color: var(--g-fill-hover) !important;
+}
+
+/* intentionally dark cards (feed quote/article cards: inline `background-color: var(--color-dark-bg-*)` + white
+   "vibrance" text): the palette remap above turned them into light frost in light glass = white on white. An INLINE
+   dark-token surface is a design choice, not the theme → stays a dark sheet in both modes */
+.pencraft[style*="var(--color-dark-bg-"] {
+	background-color: var(--g-inverse) !important;
+}

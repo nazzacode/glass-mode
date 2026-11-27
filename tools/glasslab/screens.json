@@ -92,6 +92,21 @@
    "url": "https://www.astralcodexten.com/"
   },
   {
+   "id": "substack-editor",
+   "url": "https://nazza.substack.com/publish/post/192453820",
+   "private": [
+    "body"
+   ],
+   "settle": 9
+  },
+  {
+   "id": "substack-dashboard",
+   "url": "https://nazza.substack.com/publish/posts/drafts",
+   "private": [
+    "body"
+   ]
+  },
+  {
    "id": "youtube-home",
    "url": "https://www.youtube.com/",
    "private": [

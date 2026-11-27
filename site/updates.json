@@ -3,6 +3,11 @@
     "transparent-zen@nazzacode": {
       "updates": [
         {
+          "version": "1.0.13",
+          "update_link": "https://github.com/nazzacode/glass-mode/releases/download/v1.0.13/glass-mode.xpi",
+          "update_hash": "sha256:3762d1cf0a31b074f40c1ffdb2a7eafc9b01fd2bc7693a484066739fd3e05f41"
+        },
+        {
           "version": "1.0.12",
           "update_link": "https://github.com/nazzacode/glass-mode/releases/download/v1.0.12/glass-mode.xpi",
           "update_hash": "sha256:f18e04c557df267c13c2a92ccf5c6f763961c3f6e90ecbdcac6ca5662c14b6f9"

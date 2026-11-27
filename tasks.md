@@ -45,7 +45,7 @@ Look at each render first: the slab rule is new, a hit may be an image/brand are
 - [ ] ddg home search suggestions: 20 % slab, contrast 0 % (light)
 - [ ] gdrive my-drive/recent: 6–8 % slab (+ contrast 81 % light)
 - [ ] notion careers/what's new: 5–9 % slab
-- [ ] substack home: text 77 %, contrast 76 % light (feed-dependent)
+- [ ] substack home: white-on-light fixed (1.0.13, --g-inverse); left: 42 % of text on photos trips exempt-share gate (feed), red menu label Lc 45/46
 - [ ] linear issue page: contrast 16 % light
 - [ ] gemini: hidden layer contrast 78 %
 - [ ] x profile 5 % slab · discord login 2 % slab · youtube music menu see-through .68 (unblurred)
@@ -53,5 +53,6 @@ Look at each render first: the slab rule is new, a hit may be an image/brand are
 - [ ] slider extremes (α .10/.90) fail widely (gcal, gmail, reader, claude, substack): user's trade below default, review after taste votes
 
 ## Done (recent)
+- [x] 2026-11-27 Substack writer: editor buttons/chips (hashed classes) + dark feed cards → `--g-inverse` (1.0.13); lab screens substack-editor/dashboard
 - [x] 2026-11-16 crawl, logged-in lab (site storage), slab rule, blurred-or-solid, veil, animation settle
 - [x] 2026-11-16 Linear lanes (1.0.11), composers (1.0.12); 2026-11-11 cards (1.0.9), new-issue modal (1.0.10)
